@@ -51,119 +51,190 @@ class KidsPage extends StatelessWidget {
               style: buttonTextStyle,
             )),
           ),
-          SizedBox(height: 80),
+          SizedBox(height: 40),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Container(
-                  width: BtnWidth,
-                  height: BtnHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(BtnCircularRadius),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add Games button functionality here
-                      print('Games button pressed!');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.blue,
-                      onPrimary: Colors.white,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: BtnHeight,
                     ),
-                    child: Text(
-                      'Games',
-                      style: buttonTextStyle,
+                    Image.asset(
+                      'assets/LOGO.png',
+                      width: LOGOSIZE,
+                      height: LOGOSIZE,
                     ),
-                  ),
+                    SizedBox(
+                      width: lOGOSpacing,
+                    ),
+                    Container(
+                      width: BtnWidth,
+                      height: BtnHeight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(BtnCircularRadius),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: Add Games button functionality here
+                          print('Games button pressed!');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                          onPrimary: Colors.white,
+                        ),
+                        child: Text(
+                          'Games',
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: BtnSpacing),
-                Container(
-                  width: BtnWidth,
-                  height: BtnHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(BtnCircularRadius),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add Song button functionality here
-                      print('Song button pressed!');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.green,
-                      onPrimary: Colors.white,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: BtnHeight,
                     ),
-                    child: Text(
-                      'Song',
-                      style: buttonTextStyle,
+                    Image.asset(
+                      'assets/LOGO.png',
+                      width: LOGOSIZE,
+                      height: LOGOSIZE,
                     ),
-                  ),
+                    SizedBox(
+                      width: lOGOSpacing,
+                    ),
+                    Container(
+                      width: BtnWidth,
+                      height: BtnHeight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(BtnCircularRadius),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: Add Song button functionality here
+                          print('Song button pressed!');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.green,
+                          onPrimary: Colors.white,
+                        ),
+                        child: Text(
+                          'Song',
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: BtnSpacing),
-                Container(
-                  width: BtnWidth,
-                  height: BtnHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(BtnCircularRadius),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add Progress Tracker button functionality here
-                      print('Progress Tracker button pressed!');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.orange,
-                      onPrimary: Colors.white,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: BtnHeight,
                     ),
-                    child: Text(
-                      'Progress Tracker',
-                      style: ParentbuttonTextStyle,
+                    Image.asset(
+                      'assets/LOGO.png',
+                      width: LOGOSIZE,
+                      height: LOGOSIZE,
                     ),
-                  ),
+                    SizedBox(
+                      width: lOGOSpacing,
+                    ),
+                    Container(
+                      width: BtnWidth,
+                      height: BtnHeight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(BtnCircularRadius),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: Add Progress Tracker button functionality here
+                          print('Progress Tracker button pressed!');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.orange,
+                          onPrimary: Colors.white,
+                        ),
+                        child: Text(
+                          'Progress Tracker',
+                          style: ParentbuttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: BtnSpacing),
-                Container(
-                  width: BtnWidth,
-                  height: BtnHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(BtnCircularRadius),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add Movies button functionality here
-                      print('Movies button pressed!');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.purple,
-                      onPrimary: Colors.white,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: BtnHeight,
                     ),
-                    child: Text(
-                      'Movies',
-                      style: buttonTextStyle,
+                    Image.asset(
+                      'assets/LOGO.png',
+                      width: LOGOSIZE,
+                      height: LOGOSIZE,
                     ),
-                  ),
+                    SizedBox(
+                      width: lOGOSpacing,
+                    ),
+                    Container(
+                      width: BtnWidth,
+                      height: BtnHeight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(BtnCircularRadius),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: Add Movies button functionality here
+                          print('Movies button pressed!');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.purple,
+                          onPrimary: Colors.white,
+                        ),
+                        child: Text(
+                          'Movies',
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                SizedBox(height: BtnSpacing),
-                Container(
-                  width: BtnWidth,
-                  height: BtnHeight,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(BtnCircularRadius),
-                  ),
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // TODO: Add Videos button functionality here
-                      print('Videos button pressed!');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      primary: Colors.red,
-                      onPrimary: Colors.white,
+                Row(
+                  children: [
+                    SizedBox(
+                      width: BtnHeight,
                     ),
-                    child: Text(
-                      'Videos',
-                      style: buttonTextStyle,
+                    Image.asset(
+                      'assets/LOGO.png',
+                      width: LOGOSIZE,
+                      height: LOGOSIZE,
                     ),
-                  ),
+                    SizedBox(
+                      width: lOGOSpacing,
+                    ),
+                    Container(
+                      width: BtnWidth,
+                      height: BtnHeight,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(BtnCircularRadius),
+                      ),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // TODO: Add Videos button functionality here
+                          print('Videos button pressed!');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.red,
+                          onPrimary: Colors.white,
+                        ),
+                        child: Text(
+                          'Videos',
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
