@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "28012448230",
+    "project_id": "munting-gabay",
+    "storage_bucket": "munting-gabay.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:28012448230:android:06255dd76878fe6b656e27",
+        "android_client_info": {
+          "package_name": "com.example.munting_gabay"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "28012448230-ck19knb5b9rufo91tii1up2j9ahf4bko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoP8HJGs2DEcHQFBv0snku-gR7BkZItW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "28012448230-ck19knb5b9rufo91tii1up2j9ahf4bko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

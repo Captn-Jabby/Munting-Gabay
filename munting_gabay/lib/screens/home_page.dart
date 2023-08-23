@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/Kids_page.dart';
+import 'package:munting_gabay/screens/Kids_page.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'Parent_page.dart';

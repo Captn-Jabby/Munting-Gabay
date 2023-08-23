@@ -1,8 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/home_page.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:munting_gabay/login.dart';
+import 'package:munting_gabay/register.dart';
+import 'package:munting_gabay/screens/home_page.dart';
 import 'package:munting_gabay/variable.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -12,6 +18,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: LoginScreen(),
+      builder: EasyLoading.init(),
+      routes: {
+        '/home': (context) => Homepage(), // Define the HomePage route
+      },
     );
   }
 }
@@ -39,7 +49,7 @@ class LoginScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: 100,
+                  height: 200,
                 ),
                 Container(
                   width: BtnWidth,
@@ -48,7 +58,7 @@ class LoginScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => Homepage()),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -72,8 +82,11 @@ class LoginScreen extends StatelessWidget {
                       border: Border.all(color: BtnColor)),
                   child: TextButton(
                     onPressed: () {
-                      // TODO: Add register functionality here
-                      print('Register button pressed!');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationPage()),
+                      );
                     },
                     child: Text(
                       'Register',
