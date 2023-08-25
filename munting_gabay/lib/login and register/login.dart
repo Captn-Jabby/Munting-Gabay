@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:munting_gabay/register.dart';
+import 'package:munting_gabay/login%20and%20register/register.dart';
 import 'package:munting_gabay/variable.dart';
 
 class LoginPage extends StatefulWidget {

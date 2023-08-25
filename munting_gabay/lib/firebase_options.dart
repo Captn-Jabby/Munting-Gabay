@@ -50,20 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyDa7YoTNr48VoTizmQpJ6WHbtCGpRVlNV0',
-    appId: '1:28012448230:web:297e658a3b84f55e656e27',
-    messagingSenderId: '28012448230',
-    projectId: 'munting-gabay',
-    authDomain: 'munting-gabay.firebaseapp.com',
-    storageBucket: 'munting-gabay.appspot.com',
-    measurementId: 'G-YM7VPY05Q3',
+    apiKey: 'AIzaSyCCWseAjG-EnqSx2-EnG_vdBHhn37DKRfQ',
+    appId: '1:269963703103:web:4e8a2cb3cd5f986027d98a',
+    messagingSenderId: '269963703103',
+    projectId: 'munting-gabay-4f845',
+    authDomain: 'munting-gabay-4f845.firebaseapp.com',
+    storageBucket: 'munting-gabay-4f845.appspot.com',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAoP8HJGs2DEcHQFBv0snku-gR7BkZItW4',
-    appId: '1:28012448230:android:06255dd76878fe6b656e27',
-    messagingSenderId: '28012448230',
-    projectId: 'munting-gabay',
-    storageBucket: 'munting-gabay.appspot.com',
+    apiKey: 'AIzaSyAhD4L12Kp4H4XwBGXC6ysG8b-AtUZgR4o',
+    appId: '1:269963703103:android:0d32100f9d1c2c8627d98a',
+    messagingSenderId: '269963703103',
+    projectId: 'munting-gabay-4f845',
+    storageBucket: 'munting-gabay-4f845.appspot.com',
   );
 }

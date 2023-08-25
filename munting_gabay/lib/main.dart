@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:munting_gabay/login.dart';
-import 'package:munting_gabay/register.dart';
+import 'package:munting_gabay/login%20and%20register/login.dart';
+import 'package:munting_gabay/login%20and%20register/register.dart';
 import 'package:munting_gabay/screens/home_page.dart';
 import 'package:munting_gabay/variable.dart';
 

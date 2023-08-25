@@ -1,9 +1,10 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'login.dart';
-import 'main.dart';
+import '../main.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -38,6 +39,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
       // User registration successful
       print(
           'User registration successful! User ID: ${userCredential.user?.uid}');
+
+      // Save additional user data to Firestore
+      await FirebaseFirestore.instance.collection('usersdata').doc(email).set({
+        'username': username,
+        'name': name,
+        'address': address,
+        'age': age,
+        'email': email,
+      });
 
       // Perform further actions like saving additional user data to Firestore
     } catch (e) {
