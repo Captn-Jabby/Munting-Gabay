@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:munting_gabay/variable.dart';
 
+import 'login.dart';
 import 'main.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -195,6 +196,46 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                       ),
                     ),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Confirmation'),
+                              content: Text('Are you sure you want to LOGIN?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => LoginPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Confirm',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        'CLICK HERE TO LOGIN',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    )
                   ],
                 ),
               ),

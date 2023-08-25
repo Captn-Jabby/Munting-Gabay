@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:munting_gabay/register.dart';
 import 'package:munting_gabay/variable.dart';
 
 class LoginPage extends StatefulWidget {
@@ -99,6 +100,48 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
+                    TextButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Text('Confirmation'),
+                              content: Text(
+                                  'Are you sure you want to create an account?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context); // Close the dialog
+                                    Navigator.pushReplacement(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            RegistrationPage(),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Confirm',
+                                    style: TextStyle(color: Colors.red),
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: Text(
+                        'CREATE AN ACCOUNT',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    )
                   ],
                 )
               ],

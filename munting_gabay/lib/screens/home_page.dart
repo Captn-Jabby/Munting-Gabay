@@ -3,6 +3,7 @@ import 'package:munting_gabay/screens/Kids_page.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'Parent_page.dart';
+import 'drawer_page.dart';
 
 class Homepage extends StatelessWidget {
   @override
@@ -10,10 +11,12 @@ class Homepage extends StatelessWidget {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         backgroundColor: scaffoldBgColor,
         elevation: 0,
+        iconTheme: IconThemeData(color: BtnColor),
       ),
+      drawer: AppDrawer(),
       body: Center(
         child: Stack(alignment: Alignment.topCenter, children: [
           Image.asset(

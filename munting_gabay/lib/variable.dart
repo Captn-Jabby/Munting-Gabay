@@ -25,3 +25,4 @@ final double lOGOSpacing = 10;
 // scafold settings
 const Color scaffoldBgColor = Color(0xFFF6F6F4); // Use the correct format
 
+

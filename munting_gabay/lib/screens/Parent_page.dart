@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/variable.dart';
 
+import 'drawer_page.dart';
+
 class ParentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         backgroundColor: scaffoldBgColor,
         elevation: 0,
         toolbarHeight: 150,
+        iconTheme: IconThemeData(color: BtnColor),
         actions: [
           Center(
             child: Row(
@@ -33,6 +35,7 @@ class ParentPage extends StatelessWidget {
           ),
         ],
       ),
+      drawer: AppDrawer(),
       body: Center(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
