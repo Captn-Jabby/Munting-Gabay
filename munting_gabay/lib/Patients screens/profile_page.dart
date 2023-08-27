@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:munting_gabay/screens/home_page.dart';
+import 'package:munting_gabay/Patients%20screens/homepage_PT.dart';
 
 class UserProfilePage extends StatefulWidget {
   @override
@@ -69,7 +69,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             // Perform your custom action here
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => Homepage()),
+              MaterialPageRoute(builder: (context) => HomepagePT()),
             );
           },
         ),

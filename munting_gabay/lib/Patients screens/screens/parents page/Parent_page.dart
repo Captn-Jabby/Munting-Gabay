@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/Patients%20screens/screens/parents%20page/psych.dart';
 import 'package:munting_gabay/variable.dart';
 
-import '../drawer_page.dart';
+import '../../../drawer_page.dart';
 
-class Psychpage extends StatelessWidget {
+class ParentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,7 +54,7 @@ class Psychpage extends StatelessWidget {
                 ),
                 child: Center(
                     child: Text(
-                  "PSCYHOLIGIST SEARCH",
+                  "PARENTS PAGE",
                   style: buttonTextStyle,
                 )),
               ),
@@ -84,37 +85,25 @@ class Psychpage extends StatelessWidget {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              // TODO: Add Psychologist Name and Addressbutton functionality here
-                              print(
-                                  'Psychologist Name and Address button pressed!');
+                              // TODO: Add Forum and Discussion button functionality here
+                              print('Forum and Discussion button pressed!');
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.blue,
                               onPrimary: Colors.white,
                             ),
                             child: Text(
-                              'Psychologist Name and Address',
+                              'Forum and Discussion',
                               style: ParentbuttonTextStyle,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    Divider(
-                      color: Colors.black,
-                    ), //
                     Row(
                       children: [
                         SizedBox(
                           width: BtnHeight,
-                        ),
-                        Image.asset(
-                          'assets/LOGO.png',
-                          width: LOGOSIZE,
-                          height: LOGOSIZE,
-                        ),
-                        SizedBox(
-                          width: 10,
                         ),
                         Container(
                           width: BtnWidth,
@@ -125,25 +114,97 @@ class Psychpage extends StatelessWidget {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              // TODO: Add Psychologist Name and Address button functionality here
-                              print(
-                                  'Psychologist Name and Address button pressed!');
+                              // TODO: Add Educational Webinars button functionality here
+                              print('Educational Webinars button pressed!');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.green,
+                              onPrimary: Colors.white,
+                            ),
+                            child: Text(
+                              'Educational Webinars',
+                              style: ParentbuttonTextStyle,
+                            ),
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/LOGO.png',
+                          width: LOGOSIZE,
+                          height: LOGOSIZE,
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: BtnHeight,
+                        ),
+                        Image.asset(
+                          'assets/LOGO.png',
+                          width: LOGOSIZE,
+                          height: LOGOSIZE,
+                        ),
+                        Container(
+                          width: BtnWidth,
+                          height: BtnHeight,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(BtnCircularRadius),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // TODO: Add Resource Library button functionality here
+                              print('Resource Library button pressed!');
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.orange,
                               onPrimary: Colors.white,
                             ),
                             child: Text(
-                              'Psychologist Name and Address',
+                              'Resource Library',
                               style: ParentbuttonTextStyle,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    Divider(
-                      color: Colors.black,
-                    ), //
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: BtnHeight,
+                        ),
+                        Container(
+                          width: BtnWidth,
+                          height: BtnHeight,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(BtnCircularRadius),
+                          ),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              // TODO: Add Online Consultation button functionality here
+                              print('Online Consultation button pressed!');
+                            },
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.purple,
+                              onPrimary: Colors.white,
+                            ),
+                            child: Text(
+                              'Online Consultation',
+                              style: ParentbuttonTextStyle,
+                            ),
+                          ),
+                        ),
+                        Image.asset(
+                          'assets/LOGO.png',
+                          width: LOGOSIZE,
+                          height: LOGOSIZE,
+                        ),
+                        SizedBox(
+                          width: lOGOSpacing,
+                        ),
+                      ],
+                    ),
                     Row(
                       children: [
                         SizedBox(
@@ -165,13 +226,19 @@ class Psychpage extends StatelessWidget {
                                 BorderRadius.circular(BtnCircularRadius),
                           ),
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => pscyh()),
+                              );
+                            },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.red,
                               onPrimary: Colors.white,
                             ),
                             child: Text(
-                              'Psychologist Name and Address',
+                              'Psychologist Research',
                               style: ParentbuttonTextStyle,
                             ),
                           ),

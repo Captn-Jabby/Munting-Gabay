@@ -2,9 +2,12 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/login%20and%20register/login.dart';
-import 'package:munting_gabay/login%20and%20register/register.dart';
-import 'package:munting_gabay/screens/home_page.dart';
+import 'package:munting_gabay/login%20and%20register/register_doctor.dart';
+import 'package:munting_gabay/login%20and%20register/register_patients.dart';
+import 'package:munting_gabay/Patients%20screens/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
+
+import 'Doctors screen/doctors_homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,7 +23,8 @@ class MyApp extends StatelessWidget {
       home: LoginScreen(),
       builder: EasyLoading.init(),
       routes: {
-        '/home': (context) => Homepage(), // Define the HomePage route
+        '/homePT': (context) => HomepagePT(),
+        '/homeDoctor': (context) => DoctorsHM(),
       },
     );
   }
@@ -78,14 +82,49 @@ class LoginScreen extends StatelessWidget {
                   width: BtnWidth,
                   height: BtnHeight,
                   decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(BtnCircularRadius),
-                      border: Border.all(color: BtnColor)),
+                    borderRadius: BorderRadius.circular(BtnCircularRadius),
+                    border: Border.all(color: BtnColor),
+                  ),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RegistrationPage()),
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Register'),
+                            content: Text('Register as a Doctor or a Patient?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                  // Navigate to the RegistrationPatients with type 'Doctor'
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          RegistrationDoctors(),
+                                    ),
+                                  );
+                                },
+                                child: Text('Doctor'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // Close the dialog
+                                  // Navigate to the RegistrationPatients with type 'Patient'
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          RegistrationPatients(),
+                                    ),
+                                  );
+                                },
+                                child: Text('Patient'),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                     child: Text(

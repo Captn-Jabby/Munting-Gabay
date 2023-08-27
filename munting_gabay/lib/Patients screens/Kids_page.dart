@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/variable.dart';
 
-import 'drawer_page.dart';
+import '../drawer_page.dart';
 
 class KidsPage extends StatelessWidget {
   @override

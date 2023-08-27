@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/screens/profile_page.dart';
+import 'package:munting_gabay/Patients%20screens/profile_page.dart';
 
-import '../main.dart';
+import 'main.dart';
 
 class AppDrawer extends StatelessWidget {
   final String profileImageUrl = "your_profile_image_url";

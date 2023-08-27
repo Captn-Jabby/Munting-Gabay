@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:munting_gabay/parents%20page/psych_search.dart';
 import 'package:munting_gabay/variable.dart';
 
-import 'drawer_page.dart';
+import '../../../drawer_page.dart';
 
-class ParentPage extends StatelessWidget {
+class DoctorsHM extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +54,7 @@ class ParentPage extends StatelessWidget {
                 ),
                 child: Center(
                     child: Text(
-                  "PARENTS PAGE",
+                  "DOCTORS PAGE",
                   style: buttonTextStyle,
                 )),
               ),

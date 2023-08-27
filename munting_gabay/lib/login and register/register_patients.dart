@@ -6,12 +6,12 @@ import 'package:munting_gabay/variable.dart';
 import 'login.dart';
 import '../main.dart';
 
-class RegistrationPage extends StatefulWidget {
+class RegistrationPatients extends StatefulWidget {
   @override
-  _RegistrationPageState createState() => _RegistrationPageState();
+  _RegistrationPatientsState createState() => _RegistrationPatientsState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _RegistrationPatientsState extends State<RegistrationPatients> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
@@ -44,6 +44,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       await FirebaseFirestore.instance.collection('usersdata').doc(email).set({
         'username': username,
         'name': name,
+        'usertype': 'PATIENTS',
         'address': address,
         'age': age,
         'email': email,

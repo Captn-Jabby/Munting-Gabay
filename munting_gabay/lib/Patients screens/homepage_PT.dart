@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/screens/Kids_page.dart';
+import 'package:munting_gabay/Patients%20screens/Kids_page.dart';
 import 'package:munting_gabay/variable.dart';
 
-import 'Parent_page.dart';
-import 'drawer_page.dart';
+import 'screens/parents page/Parent_page.dart';
+import '../drawer_page.dart';
 
-class Homepage extends StatelessWidget {
+class HomepagePT extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

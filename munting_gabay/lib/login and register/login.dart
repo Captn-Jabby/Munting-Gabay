@@ -1,7 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:munting_gabay/login%20and%20register/register.dart';
+import 'package:munting_gabay/login%20and%20register/register_patients.dart';
 import 'package:munting_gabay/variable.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,7 +23,23 @@ class _LoginPageState extends State<LoginPage> {
       );
 
       EasyLoading.showSuccess('You are successfully logged in.');
-      Navigator.pushReplacementNamed(context, '/home'); // Navigate to Homepage
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+            .collection('usersdata')
+            .doc(user.email)
+            .get();
+
+        String userType = userDataSnapshot['usertype'];
+
+        if (userType == 'PATIENTS') {
+          Navigator.pushReplacementNamed(context, '/homePT');
+        } else if (userType == 'DOCTORS') {
+          Navigator.pushReplacementNamed(context, '/homeDoctor');
+        }
+      }
 
       EasyLoading.dismiss();
     } on FirebaseAuthException catch (ex) {
@@ -123,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            RegistrationPage(),
+                                            RegistrationPatients(),
                                       ),
                                     );
                                   },
