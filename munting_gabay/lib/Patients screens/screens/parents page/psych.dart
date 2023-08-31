@@ -93,7 +93,7 @@ class pscyh extends StatelessWidget {
                                         onPrimary: Colors.white,
                                       ),
                                       child: Text(
-                                        '$psychologistName\n$psychologistAddress',
+                                        'Name: $psychologistName\nAddress :$psychologistAddress',
                                         style: ParentbuttonTextStyle,
                                       ),
                                     ),
