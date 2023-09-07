@@ -58,10 +58,33 @@ class _LoginPageState extends State<LoginPage> {
             child: Stack(
               alignment: Alignment.topCenter,
               children: [
-                Image.asset(
-                  'assets/A.png',
-                  width: 300,
-                  height: 300,
+                Column(
+                  children: [
+                    const SizedBox(height: 23,),
+                    Text('Munting\nGabay',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 5,
+                          shadows: [
+                            Shadow(
+                                color: Color(0xBA205007).withOpacity(1.0),
+                                offset: const Offset(7, 2)
+                            )
+                          ],
+                          fontSize: 75,
+                          color: Colors.white,
+                        )
+                    ),
+                    const SizedBox(height: 12,),
+                    const Text('A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 17
+                      ),
+                    ),
+
+                  ],
                 ),
                 SizedBox(
                   height: BtnSpacing,
@@ -106,8 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                       child: ElevatedButton(
                         onPressed: _signInUser,
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                            onPrimary: Colors.white,
+                            backgroundColor: const Color(0xBA205007),
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),
@@ -154,9 +176,9 @@ class _LoginPageState extends State<LoginPage> {
                           },
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'CREATE AN ACCOUNT',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.white),
                       ),
                     )
                   ],
