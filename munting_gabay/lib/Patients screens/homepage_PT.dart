@@ -17,18 +17,40 @@ class HomepagePT extends StatelessWidget {
         iconTheme: IconThemeData(color: BtnColor),
       ),
       drawer: AppDrawer(),
-      body: Center(
-        child: Stack(alignment: Alignment.topCenter, children: [
-          Image.asset(
-            'assets/A.png',
-            width: 300,
-            height: 300,
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
             children: [
+              Column(
+                children: [
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text('Munting\nGabay',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 5,
+                        shadows: [
+                          Shadow(
+                              color: Color(0xBA205007).withOpacity(1.0),
+                              offset: const Offset(7, 2))
+                        ],
+                        fontSize: 75,
+                        color: Colors.white,
+                      )),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const Text(
+                    'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 17),
+                  ),
+                ],
+              ),
               SizedBox(
-                height: 150,
+                height: 50,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -101,7 +123,7 @@ class HomepagePT extends StatelessWidget {
               ),
             ],
           ),
-        ]),
+        ),
       ),
     );
   }

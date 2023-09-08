@@ -5,7 +5,7 @@ final double BtnHeight = 50;
 final double BtnWidth = 200;
 final double BtnSpacing = 30;
 final double BtnCircularRadius = 20;
-const Color BtnColor = Colors.green;
+const Color BtnColor = Colors.blueAccent; //drawer button color
 
 const TextStyle buttonTextStyle = TextStyle(
   color: Colors.white,

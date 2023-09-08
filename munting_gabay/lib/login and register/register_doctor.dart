@@ -91,7 +91,9 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
             child: Stack(alignment: Alignment.topCenter, children: [
               Column(
                 children: [
-                  const SizedBox(height: 18,),
+                  const SizedBox(
+                    height: 18,
+                  ),
                   Text('Munting\nGabay',
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -100,28 +102,20 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         shadows: [
                           Shadow(
                               color: Color(0xBA205007).withOpacity(1.0),
-                              offset: const Offset(7, 2)
-                          )
+                              offset: const Offset(7, 2))
                         ],
                         fontSize: 55,
                         color: Colors.white,
-                      )
-                  ),
-
+                      )),
                 ],
               ),
               SizedBox(
                 width: 320,
                 child: Column(
                   children: [
-<<<<<<< HEAD
                     Text('DOCTORS REGISTER PAGE'),
                     SizedBox(
                       height: 270,
-=======
-                    const SizedBox(
-                      height: 175,
->>>>>>> 67f0d8b26ecf6973891a3dacfa28da5f67b60426
                     ),
                     TextField(
                       controller: _usernameController,
@@ -236,7 +230,8 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: const Text('Confirmation'),
-                              content: const Text('Are you sure you want to LOGIN?'),
+                              content:
+                                  const Text('Are you sure you want to LOGIN?'),
                               actions: [
                                 TextButton(
                                   onPressed: () {
