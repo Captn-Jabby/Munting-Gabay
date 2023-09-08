@@ -2,19 +2,32 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/Patients%20screens/profile_page.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 import 'main.dart';
 
 class AppDrawer extends StatelessWidget {
-  final String profileImageUrl = "your_profile_image_url";
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    final FirebaseAuth _auth = FirebaseAuth.instance;
     final User? user = _auth.currentUser;
+    String? profileImageUrl;
 
-    // String username = user?.displayName ?? "Trial";
-    // String email = user?.email ?? "Trial@example.com";
+    // Function to retrieve the profile image URL from Firebase Storage
+    Future<void> getProfileImageUrl() async {
+      try {
+        final ref = firebase_storage.FirebaseStorage.instance.ref().child(
+            'profile_images/${user?.uid}.jpg'); // Adjust the path as needed
+        profileImageUrl = await ref.getDownloadURL();
+      } catch (e) {
+        print('Error getting profile image URL: $e');
+      }
+    }
+
+    // Call the function to get the profile image URL
+    getProfileImageUrl();
+
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -41,7 +54,10 @@ class AppDrawer extends StatelessWidget {
             ),
             accountEmail: Text(user?.email ?? ""),
             currentAccountPicture: CircleAvatar(
-              backgroundImage: NetworkImage(profileImageUrl),
+              backgroundImage: profileImageUrl != null
+                  ? NetworkImage(profileImageUrl!)
+                  : AssetImage('assets/A.png')
+                      as ImageProvider<Object>, // Provide a default image path
             ),
           ),
           ListTile(

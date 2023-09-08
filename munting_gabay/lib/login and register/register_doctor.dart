@@ -98,6 +98,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                 width: 300,
                 child: Column(
                   children: [
+                    Text('DOCTORS REGISTER PAGE'),
                     SizedBox(
                       height: 270,
                     ),
