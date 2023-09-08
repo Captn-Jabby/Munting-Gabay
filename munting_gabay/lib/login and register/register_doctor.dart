@@ -62,7 +62,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Success'),
-          content: Text('You are successfully registasdsaered!'),
+          content: Text('You are successfully registered!'),
           actions: [
             TextButton(
               onPressed: () {
@@ -86,21 +86,42 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Center(
             child: Stack(alignment: Alignment.topCenter, children: [
-              Image.asset(
-                'assets/A.png',
-                width: 300,
-                height: 300,
+              Column(
+                children: [
+                  const SizedBox(height: 18,),
+                  Text('Munting\nGabay',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 5,
+                        shadows: [
+                          Shadow(
+                              color: Color(0xBA205007).withOpacity(1.0),
+                              offset: const Offset(7, 2)
+                          )
+                        ],
+                        fontSize: 55,
+                        color: Colors.white,
+                      )
+                  ),
+
+                ],
               ),
-              Container(
-                width: 300,
+              SizedBox(
+                width: 320,
                 child: Column(
                   children: [
+<<<<<<< HEAD
                     Text('DOCTORS REGISTER PAGE'),
                     SizedBox(
                       height: 270,
+=======
+                    const SizedBox(
+                      height: 175,
+>>>>>>> 67f0d8b26ecf6973891a3dacfa28da5f67b60426
                     ),
                     TextField(
                       controller: _usernameController,
@@ -109,12 +130,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -124,12 +145,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -139,12 +160,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -154,12 +175,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -169,12 +190,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -184,14 +205,14 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: BorderSide(
+                          borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                       obscureText: true,
                     ),
-                    SizedBox(height: 20),
-                    Container(
+                    const SizedBox(height: 20),
+                    SizedBox(
                       width: BtnWidth,
                       height: BtnHeight,
                       child: ElevatedButton(
@@ -202,7 +223,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),
-                        child: Text(
+                        child: const Text(
                           'Register',
                           style: buttonTextStyle,
                         ),
@@ -214,14 +235,14 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Confirmation'),
-                              content: Text('Are you sure you want to LOGIN?'),
+                              title: const Text('Confirmation'),
+                              content: const Text('Are you sure you want to LOGIN?'),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context); // Close the dialog
                                   },
-                                  child: Text('Cancel'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -233,7 +254,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                                       ),
                                     );
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Confirm',
                                     style: TextStyle(color: Colors.red),
                                   ),
@@ -243,9 +264,9 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                           },
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'CLICK HERE TO LOGIN',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.white),
                       ),
                     )
                   ],

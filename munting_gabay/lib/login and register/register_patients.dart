@@ -196,8 +196,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       child: ElevatedButton(
                         onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                            onPrimary: Colors.white,
+                          backgroundColor: const Color(0xBA205007),
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),
@@ -244,7 +243,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       },
                       child: Text(
                         'CLICK HERE TO LOGIN',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.white),
                       ),
                     )
                   ],
