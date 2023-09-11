@@ -2,6 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:munting_gabay/variable.dart';
+// import 'package:firebase_storage/firebase_storage.dart';
+// import 'package:image_picker/image_picker.dart';
+
+// import 'dart:io' as io;
 
 import 'login.dart';
 import '../main.dart';
@@ -18,8 +22,27 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
   TextEditingController _ageController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
 
   FirebaseAuth _auth = FirebaseAuth.instance;
+  // TextEditingController _imageController = TextEditingController();
+  // io.File? _imageFile;
+
+  // Future<void> _uploadImage() async {
+  //   final picker = ImagePicker();
+  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _imageFile = io.File(pickedFile.path); // Use the 'dart:io' File class
+  //       _imageController.text = 'Image Selected';
+  //     });
+  //   } else {
+  //     setState(() {
+  //       _imageController.text = 'No Image Selected';
+  //     });
+  //   }
+  // }
 
   void _registerUser() async {
     String username = _usernameController.text;
@@ -45,6 +68,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
         'username': username,
         'name': name,
         'usertype': 'DOCTORS',
+        'status': 'Waiting',
         'address': address,
         'age': age,
         'email': email,
@@ -162,6 +186,10 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                     const SizedBox(
                       height: 15,
                     ),
+                    // ElevatedButton(
+                    //   onPressed: _uploadImage,
+                    //   child: Text('Select Profile Image'),
+                    // ),
                     TextField(
                       controller: _ageController,
                       decoration: InputDecoration(
@@ -202,8 +230,20 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                           borderSide: const BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
                       ),
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                     ),
                     const SizedBox(height: 20),
                     SizedBox(

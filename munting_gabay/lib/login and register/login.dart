@@ -1,3 +1,4 @@
+// login
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +17,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-
   Future<void> _signInUser() async {
     try {
       UserCredential userCredential =
@@ -36,12 +36,47 @@ class _LoginPageState extends State<LoginPage> {
             .get();
 
         String userType = userDataSnapshot['usertype'];
+        String status = userDataSnapshot['status'];
 
         if (userType == 'PATIENTS') {
           Navigator.pushReplacementNamed(context, '/homePT');
         } else if (userType == 'DOCTORS') {
-          Navigator.pushReplacementNamed(context, '/homeDoctor');
+          if (status == 'Accepted') {
+            Navigator.pushReplacementNamed(context, '/homeDoctor');
+          } else if (status == 'ADMIN') {
+            Navigator.pushReplacementNamed(context, '/homeAdmin');
+          } else {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Account Not Accepted'),
+                  content: Text(
+                      'Your doctor account has not been accepted yet. Please wait for approval.'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context); // Close the dialog
+                      },
+                      child: Text('OK'),
+                    ),
+                  ],
+                );
+              },
+            );
+          }
         }
+        // else if (userType == 'ADMIN') {
+        //   // Check if the user ID is the specific admin user ID
+        //   // if (userCredential.user?.uid == 'e4gsq87sW5gIxLgabhzC6by50oR2') {
+        //   // Redirect to the admin page
+        //   Navigator.pushReplacementNamed(context, '/homeAdmin');
+        //   // }
+        //   // else {
+        //   //   // For other admin users, redirect to the '/homeDoctor' page
+        //   //   Navigator.pushReplacementNamed(context, '/homeDoctor');
+        //   // }
+        // }
       }
 
       EasyLoading.dismiss();
@@ -63,7 +98,9 @@ class _LoginPageState extends State<LoginPage> {
               children: [
                 Column(
                   children: [
-                    const SizedBox(height: 23,),
+                    const SizedBox(
+                      height: 23,
+                    ),
                     Text('Munting\nGabay',
                         textAlign: TextAlign.center,
                         style: TextStyle(
@@ -72,21 +109,19 @@ class _LoginPageState extends State<LoginPage> {
                           shadows: [
                             Shadow(
                                 color: Color(0xBA205007).withOpacity(1.0),
-                                offset: const Offset(7, 2)
-                            )
+                                offset: const Offset(7, 2))
                           ],
                           fontSize: 75,
                           color: Colors.white,
-                        )
+                        )),
+                    const SizedBox(
+                      height: 12,
                     ),
-                    const SizedBox(height: 12,),
-                    const Text('A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                    const Text(
+                      'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontSize: 17
-                      ),
+                      style: TextStyle(fontSize: 17),
                     ),
-
                   ],
                 ),
                 SizedBox(

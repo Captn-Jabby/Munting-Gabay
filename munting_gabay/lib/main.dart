@@ -7,6 +7,7 @@ import 'package:munting_gabay/login%20and%20register/register_patients.dart';
 import 'package:munting_gabay/Patients%20screens/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
 
+import 'Adminpage/adminpage.dart';
 import 'Doctors screen/doctors_homepage.dart';
 
 void main() async {
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/homePT': (context) => HomepagePT(),
         '/homeDoctor': (context) => DoctorsHM(),
+        '/homeAdmin': (context) => AdminPage(),
       },
     );
   }
@@ -58,22 +60,20 @@ class LoginScreen extends StatelessWidget {
                       letterSpacing: 5,
                       shadows: [
                         Shadow(
-                          color: Color(0xBA205007).withOpacity(1.0),
-                          offset: const Offset(7, 2)
-                        )
+                            color: Color(0xBA205007).withOpacity(1.0),
+                            offset: const Offset(7, 2))
                       ],
                       fontSize: 75,
-                        color: Colors.white,
-                    )
+                      color: Colors.white,
+                    )),
+                const SizedBox(
+                  height: 12,
                 ),
-                const SizedBox(height: 12,),
-               const Text('A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 17
+                const Text(
+                  'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 17),
                 ),
-                ),
-
               ],
             ),
 

@@ -18,7 +18,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   TextEditingController _ageController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
-
+  bool _isPasswordVisible = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   void _registerUser() async {
@@ -186,8 +186,20 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                           borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _isPasswordVisible = !_isPasswordVisible;
+                            });
+                          },
+                          child: Icon(
+                            _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                          ),
+                        ),
                       ),
-                      obscureText: true,
+                      obscureText: !_isPasswordVisible,
                     ),
                     SizedBox(height: 20),
                     Container(
@@ -196,7 +208,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       child: ElevatedButton(
                         onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xBA205007),
+                            backgroundColor: const Color(0xBA205007),
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),

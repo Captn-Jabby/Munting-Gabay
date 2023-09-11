@@ -61,6 +61,7 @@ class ParentPage extends StatelessWidget {
                 height: 600,
                 child: GridView.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    // childAspectRatio: 3.0,
                     crossAxisCount: 2, // Number of columns in the grid
                     mainAxisSpacing: 16.0, // Spacing between rows
                     crossAxisSpacing: 16.0, // Spacing between columns
