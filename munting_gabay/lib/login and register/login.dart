@@ -34,13 +34,14 @@ class _LoginPageState extends State<LoginPage> {
             .collection('usersdata')
             .doc(user.email)
             .get();
-
         String userType = userDataSnapshot['usertype'];
-        String status = userDataSnapshot['status'];
 
-        if (userType == 'PATIENTS') {
+
+        if(userType == 'PATIENTS'){
+          print('User is a PATIENTS');
           Navigator.pushReplacementNamed(context, '/homePT');
         } else if (userType == 'DOCTORS') {
+          String status = userDataSnapshot['status'];
           if (status == 'Accepted') {
             Navigator.pushReplacementNamed(context, '/homeDoctor');
           } else if (status == 'ADMIN') {
