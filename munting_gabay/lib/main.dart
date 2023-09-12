@@ -6,13 +6,16 @@ import 'package:munting_gabay/login%20and%20register/register_doctor.dart';
 import 'package:munting_gabay/login%20and%20register/register_patients.dart';
 import 'package:munting_gabay/Patients%20screens/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
-
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'Adminpage/adminpage.dart';
 import 'Doctors screen/doctors_homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await Hive.initFlutter();
+  await Hive.openBox<String>('avatarBox');
   runApp(MyApp());
 }
 

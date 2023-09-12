@@ -36,6 +36,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_easyloading: ^3.0.5
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   image_picker: ^1.0.4
 
 dev_dependencies:
@@ -55,6 +57,11 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/avatar1.png
+    - assets/avatar2.png
+    - assets/avatar3.png
+    - assets/avatar4.png
+    - assets/avatar5.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

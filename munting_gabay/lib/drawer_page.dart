@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/Patients%20screens/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:hive/hive.dart';
 
 import 'main.dart';
 
@@ -56,8 +57,11 @@ class AppDrawer extends StatelessWidget {
             currentAccountPicture: CircleAvatar(
               backgroundImage: profileImageUrl != null
                   ? NetworkImage(profileImageUrl!)
-                  : AssetImage('assets/A.png')
-                      as ImageProvider<Object>, // Provide a default image path
+                  : AssetImage(
+                // Use the avatar path from Hive as the default
+                Hive.box<String>('avatarBox').get('avatarPath',
+                    defaultValue: 'assets/A.png')!,
+              ) as ImageProvider<Object>,
             ),
           ),
           ListTile(
