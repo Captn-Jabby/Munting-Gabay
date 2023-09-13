@@ -59,7 +59,7 @@ class AppDrawer extends StatelessWidget {
                   ? NetworkImage(profileImageUrl!)
                   : AssetImage(
                 // Use the avatar path from Hive as the default
-                Hive.box<String>('avatarBox').get('avatarPath',
+                Hive.box<String>('avatarBox').get('avatarPath${user?.email}',
                     defaultValue: 'assets/A.png')!,
               ) as ImageProvider<Object>,
             ),

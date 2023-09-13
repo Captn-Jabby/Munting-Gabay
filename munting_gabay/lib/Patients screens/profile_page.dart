@@ -26,7 +26,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   void initState() {
     super.initState();
     _currentUser = _auth.currentUser!;
-    _avatarPath = _avatarBox.get('avatarPath', defaultValue: 'assets/avatar1.png')!;
+    _avatarPath = _avatarBox.get('avatarPath${_currentUser.email}', defaultValue: 'assets/avatar1.png')!;
     _loadUserData();
   }
 
@@ -43,13 +43,13 @@ class _UserProfilePageState extends State<UserProfilePage> {
         _ageController.text = snapshot['age'];
         _addressController.text = snapshot['address'];
         _emailController.text = snapshot['email'];
-        _avatarPath = _avatarBox.get('avatarPath',defaultValue: 'assets/avatar1.png')!;
+        _avatarPath = _avatarBox.get('avatarPath${_currentUser.email}', defaultValue: snapshot['avatarPath'] ?? 'assets/avatar1.png')!;
       });
     }
   }
 
   void _updateAvatarPath(String path) {
-    _avatarBox.put('avatarPath', path);
+    _avatarBox.put('avatarPath${_currentUser.email}', path);
   }
 
   void _updateUserData() async {
