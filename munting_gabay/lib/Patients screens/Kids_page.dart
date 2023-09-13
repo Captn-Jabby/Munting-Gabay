@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/variable.dart';
 
+import '../Doctors screen/movies_screen.dart';
 import '../drawer_page.dart';
 
 class KidsPage extends StatelessWidget {
@@ -193,7 +194,11 @@ class KidsPage extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Add Movies button functionality here
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => ImageGridScreen()),
+                            );
                             print('Movies button pressed!');
                           },
                           style: ElevatedButton.styleFrom(

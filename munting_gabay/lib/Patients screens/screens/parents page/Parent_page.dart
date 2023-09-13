@@ -19,12 +19,12 @@ class ParentPage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(width: 40),
+                  SizedBox(width: 20),
                   Image.asset(
                     'assets/A.png',
                     height: 150,
                   ),
-                  SizedBox(width: 30), // Add spacing between images
+                  // SizedBox(width: 30), // Add spacing between images
                   Image.asset(
                     'assets/LOGO.png',
                     height: 150,
