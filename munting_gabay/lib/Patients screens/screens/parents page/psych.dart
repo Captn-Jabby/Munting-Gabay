@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/Patients%20screens/screens/parents%20page/docinfo.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
@@ -72,7 +73,6 @@ class pscyh extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  // ... (Image and spacing widgets)
                                   SizedBox(
                                     width: 115,
                                   ),
@@ -85,8 +85,17 @@ class pscyh extends StatelessWidget {
                                     ),
                                     child: ElevatedButton(
                                       onPressed: () {
-                                        // TODO: Implement button functionality
-                                        print('Psychologist button pressed!');
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                DoctorInfoPage(
+                                              docId: doc.id,
+                                              initialName: doc['name'],
+                                              initialAddress: doc['address'],
+                                            ),
+                                          ),
+                                        );
                                       },
                                       style: ElevatedButton.styleFrom(
                                         primary: Colors.blue,
