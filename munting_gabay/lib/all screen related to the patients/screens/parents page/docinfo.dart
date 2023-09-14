@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:munting_gabay/Patients%20screens/screens/parents%20page/calendarSchedulling.dart';
-import 'package:munting_gabay/Patients%20screens/screens/parents%20page/patients_history.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/calendarSchedulling.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
 import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -182,30 +182,30 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
             SizedBox(height: BtnSpacing),
             // Button to send the date request
             // Button to send the date request
-            ElevatedButton(
-              onPressed: () async {
-                // Extract the date request text from the controller
-                final selectedDateText = _dateRequestController.text;
-                if (selectedDateText.isNotEmpty) {
-                  final selectedDate = DateTime.parse(selectedDateText);
+            // ElevatedButton(
+            //   onPressed: () async {
+            //     // Extract the date request text from the controller
+            //     final selectedDateText = _dateRequestController.text;
+            //     if (selectedDateText.isNotEmpty) {
+            //       final selectedDate = DateTime.parse(selectedDateText);
 
-                  // Check if the same patient has a schedule on the same day
-                  final hasSchedule = await hasScheduleOnSameDay(selectedDate);
+            //       // Check if the same patient has a schedule on the same day
+            //       final hasSchedule = await hasScheduleOnSameDay(selectedDate);
 
-                  if (!hasSchedule) {
-                    // No schedule exists, proceed to send the request
-                    sendDateRequestToFirebase(selectedDate);
-                  } else {
-                    // A schedule already exists for the same patient on the same day
-                    print('You already have a schedule on this day.');
-                  }
-                } else {
-                  // Handle the case where no date is selected
-                  print('No date selected.');
-                }
-              },
-              child: Text('Send Request'),
-            ),
+            //       if (!hasSchedule) {
+            //         // No schedule exists, proceed to send the request
+            //         sendDateRequestToFirebase(selectedDate);
+            //       } else {
+            //         // A schedule already exists for the same patient on the same day
+            //         print('You already have a schedule on this day.');
+            //       }
+            //     } else {
+            //       // Handle the case where no date is selected
+            //       print('No date selected.');
+            //     }
+            //   },
+            //   child: Text('Send Request'),
+            // ),
 
             SizedBox(height: BtnSpacing),
           ],
@@ -254,38 +254,59 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
 
   void sendDateRequestToFirebase(DateTime selectedDate) async {
     try {
-      // Replace 'usersdata' with your Firestore collection name
-      final CollectionReference usersDataCollection =
-          FirebaseFirestore.instance.collection('usersdata');
-
-      // Replace '123456' with the actual patient's ID
       final User? user = FirebaseAuth.instance.currentUser;
 
-      if (selectedDate != null) {
-        // Replace 'document_id' with the ID of the specific document in 'usersdata'
-        final DocumentReference userDocument =
+      if (selectedDate != null && user != null) {
+        // Replace 'usersdata' with your Firestore collection name
+        final CollectionReference usersDataCollection =
+            FirebaseFirestore.instance.collection('usersdata');
+
+        final String currentUserId = user.uid;
+
+        // Create DocumentReferences for the doctor and current user
+        final DocumentReference doctorDocument =
             usersDataCollection.doc(widget.docId);
+        final DocumentReference currentUserDocument =
+            usersDataCollection.doc(currentUserId);
 
         // Create a Timestamp object from the selected date
         final Timestamp timestamp = Timestamp.fromDate(selectedDate);
-        final User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          final String patientId = user.uid;
-          // Now, you can use `patientId` in your `requestData`.
-          // Update the 'schedule' field within the document
-          await userDocument.update({
-            'schedule': FieldValue.arrayUnion([
-              {
-                'PatientsId': patientId,
-                'sched': timestamp, // Store the timestamp
-              }
-            ]),
-          });
-        }
-        // Show a success message or perform any other actions upon success
+
+        // Update the 'schedule' field within the doctor's document (widget.docId)
+        await doctorDocument.update({
+          'schedule': FieldValue.arrayUnion([
+            {
+              'PatientsId': user.uid,
+              'sched': timestamp, // Store the timestamp
+            }
+          ]),
+          'PatientsSchedule': FieldValue.arrayUnion([
+            {
+              'DocID': widget.docId,
+              'sched': timestamp, // Store the timestamp
+            }
+          ]),
+        });
+        //Needto fix
+        // // Update the 'schedule' field within the current user's document (current user's UID)
+        // await currentUserDocument.update({
+        //   'schedule': FieldValue.arrayUnion([
+        //     {
+        //       'PatientsId': user.uid,
+        //       'sched': timestamp, // Store the timestamp
+        //     }
+        //   ]),
+        //   'PatientsSchedule': FieldValue.arrayUnion([
+        //     {
+        //       'DocID': widget.docId,
+        //       'sched': timestamp, // Store the timestamp
+        //     }
+        //   ]),
+        // });
+
         print('Date request sent successfully.');
       } else {
-        print('No date selected.');
+        print('No date selected or user not authenticated.');
       }
     } catch (e) {
       // Handle errors here

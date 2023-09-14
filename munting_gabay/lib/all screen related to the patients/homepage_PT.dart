@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/Patients%20screens/Kids_page.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/Kids_page.dart';
+import 'package:munting_gabay/pincode.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'screens/parents page/Parent_page.dart';
@@ -70,7 +71,7 @@ class HomepagePT extends StatelessWidget {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => ParentPage()),
+                          MaterialPageRoute(builder: (context) => PinScreen()),
                         );
                       },
                       style: ElevatedButton.styleFrom(

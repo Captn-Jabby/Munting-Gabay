@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/Patients%20screens/profile_page.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:hive/hive.dart';
+import 'package:munting_gabay/changepin_screen.dart';
 
 import 'main.dart';
 
@@ -58,10 +59,11 @@ class AppDrawer extends StatelessWidget {
               backgroundImage: profileImageUrl != null
                   ? NetworkImage(profileImageUrl!)
                   : AssetImage(
-                // Use the avatar path from Hive as the default
-                Hive.box<String>('avatarBox').get('avatarPath${user?.email}',
-                    defaultValue: 'assets/A.png')!,
-              ) as ImageProvider<Object>,
+                      // Use the avatar path from Hive as the default
+                      Hive.box<String>('avatarBox').get(
+                          'avatarPath${user?.email}',
+                          defaultValue: 'assets/A.png')!,
+                    ) as ImageProvider<Object>,
             ),
           ),
           ListTile(
@@ -79,7 +81,10 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text('Settings'),
             onTap: () {
-              // Handle navigation to settings
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ChnagePin()),
+              );
             },
           ),
           Divider(

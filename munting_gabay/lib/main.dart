@@ -4,7 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/login%20and%20register/login.dart';
 import 'package:munting_gabay/login%20and%20register/register_doctor.dart';
 import 'package:munting_gabay/login%20and%20register/register_patients.dart';
-import 'package:munting_gabay/Patients%20screens/homepage_PT.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -17,6 +17,15 @@ void main() async {
   await Hive.initFlutter();
   await Hive.openBox<String>('avatarBox');
   runApp(MyApp());
+}
+
+void configLoading() {
+  EasyLoading.instance
+    ..indicatorType = EasyLoadingIndicatorType.circle
+    ..userInteractions = false
+    ..loadingStyle = EasyLoadingStyle.dark
+    ..maskType = EasyLoadingMaskType.black
+    ..dismissOnTap = false;
 }
 
 class MyApp extends StatelessWidget {

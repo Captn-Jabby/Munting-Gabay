@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:munting_gabay/Patients%20screens/screens/parents%20page/docinfo.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/docinfo.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
