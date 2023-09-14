@@ -99,6 +99,10 @@ class ParentPage extends StatelessWidget {
         buttonText = 'Forum and Discussion';
         buttonColor = Colors.teal; // Customize the color for this button
         break;
+      case 5:
+        buttonText = 'Progress Tracker';
+        buttonColor = Colors.amber; // Customize the color for this button
+        break;
       default:
         break;
     }
@@ -135,6 +139,10 @@ class ParentPage extends StatelessWidget {
                 // Navigate to the screen for 'Screen 5'
                 // Replace with the actual screen navigation code
                 break;
+              case 5:
+              // Navigate to the screen for 'Screen 6'
+              // Replace with the actual screen navigation code
+                break;
               default:
                 break;
             }
@@ -155,3 +163,5 @@ class ParentPage extends StatelessWidget {
 
 String buttonText = "";
 Color buttonColor = Colors.blue;
+
+

@@ -222,106 +222,111 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 300,
                     ),
-                    TextField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.black), // Adjust the border color
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: BtnSpacing,
-                    ),
-                    TextField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(
-                            color:
-                                Colors.blue, // You can adjust the border color
-                          ),
-                        ),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
-                          },
-                          child: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
-                          ),
-                        ),
-                      ),
-                      obscureText: !_isPasswordVisible,
-                    ),
-                    SizedBox(height: 20),
                     Container(
-                      width: BtnWidth,
-                      height: BtnHeight,
-                      child: ElevatedButton(
-                        onPressed: () => _signInUser(context),
-                        child: Text(
-                          'Login',
-                          style: buttonTextStyle,
+                      child: Column(children: [
+                        TextField(
+                          controller: _emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the border radius
+                              borderSide: BorderSide(
+                                  color: Colors.black), // Adjust the border color
+                            ),
+                          ),
                         ),
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xBA205007),
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
+                        SizedBox(
+                          height: BtnSpacing,
+                        ),
+                        TextField(
+                          controller: _passwordController,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(
+                                color:
+                                Colors.blue, // You can adjust the border color
+                              ),
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                              child: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
+                            ),
+                          ),
+                          obscureText: !_isPasswordVisible,
+                        ),
+                        SizedBox(height: 20),
+                        Container(
+                          width: BtnWidth,
+                          height: BtnHeight,
+                          child: ElevatedButton(
+                            onPressed: () => _signInUser(context),
+                            child: Text(
+                              'Login',
+                              style: buttonTextStyle,
+                            ),
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xBA205007),
+                                shape: RoundedRectangleBorder(
+                                    borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Confirmation'),
-                              content: Text(
-                                  'Are you sure you want to create an account?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
-                                  },
-                                  child: Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            RegistrationPatients(),
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('Confirmation'),
+                                  content: Text(
+                                      'Are you sure you want to create an account?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context); // Close the dialog
+                                      },
+                                      child: Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context); // Close the dialog
+                                        Navigator.pushReplacement(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                RegistrationPatients(),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Confirm',
+                                        style: TextStyle(color: Colors.red),
                                       ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Confirm',
-                                    style: TextStyle(color: Colors.red),
-                                  ),
-                                ),
-                              ],
+                                    ),
+                                  ],
+                                );
+                              },
                             );
                           },
-                        );
-                      },
-                      child: const Text(
-                        'CREATE AN ACCOUNT',
-                        style: TextStyle(color: Colors.white),
-                      ),
+                          child: const Text(
+                            'CREATE AN ACCOUNT',
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
+                      ],),
                     ),
+
                     TextButton(
                       onPressed: () {
                         showDialog(

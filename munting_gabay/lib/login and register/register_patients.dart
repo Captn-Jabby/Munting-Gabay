@@ -149,7 +149,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                     TextField(
                       controller: _ageController,
                       decoration: InputDecoration(
-                        labelText: 'Age',
+                        labelText: 'Birthdate',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius

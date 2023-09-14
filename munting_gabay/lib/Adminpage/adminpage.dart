@@ -154,8 +154,7 @@ class _AdminPageState extends State<AdminPage> {
                                         );
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue,
-                                        onPrimary: Colors.white,
+                                       backgroundColor: secondaryColor,
                                       ),
                                       child: Column(
                                         crossAxisAlignment:

@@ -188,7 +188,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             TextFormField(
               controller: _ageController,
-              decoration: InputDecoration(labelText: 'Age'),
+              decoration: InputDecoration(labelText: 'Birthdate'),
             ),
             TextFormField(
               controller: _addressController,

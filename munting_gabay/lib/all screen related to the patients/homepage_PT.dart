@@ -57,7 +57,7 @@ class HomepagePT extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/LOGO.png',
+                    'assets/hands.png',
                     width: LOGOSIZE,
                     height: LOGOSIZE,
                   ),
@@ -75,8 +75,7 @@ class HomepagePT extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                          primary: Colors.blue,
-                          onPrimary: Colors.white,
+                          backgroundColor: secondaryColor,
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(BtnCircularRadius))),
@@ -93,7 +92,7 @@ class HomepagePT extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/LOGO.png',
+                    'assets/playtime.png',
                     width: LOGOSIZE,
                     height: LOGOSIZE,
                   ),
@@ -104,7 +103,7 @@ class HomepagePT extends StatelessWidget {
                     width: BtnWidth,
                     height: BtnHeight,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.green, width: 2),
+                      color: secondaryColor,
                       borderRadius: BorderRadius.circular(BtnCircularRadius),
                     ),
                     child: TextButton(

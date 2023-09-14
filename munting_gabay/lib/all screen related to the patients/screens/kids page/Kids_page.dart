@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/games/categories.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../Doctors screen/movies_screen.dart';
@@ -12,50 +14,31 @@ class KidsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: scaffoldBgColor,
         elevation: 0,
-        toolbarHeight: 150,
         iconTheme: IconThemeData(color: BtnColor),
-        actions: [
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/A.png', // Replace with the path to your first image
-                  width: 130,
-                  height: 150,
-                ),
-                SizedBox(width: 60), // Add spacing between images
-                Image.asset(
-                  'assets/LOGO.png',
-                  height: 150,
-                  width: 130,
-                ),
-                SizedBox(width: 40),
-              ],
-            ),
-          ),
-        ],
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-              width: 350,
-              height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black, // Change the color of the outline
-                  width: 2, // Set the width of the outline
-                ),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Center(
-                  child: Text(
-                "KIDS PAGE",
-                style: buttonTextStyle,
-              )),
+            Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+              "KIDS PAGE",
+              style: buttonTextStyle,
             ),
+                    SizedBox(width: 23,),
+                    Image.asset(
+
+                      'assets/MenuLogo.png',
+                      height: 70,
+                      width: 43,
+                    ),
+                  ],
+                ),
+            ),
+
             SizedBox(height: 40),
             Center(
               child: Column(
@@ -67,7 +50,7 @@ class KidsPage extends StatelessWidget {
                         width: BtnHeight,
                       ),
                       Image.asset(
-                        'assets/LOGO.png',
+                        'assets/alphabetical.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -84,11 +67,11 @@ class KidsPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // TODO: Add Games button functionality here
+                            Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Categories()));
                             print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                            onPrimary: Colors.white,
+                          backgroundColor: secondaryColor
                           ),
                           child: Text(
                             'Games',
@@ -104,7 +87,7 @@ class KidsPage extends StatelessWidget {
                         width: BtnHeight,
                       ),
                       Image.asset(
-                        'assets/LOGO.png',
+                        'assets/music.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -124,11 +107,10 @@ class KidsPage extends StatelessWidget {
                             print('Song button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.green,
-                            onPrimary: Colors.white,
+                              backgroundColor: secondaryColor
                           ),
                           child: Text(
-                            'Song',
+                            'Music',
                             style: buttonTextStyle,
                           ),
                         ),
@@ -141,44 +123,7 @@ class KidsPage extends StatelessWidget {
                         width: BtnHeight,
                       ),
                       Image.asset(
-                        'assets/LOGO.png',
-                        width: LOGOSIZE,
-                        height: LOGOSIZE,
-                      ),
-                      SizedBox(
-                        width: lOGOSpacing,
-                      ),
-                      Container(
-                        width: BtnWidth,
-                        height: BtnHeight,
-                        decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(BtnCircularRadius),
-                        ),
-                        child: ElevatedButton(
-                          onPressed: () {
-                            // TODO: Add Progress Tracker button functionality here
-                            print('Progress Tracker button pressed!');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            primary: Colors.orange,
-                            onPrimary: Colors.white,
-                          ),
-                          child: Text(
-                            'Progress Tracker',
-                            style: ParentbuttonTextStyle,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: BtnHeight,
-                      ),
-                      Image.asset(
-                        'assets/LOGO.png',
+                        'assets/movies.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -202,8 +147,7 @@ class KidsPage extends StatelessWidget {
                             print('Movies button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.purple,
-                            onPrimary: Colors.white,
+                              backgroundColor: secondaryColor
                           ),
                           child: Text(
                             'Movies',
@@ -219,7 +163,7 @@ class KidsPage extends StatelessWidget {
                         width: BtnHeight,
                       ),
                       Image.asset(
-                        'assets/LOGO.png',
+                        'assets/videos.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -239,8 +183,7 @@ class KidsPage extends StatelessWidget {
                             print('Videos button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                            primary: Colors.red,
-                            onPrimary: Colors.white,
+                              backgroundColor: secondaryColor
                           ),
                           child: Text(
                             'Videos',
