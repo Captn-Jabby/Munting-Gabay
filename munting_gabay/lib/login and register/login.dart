@@ -98,84 +98,82 @@ class _LoginPageState extends State<LoginPage> {
   bool _ispasswordValid = true;
 
   /////////////////////////
-  bool _validatePassword(String password)
-  {
+  bool _validatePassword(String password) {
     return password.length >= 6;
   }
+
   ////////////////////
-  void _showError (String title){
-    showDialog (
-        context: context,
-        builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text(title),
-        content: Text(title),
-        actions: [
-          ElevatedButton(
-          onPressed: (){
-          Navigator.pop(context);
-      }, child: Text('Okay') ),
-    ],
-      );
-    },);
+  void _showError(String title) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(title),
+          actions: [
+            ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Okay')),
+          ],
+        );
+      },
+    );
   }
+
 //////////////////////////////
-  void _signInUser (BuildContext context) async {
+  void _signInUser(BuildContext context) async {
+    EasyLoading.show(status: 'Logging in...');
+
+    await Future.delayed(Duration(seconds: 2));
     final email = _emailController.text.trim();
-    final password =_passwordController.text.trim();
+    final password = _passwordController.text.trim();
 
-            setState(() {
-          _ispasswordValid =_validatePassword(password);
-        });
-          if (_ispasswordValid){
-            try  {
-              UserCredential result =
-                await _auth.signInWithEmailAndPassword(
-              email: email,
-              password: password,
-            );
+    setState(() {
+      _ispasswordValid = _validatePassword(password);
+    });
+    if (_ispasswordValid) {
+      try {
+        UserCredential result = await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
 
-            EasyLoading.showSuccess('You are successfully logged in.');
+        EasyLoading.showSuccess('You are successfully logged in.');
 
-           final
-           User? user = result.user;
+        final User? user = result.user;
 
-              if (user != null) {
-            DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-                .collection('usersdata')
-                .doc(user.email)
-                .get();
-            String userType = userDataSnapshot['usertype'];
+        if (user != null) {
+          DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+              .collection('usersdata')
+              .doc(user.email)
+              .get();
+          String userType = userDataSnapshot['usertype'];
 
-
-            if(userType == 'PATIENTS'){
-
-              Navigator.pushReplacementNamed(context, '/homePT');
+          if (userType == 'PATIENTS') {
+            Navigator.pushReplacementNamed(context, '/homePT');
+          } else if (userType == 'DOCTORS') {
+            String status = userDataSnapshot['status'];
+            if (status == 'Accepted') {
+              Navigator.pushReplacementNamed(context, '/homeDoctor');
+            } else if (status == 'ADMIN') {
+              Navigator.pushReplacementNamed(context, '/homeAdmin');
+            } else {
+              _showError(
+                  'Your doctor account has not been accepted yet. Please wait for approval.');
             }
-                            else if (userType == 'DOCTORS') {
-                              String status = userDataSnapshot['status'];
-                              if (status == 'Accepted') {
-                                Navigator.pushReplacementNamed(context, '/homeDoctor');
-                              }
-                              else if (status == 'ADMIN') {
-                                Navigator.pushReplacementNamed(context, '/homeAdmin');
-                              } else {
-                                _showError('Your doctor account has not been accepted yet. Please wait for approval.');
-                              }
-                            }
-              }
-              else {
-                _showError('Login failed');
-              }
-
-
-            } catch (error) {
-              _showError('Login error');
-            }}
-         }
-
-
-
+          } else {
+            _showError('Invalid user type');
+          }
+        } else {
+          _showError('Login failed');
+        }
+      } catch (error) {
+        _showError('Login error: $error');
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -280,7 +278,6 @@ class _LoginPageState extends State<LoginPage> {
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),
-
                       ),
                     ),
                     TextButton(

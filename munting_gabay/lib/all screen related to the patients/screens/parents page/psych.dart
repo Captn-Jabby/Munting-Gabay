@@ -48,78 +48,78 @@ class pscyh extends StatelessWidget {
                   ),
               SizedBox(height: 50),
               Container(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection('usersdata')
-                      .where('usertype', isEqualTo: 'DOCTORS')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator();
-                    }
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('usersdata')
+                    .where('usertype', isEqualTo: 'DOCTORS')
+                    .where('status',
+                        isEqualTo: 'Accepted') // Add this condition
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
 
-                    if (!snapshot.hasData) {
-                      return Text('No psychologists available.');
-                    }
+                  if (!snapshot.hasData) {
+                    return Text('No psychologists available.');
+                  }
 
-                    final psychologistDocs = snapshot.data!.docs;
-                    return Column(
-                      children: psychologistDocs.map((doc) {
-                        final psychologistName = doc['name'];
-                        final psychologistAddress = doc['address'];
+                  final psychologistDocs = snapshot.data!.docs;
+                  return Column(
+                    children: psychologistDocs.map((doc) {
+                      final psychologistName = doc['name'];
+                      final psychologistAddress = doc['address'];
 
-                        return Center(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  SizedBox(
-                                    width: 115,
+                      return Center(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                SizedBox(
+                                  width: 115,
+                                ),
+                                Container(
+                                  width: BtnWidth,
+                                  height: BtnHeight,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        BtnCircularRadius),
                                   ),
-                                  Container(
-                                    width: BtnWidth,
-                                    height: BtnHeight,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          BtnCircularRadius),
-                                    ),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                DoctorInfoPage(
-                                              docId: doc.id,
-                                              initialName: doc['name'],
-                                              initialAddress: doc['address'],
-                                            ),
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => DoctorInfoPage(
+                                            docId: doc.id,
+                                            initialName: doc['name'],
+                                            initialAddress: doc['address'],
                                           ),
-                                        );
-                                      },
-                                      style: ElevatedButton.styleFrom(
-                                        primary: Colors.blue,
-                                        onPrimary: Colors.white,
-                                      ),
-                                      child: Text(
-                                        'Name: $psychologistName\nAddress :$psychologistAddress',
-                                        style: ParentbuttonTextStyle,
-                                      ),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      primary: Colors.blue,
+                                      onPrimary: Colors.white,
+                                    ),
+                                    child: Text(
+                                      'Name: $psychologistName\nAddress :$psychologistAddress',
+                                      style: ParentbuttonTextStyle,
                                     ),
                                   ),
-                                ],
-                              ),
-                              Divider(
-                                color: Colors.black,
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
-                    );
-                  },
-                ),
-              ),
+                                ),
+                              ],
+                            ),
+                            Divider(
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      );
+                    }).toList(),
+                  );
+                },
+              )),
             ],
           ),
         ),

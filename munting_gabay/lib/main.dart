@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
 import 'package:munting_gabay/login%20and%20register/login.dart';
 import 'package:munting_gabay/login%20and%20register/register_doctor.dart';
 import 'package:munting_gabay/login%20and%20register/register_patients.dart';
@@ -37,7 +38,7 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       routes: {
         '/homePT': (context) => HomepagePT(),
-        '/homeDoctor': (context) => DoctorsHM(),
+        '/homeDoctor': (context) => DocDashboard(),
         '/homeAdmin': (context) => AdminPage(),
       },
     );

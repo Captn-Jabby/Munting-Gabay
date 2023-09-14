@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -90,12 +91,20 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 ),
               ),
             if (bookedDates.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Text(
-                  'Booked Dates: ${bookedDates.map((date) => DateFormat('yyyy-MM-dd').format(date)).join(', \n')}',
-                  style: TextStyle(fontSize: 16),
-                ),
+              Column(
+                children: [
+                  Text(
+                    'Booked Dates: ',
+                    style: ParentbuttonTextStyle,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      ' ${bookedDates.map((date) => DateFormat('yyyy-MM-dd').format(date)).join(', \n')}',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
           ],
         ),

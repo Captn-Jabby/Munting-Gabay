@@ -280,12 +280,12 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
               'sched': timestamp, // Store the timestamp
             }
           ]),
-          'PatientsSchedule': FieldValue.arrayUnion([
-            {
-              'DocID': widget.docId,
-              'sched': timestamp, // Store the timestamp
-            }
-          ]),
+          // 'PatientsSchedule': FieldValue.arrayUnion([
+          //   {
+          //     'DocID': widget.docId,
+          //     'sched': timestamp, // Store the timestamp
+          //   }
+          // ]),
         });
         //Needto fix
         // // Update the 'schedule' field within the current user's document (current user's UID)

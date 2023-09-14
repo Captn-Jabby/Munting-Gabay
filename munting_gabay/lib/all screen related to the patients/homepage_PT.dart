@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/Kids_page.dart';
-import 'package:munting_gabay/pincode.dart';
+import 'package:munting_gabay/login%20and%20register/pincode.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'screens/parents page/Parent_page.dart';

@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/Dr_Profile.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:hive/hive.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
+import 'package:munting_gabay/main.dart';
 
-import 'main.dart';
-
-class AppDrawer extends StatelessWidget {
+class DrDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -73,20 +73,20 @@ class AppDrawer extends StatelessWidget {
               // Handle navigation to profile
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => UserProfilePage()),
+                MaterialPageRoute(builder: (context) => DrUserProfile()),
               );
             },
           ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text('Settings'),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ChnagePin()),
-              );
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.settings),
+          //   title: Text('Settings'),
+          //   onTap: () {
+          //     // Navigator.pushReplacement(
+          //     //   context,
+          //     //   MaterialPageRoute(builder: (context) => ChnagePin()),
+          //     // );
+          //   },
+          // ),
           Divider(
             color: Colors.black,
           ), // Adds a visual divider
@@ -101,6 +101,7 @@ class AppDrawer extends StatelessWidget {
                     title: Text('Confirm Logout'),
                     content: Text('Are you sure you want to log out?'),
                     actions: <Widget>[
+                      Text('Dr Drawer'),
                       TextButton(
                         child: Text('Cancel'),
                         onPressed: () {
