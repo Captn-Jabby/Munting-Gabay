@@ -12,50 +12,24 @@ class ParentPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: scaffoldBgColor,
           elevation: 0,
-          toolbarHeight: 150,
           iconTheme: IconThemeData(color: BtnColor),
-          actions: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(width: 20),
-                  Image.asset(
-                    'assets/A.png',
-                    height: 150,
-                  ),
-                  // SizedBox(width: 30), // Add spacing between images
-                  Image.asset(
-                    'assets/LOGO.png',
-                    height: 150,
-                    width: 130,
-                  ),
-                ],
-              ),
-            ),
-          ],
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
             child: Center(
           child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Container(
-              width: 350,
-              height: 40,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Colors.black, // Change the color of the outline
-                  width: 2, // Set the width of the outline
+              Column(
+                  crossAxisAlignment: CrossAxisAlignment.center, children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "PARENT'S PAGE",
+                      style: buttonTextStyle,
+                    ),
+
+                  ],
                 ),
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: Center(
-                  child: Text(
-                "PARENTS PAGE",
-                style: buttonTextStyle,
-              )),
-            ),
             SizedBox(height: 20),
             Container(
                 height: 600,
@@ -81,23 +55,23 @@ class ParentPage extends StatelessWidget {
     switch (index) {
       case 0:
         buttonText = 'Psychologist Research';
-        buttonColor = Colors.red; // Customize the color for this button
+        buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 1:
         buttonText = 'Educational Webinars';
-        buttonColor = Colors.green; // Customize the color for this button
+        buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 2:
         buttonText = 'Resource Library';
-        buttonColor = Colors.orange; // Customize the color for this button
+        buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 3:
         buttonText = 'Online Consultation';
-        buttonColor = Colors.purple; // Customize the color for this button
+        buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 4:
         buttonText = 'Forum and Discussion';
-        buttonColor = Colors.teal; // Customize the color for this button
+        buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 5:
         buttonText = 'Progress Tracker';
@@ -148,8 +122,7 @@ class ParentPage extends StatelessWidget {
             }
           },
           style: ElevatedButton.styleFrom(
-            primary: buttonColor,
-            onPrimary: Colors.white,
+            backgroundColor: secondaryColor
           ),
           child: Text(
             buttonText,

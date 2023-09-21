@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/games/categories.dart';
 import 'package:munting_gabay/variable.dart';
-
 import '../../../Doctors screen/movies_screen.dart';
 import '../../../drawer_page.dart';
 
@@ -20,23 +19,15 @@ class KidsPage extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
               "KIDS PAGE",
               style: buttonTextStyle,
             ),
-                    SizedBox(width: 23,),
-                    Image.asset(
 
-                      'assets/MenuLogo.png',
-                      height: 70,
-                      width: 43,
-                    ),
-                  ],
-                ),
+              ],
             ),
 
             SizedBox(height: 40),
@@ -47,7 +38,7 @@ class KidsPage extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        width: BtnHeight,
+                        width: pageButton,
                       ),
                       Image.asset(
                         'assets/alphabetical.png',
@@ -84,7 +75,7 @@ class KidsPage extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        width: BtnHeight,
+                        width: pageButton,
                       ),
                       Image.asset(
                         'assets/music.png',
@@ -120,7 +111,7 @@ class KidsPage extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        width: BtnHeight,
+                        width: pageButton,
                       ),
                       Image.asset(
                         'assets/movies.png',
@@ -160,7 +151,7 @@ class KidsPage extends StatelessWidget {
                   Row(
                     children: [
                       SizedBox(
-                        width: BtnHeight,
+                        width: pageButton,
                       ),
                       Image.asset(
                         'assets/videos.png',

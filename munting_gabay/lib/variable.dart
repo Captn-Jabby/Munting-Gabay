@@ -1,6 +1,11 @@
-// Button Settings
 import 'package:flutter/material.dart';
 
+// scafold settings
+const Color scaffoldBgColor = Color(0xFF8FCC62); // Use the correct format
+const Color secondaryColor = Color(0xFFFA893D);
+
+
+// Button Settings
 final double BtnHeight = 50;
 final double BtnWidth = 250;
 final double BtnSpacing = 25;
@@ -22,8 +27,7 @@ const TextStyle ParentbuttonTextStyle = TextStyle(
 // Logo width and height
 final double LOGOSIZE = 65;
 final double lOGOSpacing = 10;
+final double pageButton = 20;
 
-// scafold settings
-const Color scaffoldBgColor = Color(0xFF8FCC62); // Use the correct format
-const Color secondaryColor = Color(0xFFFA893D);
+
 
