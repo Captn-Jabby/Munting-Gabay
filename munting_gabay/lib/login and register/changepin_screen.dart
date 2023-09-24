@@ -2,14 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ChnagePin extends StatefulWidget {
-  const ChnagePin({super.key});
+class ChangePin extends StatefulWidget {
+  const ChangePin({Key? key});
 
   @override
-  State<ChnagePin> createState() => _ChnagePinState();
+  _ChangePinState createState() => _ChangePinState();
 }
 
-class _ChnagePinState extends State<ChnagePin> {
+class _ChangePinState extends State<ChangePin> {
   String currentPin = '';
   String newPin = '';
 
@@ -71,11 +71,11 @@ class _ChnagePinState extends State<ChnagePin> {
         final CollectionReference usersDataCollection =
             FirebaseFirestore.instance.collection('usersdata');
 
-        final String currentUserId = user.uid;
+        final String? currentUserEmail = user.email;
 
-        // Update the 'pincode' field for the current user
-        await usersDataCollection.doc(currentUserId).update({
-          'pincode': pin,
+        // Update the 'pin' field for the current user using their email
+        await usersDataCollection.doc(currentUserEmail).update({
+          'pin': pin,
         });
 
         print('PIN code set successfully in Firestore.');
@@ -87,28 +87,54 @@ class _ChnagePinState extends State<ChnagePin> {
     }
   }
 
-  // Function to change the PIN
+// Function to change the PIN
   void changePin(String currentPin, String newPin) async {
-    // Implement your logic to verify the current PIN and change it to the new one
-    if (currentPin == '1234') {
-      // Replace '1234' with your actual PIN or retrieve it from Firebase
-      // Save the new PIN in Firebase
-      await setPinInFirestore(newPin);
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
 
-      // Navigate back to the previous screen or show a success message
-      Navigator.pop(context);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('PIN changed successfully.'),
-        ),
-      );
-    } else {
-      // Incorrect current PIN, show an error message
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Incorrect current PIN. Please try again.'),
-        ),
-      );
+      if (user != null) {
+        final CollectionReference usersDataCollection =
+            FirebaseFirestore.instance.collection('usersdata');
+
+        final String? currentUserEmail = user.email;
+
+        // Retrieve the 'pin' field for the current user from Firestore using their email
+        final DocumentSnapshot userData =
+            await usersDataCollection.doc(currentUserEmail).get();
+
+        if (userData.exists) {
+          final Map<String, dynamic> userDataMap =
+              userData.data() as Map<String, dynamic>;
+          final String savedPin = userDataMap['pin'];
+
+          // Compare the entered current PIN with the saved PIN
+          if (currentPin == savedPin) {
+            // Save the new PIN in Firebase
+            await setPinInFirestore(newPin);
+
+            // Navigate back to the previous screen or show a success message
+            Navigator.pop(context);
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('PIN changed successfully.'),
+              ),
+            );
+          } else {
+            // Incorrect current PIN, show an error message
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Incorrect current PIN. Please try again.'),
+              ),
+            );
+          }
+        } else {
+          print('User data not found in Firestore.');
+        }
+      } else {
+        print('User not authenticated.');
+      }
+    } catch (e) {
+      print('Error changing PIN: $e');
     }
   }
 }

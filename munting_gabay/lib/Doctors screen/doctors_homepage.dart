@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/parents%20page/psych_search.dart';
+
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
@@ -227,11 +227,12 @@ class DoctorsHM extends StatelessWidget {
                           ),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => Psychpage()),
-                              );
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //       builder: (context) => Psychpage()
+                              // ),
+                              // );
                             },
                             style: ElevatedButton.styleFrom(
                               primary: Colors.red,

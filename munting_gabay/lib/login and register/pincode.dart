@@ -47,65 +47,52 @@ class _PinScreenState extends State<PinScreen> {
       ),
     );
   }
+
   // getting the Pincode in the firebase (PLEASE ALSO CHECK THE CHANGEPIN_SCREEN)
-  // void _verifyPin(String pin) async {
-  //   EasyLoading.show(status: 'Verifying PIN...'); // Show loading indicator
-
-  //   try {
-  //     final User? user = FirebaseAuth.instance.currentUser;
-
-  //     if (user != null) {
-  //       final CollectionReference usersDataCollection =
-  //           FirebaseFirestore.instance.collection('usersdata');
-
-  //       final String currentUserId = user.uid;
-
-  //       // Retrieve the 'pincode' field for the current user from Firestore
-  //       final DocumentSnapshot userData =
-  //           await usersDataCollection.doc(currentUserId).get();
-
-  //       if (userData.exists) {
-  //         final String savedPin = userData['pincode'];
-
-  //         if (pin == savedPin) {
-  //           // Correct PIN, proceed to the next screen
-  //           Navigator.pushReplacement(
-  //             context,
-  //             MaterialPageRoute(builder: (context) => ParentPage()),
-  //           );
-  //         } else {
-  //           // Incorrect PIN, show an error message
-  //           EasyLoading.showError('Incorrect PIN. Please try again.');
-  //         }
-  //       } else {
-  //         EasyLoading.showError('User data not found in Firestore.');
-  //       }
-  //     } else {
-  //       EasyLoading.showError('User not authenticated.');
-  //     }
-  //   } catch (e) {
-  //     EasyLoading.showError('Error verifying PIN: $e');
-  //   } finally {
-  //     EasyLoading.dismiss(); // Dismiss loading indicator
-  //   }
-  // }
   void _verifyPin(String pin) async {
     EasyLoading.show(status: 'Verifying PIN...'); // Show loading indicator
 
-    // Simulate asynchronous verification (replace with actual logic)
-    await Future.delayed(Duration(seconds: 2));
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
 
-    EasyLoading.dismiss(); // Dismiss loading indicator
+      if (user != null) {
+        final String currentUserId = user.uid;
+        print('Current User ID: $currentUserId'); // Print the current user's ID
 
-    if (pin == '1234') {
-      // Replace '1234' with your actual PIN
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ParentPage()),
-      );
-    } else {
-      // Incorrect PIN, show an error message
-      EasyLoading.showError('Incorrect PIN. Please try again.');
+        // Retrieve the 'pincode' field for the current user from Firestore using their email
+        DocumentSnapshot userData = await FirebaseFirestore.instance
+            .collection('usersdata')
+            .doc(user.email) // Use the user's email as the document ID
+            .get();
+        // print('User Data: ${userData.data()}'); // Print the entire user data
+
+        if (userData.exists) {
+          final Map<String, dynamic> userDataMap =
+              userData.data() as Map<String, dynamic>;
+          final String savedPin = userDataMap['pin'];
+          // print('Saved PIN: $savedPin'); // Print the saved PIN
+          // print('Entered PIN: $pin'); // Print the entered PIN for debugging
+
+          if (pin == savedPin) {
+            // Correct PIN, proceed to the next screen
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => ParentPage()),
+            );
+          } else {
+            // Incorrect PIN, show an error message
+            EasyLoading.showError('Incorrect PIN. Please try again.');
+          }
+        } else {
+          EasyLoading.showError('User data not found in Firestore.');
+        }
+      } else {
+        EasyLoading.showError('User not authenticated.');
+      }
+    } catch (e) {
+      EasyLoading.showError('Error verifying PIN: $e');
+    } finally {
+      EasyLoading.dismiss(); // Dismiss loading indicator
     }
   }
 }

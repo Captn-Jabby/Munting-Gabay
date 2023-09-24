@@ -18,6 +18,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   TextEditingController _ageController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _pinController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
   bool _isPasswordVisible = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -25,9 +27,10 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
     String username = _usernameController.text;
     String name = _nameController.text;
     String address = _addressController.text;
-    String age = _ageController.text;
+    // String age = _ageController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
+    String pin = _pinController.text;
 
     try {
       UserCredential userCredential =
@@ -46,8 +49,9 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         'name': name,
         'usertype': 'PATIENTS',
         'address': address,
-        'age': age,
+        'birthdate': selectedDate,
         'email': email,
+        'pin': pin,
       });
 
       // Perform further actions like saving additional user data to Firestore
@@ -78,6 +82,30 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         );
       },
     );
+  }
+
+  // Selection of date
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime currentDate = DateTime.now();
+    DateTime firstDate = DateTime(1900);
+    DateTime lastDate = DateTime(2101);
+
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      selectableDayPredicate: (DateTime day) {
+        // Allow only dates without time
+        return day.isBefore(currentDate) || day.isAtSameMomentAs(currentDate);
+      },
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
   }
 
   @override
@@ -147,14 +175,34 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       height: 15,
                     ),
                     TextField(
-                      controller: _ageController,
+                      controller: _pinController,
                       decoration: InputDecoration(
-                        labelText: 'Birthdate',
+                        labelText: '''Pincode for Parent's Pages''',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
                           borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: TextField(
+                          controller: TextEditingController(
+                              text: "${selectedDate.toLocal()}".split(
+                                  ' ')[0]), // Format to show only the date part
+                          decoration: InputDecoration(
+                            labelText: 'Birthdate',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
                         ),
                       ),
                     ),
