@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:hive/hive.dart';
@@ -74,6 +75,17 @@ class AppDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => UserProfilePage()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.home_filled),
+            title: Text('Home'),
+            onTap: () {
+              // Handle navigation to profile
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomepagePT()),
               );
             },
           ),
