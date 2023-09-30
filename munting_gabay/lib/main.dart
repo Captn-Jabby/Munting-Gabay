@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -10,7 +11,6 @@ import 'package:munting_gabay/variable.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'Adminpage/adminpage.dart';
-import 'Doctors screen/doctors_homepage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +34,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      // home: LoginScreen(),
+      home: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return HomepagePT();
+          } else {
+            return LoginScreen();
+          }
+        },
+      ),
       builder: EasyLoading.init(),
       routes: {
         '/homePT': (context) => HomepagePT(),
@@ -56,7 +66,6 @@ class LoginScreen extends StatelessWidget {
         elevation: 0,
       ),
       body: Container(
-
         child: Center(
           child: Stack(
             alignment: Alignment.topCenter,
@@ -135,7 +144,8 @@ class LoginScreen extends StatelessWidget {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               title: Text('Register'),
-                              content: Text('Register as a Doctor or a Patient?'),
+                              content:
+                                  Text('Register as a Doctor or a Patient?'),
                               actions: [
                                 TextButton(
                                   onPressed: () {

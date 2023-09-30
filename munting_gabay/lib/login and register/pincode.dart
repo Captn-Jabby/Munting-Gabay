@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
+import 'package:munting_gabay/login%20and%20register/forgot_pin.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinScreen extends StatefulWidget {
@@ -42,6 +43,17 @@ class _PinScreenState extends State<PinScreen> {
               'Enter your PIN',
               style: TextStyle(fontSize: 18.0),
             ),
+            // Inside your PinScreen widget build method:
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the ForgotPINScreen when the button is pressed
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ViewPINScreen()),
+                );
+              },
+              child: Text("Forgot PIN"),
+            )
           ],
         ),
       ),
