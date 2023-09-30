@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/calendarSchedulling.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/calendarSchedulling.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
 import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/variable.dart';
@@ -95,7 +96,15 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                 IconButton(
                   icon: Icon(Icons.message), // Messaging icon
                   onPressed: () {
-                    // Add functionality for messaging here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatPage(
+                          doctorId: widget.docId,
+                          doctorName: widget.initialName,
+                        ),
+                      ),
+                    );
                   },
                 ),
                 IconButton(

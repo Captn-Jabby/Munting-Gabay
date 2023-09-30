@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/psych.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/psych.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
@@ -18,18 +18,16 @@ class ParentPage extends StatelessWidget {
         body: SingleChildScrollView(
             child: Center(
           child:
-              Column(
-                  crossAxisAlignment: CrossAxisAlignment.center, children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "PARENT'S PAGE",
-                      style: buttonTextStyle,
-                    ),
-
-                  ],
+              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "PARENT'S PAGE",
+                  style: buttonTextStyle,
                 ),
+              ],
+            ),
             SizedBox(height: 20),
             Container(
                 height: 600,
@@ -114,16 +112,14 @@ class ParentPage extends StatelessWidget {
                 // Replace with the actual screen navigation code
                 break;
               case 5:
-              // Navigate to the screen for 'Screen 6'
-              // Replace with the actual screen navigation code
+                // Navigate to the screen for 'Screen 6'
+                // Replace with the actual screen navigation code
                 break;
               default:
                 break;
             }
           },
-          style: ElevatedButton.styleFrom(
-            backgroundColor: secondaryColor
-          ),
+          style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
           child: Text(
             buttonText,
             style: TextStyle(fontSize: 16.0),
@@ -136,5 +132,3 @@ class ParentPage extends StatelessWidget {
 
 String buttonText = "";
 Color buttonColor = Colors.blue;
-
-
