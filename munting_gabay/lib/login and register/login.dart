@@ -1,81 +1,3 @@
-// login
-
-//
-// Future<void> _signInUser(BuildContext, Context) async {
-//   final email =_emailController.text.trim();
-//   final password =_passwordController.text.trim();
-//
-//
-//   setState(() {
-//     _ispasswordValid =_validatePassword(password);
-//   });
-//   try {
-//     UserCredential userCredential =
-//         await FirebaseAuth.instance.signInWithEmailAndPassword(
-//       email: _emailController.text,
-//       password: _passwordController.text,
-//     );
-//
-//     EasyLoading.showSuccess('You are successfully logged in.');
-//
-//     User? user = userCredential.user;
-//
-//     if (user != null) {
-//       DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-//           .collection('usersdata')
-//           .doc(user.email)
-//           .get();
-//       String userType = userDataSnapshot['usertype'];
-//
-//
-//       if(userType == 'PATIENTS'){
-//
-//         Navigator.pushReplacementNamed(context, '/homePT');
-//       } else if (userType == 'DOCTORS') {
-//         String status = userDataSnapshot['status'];
-//         if (status == 'Accepted') {
-//           Navigator.pushReplacementNamed(context, '/homeDoctor');
-//         } else if (status == 'ADMIN') {
-//           Navigator.pushReplacementNamed(context, '/homeAdmin');
-//         } else {
-//           showDialog(
-//             context: context,
-//             builder: (BuildContext context) {
-//               return AlertDialog(
-//                 title: Text('Account Not Accepted'),
-//                 content: Text(
-//                     'Your doctor account has not been accepted yet. Please wait for approval.'),
-//                 actions: [
-//                   TextButton(
-//                     onPressed: () {
-//                       Navigator.pop(context); // Close the dialog
-//                     },
-//                     child: Text('OK'),
-//                   ),
-//                 ],
-//               );
-//             },
-//           );
-//         }
-//       }
-//       // else if (userType == 'ADMIN') {
-//       //   // Check if the user ID is the specific admin user ID
-//       //   // if (userCredential.user?.uid == 'e4gsq87sW5gIxLgabhzC6by50oR2') {
-//       //   // Redirect to the admin page
-//       //   Navigator.pushReplacementNamed(context, '/homeAdmin');
-//       //   // }
-//       //   // else {
-//       //   //   // For other admin users, redirect to the '/homeDoctor' page
-//       //   //   Navigator.pushReplacementNamed(context, '/homeDoctor');
-//       //   // }
-//       // }
-//     }
-//
-//     EasyLoading.dismiss();
-//   } on FirebaseAuthException catch (ex) {
-//     EasyLoading.showError('Login failed: ${ex.message}');
-//   }
-// }
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -223,110 +145,114 @@ class _LoginPageState extends State<LoginPage> {
                       height: 300,
                     ),
                     Container(
-                      child: Column(children: [
-                        TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Adjust the border radius
-                              borderSide: BorderSide(
-                                  color: Colors.black), // Adjust the border color
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: BtnSpacing,
-                        ),
-                        TextField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(
-                                color:
-                                Colors.blue, // You can adjust the border color
-                              ),
-                            ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              child: Icon(
-                                _isPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
+                      child: Column(
+                        children: [
+                          TextField(
+                            controller: _emailController,
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(
+                                    10.0), // Adjust the border radius
+                                borderSide: BorderSide(
+                                    color: Colors
+                                        .black), // Adjust the border color
                               ),
                             ),
                           ),
-                          obscureText: !_isPasswordVisible,
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          width: BtnWidth,
-                          height: BtnHeight,
-                          child: ElevatedButton(
-                            onPressed: () => _signInUser(context),
-                            child: Text(
-                              'Login',
-                              style: buttonTextStyle,
-                            ),
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xBA205007),
-                                shape: RoundedRectangleBorder(
-                                    borderRadius:
-                                    BorderRadius.circular(BtnCircularRadius))),
+                          SizedBox(
+                            height: BtnSpacing,
                           ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: Text('Confirmation'),
-                                  content: Text(
-                                      'Are you sure you want to create an account?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); // Close the dialog
-                                      },
-                                      child: Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context); // Close the dialog
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                RegistrationPatients(),
-                                          ),
-                                        );
-                                      },
-                                      child: Text(
-                                        'Confirm',
-                                        style: TextStyle(color: Colors.red),
+                          TextField(
+                            controller: _passwordController,
+                            decoration: InputDecoration(
+                              labelText: 'Password',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide(
+                                  color: Colors
+                                      .blue, // You can adjust the border color
+                                ),
+                              ),
+                              suffixIcon: GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    _isPasswordVisible = !_isPasswordVisible;
+                                  });
+                                },
+                                child: Icon(
+                                  _isPasswordVisible
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
+                            ),
+                            obscureText: !_isPasswordVisible,
+                          ),
+                          SizedBox(height: 20),
+                          Container(
+                            width: BtnWidth,
+                            height: BtnHeight,
+                            child: ElevatedButton(
+                              onPressed: () => _signInUser(context),
+                              child: Text(
+                                'Login',
+                                style: buttonTextStyle,
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xBA205007),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(
+                                          BtnCircularRadius))),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Confirmation'),
+                                    content: Text(
+                                        'Are you sure you want to create an account?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                        },
+                                        child: Text('Cancel'),
                                       ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: const Text(
-                            'CREATE AN ACCOUNT',
-                            style: TextStyle(color: Colors.white),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                          Navigator.pushReplacement(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RegistrationPatients(),
+                                            ),
+                                          );
+                                        },
+                                        child: Text(
+                                          'Confirm',
+                                          style: TextStyle(color: Colors.red),
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            child: const Text(
+                              'CREATE AN ACCOUNT',
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
-                        ),
-                      ],),
+                        ],
+                      ),
                     ),
-
                     TextButton(
                       onPressed: () {
                         showDialog(

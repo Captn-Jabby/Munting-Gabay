@@ -16,7 +16,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-
+  DateTime selectedDate = DateTime.now();
   late User _currentUser;
   final Box<String> _avatarBox = Hive.box<String>('avatarBox');
   late String _avatarPath;
@@ -40,7 +40,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       setState(() {
         _nameController.text = snapshot['name'];
         _usernameController.text = snapshot['username'];
-        _ageController.text = snapshot['age'];
+        // Convert Timestamp to DateTime
+        Timestamp birthdateTimestamp = snapshot['birthdate'];
+        selectedDate = birthdateTimestamp.toDate();
         _addressController.text = snapshot['address'];
         _emailController.text = snapshot['email'];
         _avatarPath = _avatarBox.get('avatarPath${_currentUser.email}',
@@ -53,6 +55,30 @@ class _UserProfilePageState extends State<UserProfilePage> {
     _avatarBox.put('avatarPath${_currentUser.email}', path);
   }
 
+  // Selection of date
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime currentDate = DateTime.now();
+    DateTime firstDate = DateTime(1900);
+    DateTime lastDate = DateTime(2101);
+
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      selectableDayPredicate: (DateTime day) {
+        // Allow only dates without time
+        return day.isBefore(currentDate) || day.isAtSameMomentAs(currentDate);
+      },
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
   void _updateUserData() async {
     await FirebaseFirestore.instance
         .collection('usersdata')
@@ -60,7 +86,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         .update({
       'name': _nameController.text,
       'username': _usernameController.text,
-      'age': _ageController.text,
+      'birthdate': selectedDate,
       'address': _addressController.text,
       'email': _emailController.text,
       'avatarPath': _avatarPath,
@@ -186,9 +212,23 @@ class _UserProfilePageState extends State<UserProfilePage> {
               controller: _usernameController,
               decoration: InputDecoration(labelText: 'Username'),
             ),
-            TextFormField(
-              controller: _ageController,
-              decoration: InputDecoration(labelText: 'Birthdate'),
+            SizedBox(height: 16.0),
+            GestureDetector(
+              onTap: () => _selectDate(context),
+              child: AbsorbPointer(
+                child: TextField(
+                  controller: TextEditingController(
+                      text: "${selectedDate.toLocal()}"
+                          .split(' ')[0]), // Format to show only the date part
+                  decoration: InputDecoration(
+                    labelText: 'Birthdate',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(color: Colors.blue),
+                    ),
+                  ),
+                ),
+              ),
             ),
             TextFormField(
               controller: _addressController,
