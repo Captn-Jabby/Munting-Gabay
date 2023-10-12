@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 
-class ChatPage extends StatefulWidget {
-  final String doctorId; // Doctor's UID
-  final String doctorName; // Doctor's name
+class ReceiverChatPage extends StatefulWidget {
+  final String receiverId; // Receiver's UID
+  final String receiverName; // Receiver's name
 
-  ChatPage({required this.doctorId, required this.doctorName});
+  ReceiverChatPage({required this.receiverId, required this.receiverName});
 
   @override
-  _ChatPageState createState() => _ChatPageState();
+  _ReceiverChatPageState createState() => _ReceiverChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage> {
+class _ReceiverChatPageState extends State<ReceiverChatPage> {
   final TextEditingController messageController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late User currentUser;
@@ -29,7 +28,7 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.doctorName),
+        title: Text(widget.receiverName),
       ),
       body: Column(
         children: [
@@ -37,9 +36,10 @@ class _ChatPageState extends State<ChatPage> {
             child: StreamBuilder(
               stream: firestore
                   .collection('messages')
-                  .doc(widget.doctorId) // Use doctor's ID as the document ID
+                  .doc(
+                      widget.receiverId) // Use receiver's ID as the document ID
                   .collection(currentUser
-                      .email!) // Use user's email as sub-collection name
+                      .email!) // Use current user's email as the sub-collection name
                   .orderBy('timestamp')
                   .snapshots(),
               builder: (context, snapshot) {
@@ -56,52 +56,31 @@ class _ChatPageState extends State<ChatPage> {
                 for (var message in documents) {
                   final messageText = message['messageText'];
                   final senderName = message['senderName'];
-                  final receiverName = message['receiverName'];
 
                   messageWidgets.add(
                     ListTile(
                       title: Row(
-                        mainAxisAlignment:
-                            message['senderId'] == currentUser.email
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment
+                            .start, // Align messages to the left for the receiver
                         children: [
                           Flexible(
                             child: Container(
                               padding: EdgeInsets.all(8.0),
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(8.0),
-                                color: message['senderId'] == currentUser.email
-                                    ? Colors.blue
-                                    : Colors.green,
+                                color: Colors
+                                    .green, // You can customize the color for receiver's messages
                               ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    messageText,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    // Format the timestamp to display date and time without seconds
-                                    (message['timestamp'] != null &&
-                                            message['timestamp'] is Timestamp)
-                                        ? DateFormat('yyyy-MM-dd HH:mm').format(
-                                            (message['timestamp'] as Timestamp)
-                                                .toDate())
-                                        : 'N/A',
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 12.0),
-                                  ),
-                                ],
+                              child: Text(
+                                messageText,
+                                style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      // No subtitle for any message
-                      subtitle: null,
+                      subtitle: Text(
+                          'From: $senderName'), // Display sender's name under the message
                       // No trailing widget for any message
                       trailing: null,
                       // No leading widget for any message
@@ -153,17 +132,31 @@ class _ChatPageState extends State<ChatPage> {
 
       // Create a new message document in the receiver's collection
       await messagesCollection
-          .doc(widget.doctorId) // Use doctor's ID as the document ID
+          .doc(widget.receiverId) // Use receiver's ID as the document ID
           .collection(
-              currentUserEmail) // Use user's email as sub-collection name
+              currentUserEmail) // Use current user's email as the sub-collection name
           .add({
         'senderId': currentUserEmail,
         'senderName': currentUser.displayName, // Store sender's name
-        'receiverId': widget.doctorId,
-        'receiverName': widget.doctorName, // Store receiver's name
+        'receiverId': widget.receiverId,
+        'receiverName': widget.receiverName, // Store receiver's name
         'messageText': messageText,
         'timestamp': FieldValue.serverTimestamp(),
       });
+
+      // Create a copy of the message in the sender's collection
+      // await messagesCollection
+      //     .doc(currentUserEmail) // Use sender's email as the document ID
+      //     .collection(
+      //         widget.receiverId) // Use receiver's ID as the sub-collection name
+      //     .add({
+      //   'senderId': currentUserEmail,
+      //   'senderName': currentUser.displayName, // Store sender's name
+      //   'receiverId': widget.receiverId,
+      //   'receiverName': widget.receiverName, // Store receiver's name
+      //   'messageText': messageText,
+      //   'timestamp': FieldValue.serverTimestamp(),
+      // });
 
       // Clear the message input field
       messageController.clear();

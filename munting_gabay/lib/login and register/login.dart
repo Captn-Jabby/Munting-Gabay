@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
         _showError('Login error: $error');
       }
     }
+    EasyLoading.dismiss();
   }
 
   @override

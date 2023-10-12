@@ -101,7 +101,6 @@ class DrDrawer extends StatelessWidget {
                     title: Text('Confirm Logout'),
                     content: Text('Are you sure you want to log out?'),
                     actions: <Widget>[
-                      Text('Dr Drawer'),
                       TextButton(
                         child: Text('Cancel'),
                         onPressed: () {

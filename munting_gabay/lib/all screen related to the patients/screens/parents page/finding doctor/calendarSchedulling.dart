@@ -1,9 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:munting_gabay/variable.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarScreen extends StatefulWidget {
   final String docId;
@@ -18,29 +17,23 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime? _selectedDate;
-  DateTime _focusedDay = DateTime.now(); // Provide the initial focused day
+  DateTime _focusedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<DateTime> bookedDates = [];
 
   @override
   void initState() {
     super.initState();
-    // Fetch the booked dates for the specified doctor
     fetchBookedDates();
   }
 
   void fetchBookedDates() async {
     try {
-      final CollectionReference usersDataCollection =
-          firestore.collection('usersdata');
-
       final DocumentSnapshot doc =
-          await usersDataCollection.doc(widget.docId).get();
+          await firestore.collection('usersdata').doc(widget.docId).get();
 
       if (doc.exists) {
         final List<dynamic> schedule = doc['schedule'];
-
-        // Extract the scheduled dates from the document
         final List<DateTime> dates = schedule
             .map((entry) => (entry['sched'] as Timestamp).toDate())
             .toList();
@@ -50,7 +43,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
         });
       }
     } catch (e) {
-      // Handle errors here
       print('Error fetching booked dates: $e');
     }
   }
@@ -66,13 +58,22 @@ class _CalendarScreenState extends State<CalendarScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             TableCalendar(
-              focusedDay: _focusedDay, // Set the focused day
-              firstDay: DateTime(2000), // Replace with your desired range
-              lastDay: DateTime(2101), // Replace with your desired range
+              focusedDay: _focusedDay,
+              firstDay: DateTime(2000),
+              lastDay: DateTime(2101),
               onDaySelected: (selectedDate, focusedDay) {
                 setState(() {
                   _selectedDate = selectedDate;
                 });
+              },
+              eventLoader: (day) {
+                final events = bookedDates
+                    .where((date) =>
+                        date.year == day.year &&
+                        date.month == day.month &&
+                        date.day == day.day)
+                    .toList();
+                return events;
               },
               // Customize the calendar appearance and behavior here
             ),
@@ -82,29 +83,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                 child: ElevatedButton(
                   onPressed: () async {
                     if (_selectedDate != null) {
-                      // Send the request to Firebase
-                      // sendDateRequestToFirebase(_selectedDate!);
-                      // showConfirmationDialog(_selectedDate!);
+                      showConfirmationDialog(_selectedDate!);
                     }
                   },
                   child: Text('Send Date Request'),
                 ),
-              ),
-            if (bookedDates.isNotEmpty)
-              Column(
-                children: [
-                  Text(
-                    'Booked Dates: ',
-                    style: ParentbuttonTextStyle,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Text(
-                      ' ${bookedDates.map((date) => DateFormat('yyyy-MM-dd').format(date)).join(', \n')}',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                  ),
-                ],
               ),
           ],
         ),
@@ -132,15 +115,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
           actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
-                // Call the method to send the date request here
                 sendDateRequestToFirebase(selectedDate);
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Confirm'),
             ),
@@ -152,41 +134,29 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
   void sendDateRequestToFirebase(DateTime selectedDate) async {
     try {
-      // Replace 'usersdata' with your Firestore collection name
       final CollectionReference usersDataCollection =
           firestore.collection('usersdata');
-
-      // Replace '123456' with the actual patient's ID
       final User? user = FirebaseAuth.instance.currentUser;
 
-      if (selectedDate != null) {
-        // Replace 'document_id' with the ID of the specific document in 'usersdata'
+      if (selectedDate != null && user != null) {
         final DocumentReference userDocument =
             usersDataCollection.doc(widget.docId);
-
-        // Create a Timestamp object from the selected date
         final Timestamp timestamp = Timestamp.fromDate(selectedDate);
-        final User? user = FirebaseAuth.instance.currentUser;
-        if (user != null) {
-          final String patientId = user.uid;
-          // Now, you can use `patientId` in your `requestData`.
-          // Update the 'schedule' field within the document
-          await userDocument.update({
-            'schedule': FieldValue.arrayUnion([
-              {
-                'PatientsId': patientId,
-                'sched': timestamp, // Store the timestamp
-              }
-            ]),
-          });
-        }
-        // Show a success message or perform any other actions upon success
+
+        await userDocument.update({
+          'schedule': FieldValue.arrayUnion([
+            {
+              'PatientsId': user.uid,
+              'sched': timestamp,
+            }
+          ]),
+        });
+
         print('Date request sent successfully.');
       } else {
         print('No date selected.');
       }
     } catch (e) {
-      // Handle errors here
       print('Error sending date request: $e');
     }
   }

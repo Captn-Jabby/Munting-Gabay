@@ -2,55 +2,35 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:munting_gabay/variable.dart';
-// import 'package:firebase_storage/firebase_storage.dart';
-// import 'package:image_picker/image_picker.dart';
-
-// import 'dart:io' as io;
 
 import 'login.dart';
 import '../main.dart';
 
-class RegistrationDoctors extends StatefulWidget {
+class RegistrationDOCTORS extends StatefulWidget {
   @override
-  _RegistrationDoctorsState createState() => _RegistrationDoctorsState();
+  _RegistrationDOCTORSState createState() => _RegistrationDOCTORSState();
 }
 
-class _RegistrationDoctorsState extends State<RegistrationDoctors> {
+class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
   TextEditingController _ageController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _pinController = TextEditingController();
+  DateTime selectedDate = DateTime.now();
   bool _isPasswordVisible = false;
-
   FirebaseAuth _auth = FirebaseAuth.instance;
-  // TextEditingController _imageController = TextEditingController();
-  // io.File? _imageFile;
-
-  // Future<void> _uploadImage() async {
-  //   final picker = ImagePicker();
-  //   final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-
-  //   if (pickedFile != null) {
-  //     setState(() {
-  //       _imageFile = io.File(pickedFile.path); // Use the 'dart:io' File class
-  //       _imageController.text = 'Image Selected';
-  //     });
-  //   } else {
-  //     setState(() {
-  //       _imageController.text = 'No Image Selected';
-  //     });
-  //   }
-  // }
 
   void _registerUser() async {
     String username = _usernameController.text;
     String name = _nameController.text;
     String address = _addressController.text;
-    String age = _ageController.text;
+    // String age = _ageController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
+    String pin = _pinController.text;
 
     try {
       UserCredential userCredential =
@@ -68,10 +48,10 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
         'username': username,
         'name': name,
         'usertype': 'DOCTORS',
-        'status': 'Waiting',
         'address': address,
-        'age': age,
+        'birthdate': selectedDate,
         'email': email,
+        'status': 'Waiting',
       });
 
       // Perform further actions like saving additional user data to Firestore
@@ -104,40 +84,48 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
     );
   }
 
+  // Selection of date
+  Future<void> _selectDate(BuildContext context) async {
+    DateTime currentDate = DateTime.now();
+    DateTime firstDate = DateTime(1900);
+    DateTime lastDate = DateTime(2101);
+
+    DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      selectableDayPredicate: (DateTime day) {
+        // Allow only dates without time
+        return day.isBefore(currentDate) || day.isAtSameMomentAs(currentDate);
+      },
+    );
+
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: EdgeInsets.all(16.0),
           child: Center(
             child: Stack(alignment: Alignment.topCenter, children: [
-              Column(
-                children: [
-                  const SizedBox(
-                    height: 18,
-                  ),
-                  Text('Munting\nGabay',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 5,
-                        shadows: [
-                          Shadow(
-                              color: Color(0xBA205007).withOpacity(1.0),
-                              offset: const Offset(7, 2))
-                        ],
-                        fontSize: 55,
-                        color: Colors.white,
-                      )),
-                ],
+              Image.asset(
+                'assets/A.png',
+                width: 300,
+                height: 300,
               ),
-              SizedBox(
-                width: 320,
+              Container(
+                width: 300,
                 child: Column(
                   children: [
-                    Text('DOCTORS REGISTER PAGE'),
                     SizedBox(
                       height: 270,
                     ),
@@ -148,12 +136,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -163,12 +151,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -178,31 +166,32 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
-                    // ElevatedButton(
-                    //   onPressed: _uploadImage,
-                    //   child: Text('Select Profile Image'),
-                    // ),
-                    TextField(
-                      controller: _ageController,
-                      decoration: InputDecoration(
-                        labelText: 'Age',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: const BorderSide(
-                              color: Colors.blue), // Adjust the border color
+                    GestureDetector(
+                      onTap: () => _selectDate(context),
+                      child: AbsorbPointer(
+                        child: TextField(
+                          controller: TextEditingController(
+                              text: "${selectedDate.toLocal()}".split(
+                                  ' ')[0]), // Format to show only the date part
+                          decoration: InputDecoration(
+                            labelText: 'Birthdate',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: BorderSide(color: Colors.blue),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -212,12 +201,12 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
                     ),
-                    const SizedBox(
+                    SizedBox(
                       height: 15,
                     ),
                     TextField(
@@ -227,7 +216,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(
                               10.0), // Adjust the border radius
-                          borderSide: const BorderSide(
+                          borderSide: BorderSide(
                               color: Colors.blue), // Adjust the border color
                         ),
                         suffixIcon: GestureDetector(
@@ -245,19 +234,18 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                       ),
                       obscureText: !_isPasswordVisible,
                     ),
-                    const SizedBox(height: 20),
-                    SizedBox(
+                    SizedBox(height: 20),
+                    Container(
                       width: BtnWidth,
                       height: BtnHeight,
                       child: ElevatedButton(
                         onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
-                            primary: Colors.blue,
-                            onPrimary: Colors.white,
+                            backgroundColor: const Color(0xBA205007),
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),
-                        child: const Text(
+                        child: Text(
                           'Register',
                           style: buttonTextStyle,
                         ),
@@ -269,15 +257,14 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: const Text('Confirmation'),
-                              content:
-                                  const Text('Are you sure you want to LOGIN?'),
+                              title: Text('Confirmation'),
+                              content: Text('Are you sure you want to LOGIN?'),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context); // Close the dialog
                                   },
-                                  child: const Text('Cancel'),
+                                  child: Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -289,7 +276,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                                       ),
                                     );
                                   },
-                                  child: const Text(
+                                  child: Text(
                                     'Confirm',
                                     style: TextStyle(color: Colors.red),
                                   ),
@@ -299,7 +286,7 @@ class _RegistrationDoctorsState extends State<RegistrationDoctors> {
                           },
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'CLICK HERE TO LOGIN',
                         style: TextStyle(color: Colors.white),
                       ),
