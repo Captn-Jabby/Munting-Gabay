@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:munting_gabay/variable.dart';
 import '../../../Doctors screen/movies_screen.dart';
 import '../../../drawer_page.dart';
-import 'games/main.dart';
+import 'games/categories.dart';
+
 
 class KidsPage extends StatelessWidget {
   @override
@@ -58,7 +59,7 @@ class KidsPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // TODO: Add Games button functionality here
-                            Navigator.push(context, CupertinoPageRoute(builder: (context)=>const KiddieHome()));
+                            Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Categories()));
                             print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
