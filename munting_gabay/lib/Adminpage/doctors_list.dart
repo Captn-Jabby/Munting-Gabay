@@ -8,14 +8,22 @@ class DoctorDetailsScreen extends StatefulWidget {
   final String docId;
   final String initialName;
   final String initialAddress;
-  final String initialAge;
+  final String initialBirthdate;
   final String initialStatus;
+  final String clinic; // Add clinic argument
+  final String addressHospital; // Add addressHospital argument
+  final String imageUrl;
+  final String imageUrl2;
 
   DoctorDetailsScreen({
+    required this.imageUrl,
+    required this.imageUrl2,
+    required this.clinic,
+    required this.addressHospital,
     required this.docId,
     required this.initialName,
     required this.initialAddress,
-    required this.initialAge,
+    required this.initialBirthdate,
     required this.initialStatus,
   });
 
@@ -90,8 +98,29 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
             Text('Address: ${widget.initialAddress}',
                 style: TextStyle(fontSize: 16)),
             SizedBox(height: 16),
-            Text('Age: ${widget.initialAge}', style: TextStyle(fontSize: 16)),
+            Text('Birthdate: ${widget.initialBirthdate}',
+                style: TextStyle(fontSize: 16)),
             SizedBox(height: 16),
+            Text('Clinic Adress: ${widget.addressHospital}',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 16),
+            Text('Clinic Name: ${widget.clinic}',
+                style: TextStyle(fontSize: 16)),
+            SizedBox(height: 16),
+            Text('Identification:', style: TextStyle(fontSize: 16)),
+            Image.network(
+              widget.imageUrl,
+              width: 100,
+              height: 100,
+            ),
+            Text('lICENSURE:', style: TextStyle(fontSize: 16)),
+            // if (widget.imageUrl2 !=
+            //     null)
+            Image.network(
+              widget.imageUrl2,
+              width: 100,
+              height: 100,
+            ),
             Text('Status:', style: TextStyle(fontSize: 16)),
             Row(
               children: [
@@ -106,7 +135,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 ),
                 Text('Accepted'),
                 Radio(
-                  value: 'Denied',
+                  value: 'Waiting',
                   groupValue: selectedStatus,
                   onChanged: (value) {
                     setState(() {

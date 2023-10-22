@@ -52,6 +52,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         'birthdate': selectedDate,
         'email': email,
         'pin': pin,
+        'avatarPath': 'assets/avatar1.png'
       });
 
       // Perform further actions like saving additional user data to Firestore

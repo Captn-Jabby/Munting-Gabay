@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
+import 'package:munting_gabay/Doctors%20screen/schedule.dart';
 import 'package:munting_gabay/Dr_Profile.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/message_screen.dart';
@@ -83,6 +84,20 @@ class _DocDashboardState extends State<DocDashboard> {
                     // ReceiverChatPage(receiverId: '', receiverName: '',)
 
                     ),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.calendar_month,
+              color: Colors.indigo,
+            ),
+            onPressed: () {
+              // Handle the action when the message button is pressed
+              // For example, navigate to the chat screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ScheduleScreen()),
               );
             },
           ),

@@ -66,62 +66,78 @@ class pscyh extends StatelessWidget {
                     final psychologistDocs = snapshot.data!.docs;
                     return Column(
                       children: psychologistDocs.map((doc) {
-                        final psychologistName = doc['name'];
-                        final psychologistAddress = doc['address'];
+                        try {
+                          final psychologistName = doc.get('name') ?? 'Unknown';
+                          final psychologistAddress =
+                              doc.get('address') ?? 'Unknown';
 
-                        return Center(
-                          child: Column(
-                            children: [
-                              Card(
-                                elevation: 3, // You can adjust the elevation
-                                margin: EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 20),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16.0),
-                                  child: Column(
-                                    children: [
-                                      Text(
-                                        'Name: $psychologistName',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      Text(
-                                        'Address: $psychologistAddress',
-                                        style: TextStyle(fontSize: 16),
-                                      ),
-                                      SizedBox(height: 10),
-                                      ElevatedButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                              builder: (context) =>
-                                                  DoctorInfoPage(
-                                                docId: doc.id,
-                                                initialName: doc['name'],
-                                                initialAddress: doc['address'],
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                        style: ElevatedButton.styleFrom(
-                                          primary: Colors.blue,
-                                          onPrimary: Colors.white,
+                          return Center(
+                            child: Column(
+                              children: [
+                                Card(
+                                  elevation: 3,
+                                  margin: EdgeInsets.symmetric(
+                                      vertical: 10, horizontal: 20),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      children: [
+                                        CircleAvatar(
+                                          radius: 40,
+                                          backgroundImage: AssetImage(
+                                            doc['avatarPath'] ??
+                                                'assets/avatar1.png',
+                                          ),
                                         ),
-                                        child: Text(
-                                          'View Details',
+                                        SizedBox(height: 10),
+                                        Text(
+                                          'Name: $psychologistName',
                                           style: TextStyle(fontSize: 16),
                                         ),
-                                      ),
-                                    ],
+                                        Text(
+                                          'Address: $psychologistAddress',
+                                          style: TextStyle(fontSize: 16),
+                                        ),
+                                        SizedBox(height: 10),
+                                        ElevatedButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    DoctorInfoPage(
+                                                  docId: doc.id,
+                                                  initialName: doc['name'],
+                                                  initialAddress:
+                                                      doc['address'],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          style: ElevatedButton.styleFrom(
+                                            primary: Colors.blue,
+                                            onPrimary: Colors.white,
+                                          ),
+                                          child: Text(
+                                            'View Details',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Divider(
-                                color: Colors.black,
-                              ),
-                            ],
-                          ),
-                        );
+                                Divider(
+                                  color: Colors.black,
+                                ),
+                              ],
+                            ),
+                          );
+                        } catch (e) {
+                          print('Error in rendering psychologist: $e');
+                          return SizedBox
+                              .shrink(); // Return an empty container in case of error
+                        }
                       }).toList(),
                     );
                   },

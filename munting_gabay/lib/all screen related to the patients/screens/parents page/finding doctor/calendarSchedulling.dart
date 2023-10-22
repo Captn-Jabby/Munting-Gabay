@@ -17,7 +17,7 @@ class CalendarScreen extends StatefulWidget {
 
 class _CalendarScreenState extends State<CalendarScreen> {
   DateTime? _selectedDate;
-  DateTime _focusedDay = DateTime.now();
+  final DateTime _focusedDay = DateTime.now();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   List<DateTime> bookedDates = [];
 
@@ -51,7 +51,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Calendar Screen'),
+        title: const Text('Calendar Screen'),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -86,7 +86,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       showConfirmationDialog(_selectedDate!);
                     }
                   },
-                  child: Text('Send Date Request'),
+                  child: const Text('Send Date Request'),
                 ),
               ),
           ],
@@ -100,15 +100,15 @@ class _CalendarScreenState extends State<CalendarScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Confirm Date and Time'),
+          title: const Text('Confirm Date and Time'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Selected Date and Time:'),
+              const Text('Selected Date and Time:'),
               Text(
                 DateFormat('yyyy-MM-dd HH:mm').format(selectedDate),
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: const TextStyle(fontWeight: FontWeight.bold),
               ),
             ],
           ),
@@ -117,14 +117,14 @@ class _CalendarScreenState extends State<CalendarScreen> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
                 sendDateRequestToFirebase(selectedDate);
                 Navigator.of(context).pop();
               },
-              child: Text('Confirm'),
+              child: const Text('Confirm'),
             ),
           ],
         );

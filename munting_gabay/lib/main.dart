@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -29,20 +30,79 @@ void configLoading() {
     ..dismissOnTap = false;
 }
 
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       debugShowCheckedModeBanner: false,
+//       // home: LoginScreen(),
+//       home: StreamBuilder(
+//         stream: FirebaseAuth.instance.authStateChanges(),
+//         builder: (context, snapshot) {
+//           if (snapshot.hasData) {
+//             return HomepagePT();
+//           } else {
+//             return LoginScreen();
+//           }
+//         },
+//       ),
+//       builder: EasyLoading.init(),
+//       routes: {
+//         '/homePT': (context) => HomepagePT(),
+//         '/homeDoctor': (context) => DocDashboard(),
+//         '/homeAdmin': (context) => AdminPage(),
+//       },
+//     );
+//   }
+// }
+
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: LoginScreen(),
-      home: StreamBuilder(
+      home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return HomepagePT();
-          } else {
-            return LoginScreen();
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
           }
+
+          if (snapshot.hasData) {
+            User? user = snapshot.data;
+            if (user != null) {
+              return FutureBuilder<DocumentSnapshot>(
+                future: getUserDataFromFirestore(user),
+                builder: (context, userDataSnapshot) {
+                  if (userDataSnapshot.connectionState ==
+                      ConnectionState.waiting) {
+                    return CircularProgressIndicator();
+                  }
+
+                  String userType =
+                      userDataSnapshot.data?.get('usertype') ?? '';
+
+                  if (userType == 'PATIENTS') {
+                    return HomepagePT();
+                  } else if (userType == 'DOCTORS') {
+                    String status = userDataSnapshot.data?.get('status') ?? '';
+
+                    if (status == 'Accepted') {
+                      return DocDashboard();
+                    } else if (status == 'ADMIN') {
+                      return AdminPage();
+                    } else {
+                      return Text("EMPTY");
+                    }
+                  } else {
+                    return InvalidUserTypeScreen();
+                  }
+                },
+              );
+            }
+          }
+
+          return LoginScreen();
         },
       ),
       builder: EasyLoading.init(),
@@ -51,6 +111,41 @@ class MyApp extends StatelessWidget {
         '/homeDoctor': (context) => DocDashboard(),
         '/homeAdmin': (context) => AdminPage(),
       },
+    );
+  }
+
+  Future<DocumentSnapshot> getUserDataFromFirestore(User user) async {
+    return await FirebaseFirestore.instance
+        .collection('usersdata')
+        .doc(user.email)
+        .get();
+  }
+}
+
+class InvalidUserTypeScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Invalid User Type'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'Invalid User Type',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 10),
+            Text(
+              'You do not have a valid user type for this app.',
+              style: TextStyle(fontSize: 16),
+            ),
+            // You can add more widgets, buttons, or information as needed
+          ],
+        ),
+      ),
     );
   }
 }

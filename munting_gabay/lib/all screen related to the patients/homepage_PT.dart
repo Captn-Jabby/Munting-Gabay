@@ -3,10 +3,11 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/scree
 import 'package:munting_gabay/login%20and%20register/pincode.dart';
 import 'package:munting_gabay/variable.dart';
 
-import 'screens/parents page/Parent_page.dart';
 import '../drawer_page.dart';
 
 class HomepagePT extends StatelessWidget {
+  const HomepagePT({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +16,7 @@ class HomepagePT extends StatelessWidget {
         // automaticallyImplyLeading: false,
         backgroundColor: scaffoldBgColor,
         elevation: 0,
-        iconTheme: IconThemeData(color: BtnColor),
+        iconTheme: const IconThemeData(color: BtnColor),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
@@ -24,7 +25,7 @@ class HomepagePT extends StatelessWidget {
             children: [
               Column(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   Text('Munting\nGabay',
@@ -34,7 +35,7 @@ class HomepagePT extends StatelessWidget {
                         letterSpacing: 5,
                         shadows: [
                           Shadow(
-                              color: Color(0xBA205007).withOpacity(1.0),
+                              color: const Color(0xBA205007).withOpacity(1.0),
                               offset: const Offset(7, 2))
                         ],
                         fontSize: 75,
@@ -50,7 +51,7 @@ class HomepagePT extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
               Row(
@@ -64,7 +65,7 @@ class HomepagePT extends StatelessWidget {
                   SizedBox(
                     width: lOGOSpacing,
                   ),
-                  Container(
+                  SizedBox(
                     width: BtnWidth,
                     height: BtnHeight,
                     child: ElevatedButton(
@@ -79,7 +80,7 @@ class HomepagePT extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(BtnCircularRadius))),
-                      child: Text(
+                      child: const Text(
                         'Parents',
                         style: buttonTextStyle,
                       ),
@@ -113,7 +114,7 @@ class HomepagePT extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => KidsPage()),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'Child',
                         style: buttonTextStyle,
                       ),

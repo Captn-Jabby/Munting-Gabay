@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/psych.dart';
+import 'package:munting_gabay/resources.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
@@ -100,8 +101,10 @@ class ParentPage extends StatelessWidget {
                 // Replace with the actual screen navigation code
                 break;
               case 2:
-                // Navigate to the screen for 'Screen 3'
-                // Replace with the actual screen navigation code
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BookResourcesApp()),
+                );
                 break;
               case 3:
                 // Navigate to the screen for 'Screen 4'

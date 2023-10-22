@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 const Color scaffoldBgColor = Color(0xFF8FCC62); // Use the correct format
 const Color secondaryColor = Color(0xFFFA893D);
 
-
 // Button Settings
 final double BtnHeight = 50;
 final double BtnWidth = 250;
@@ -29,5 +28,20 @@ final double LOGOSIZE = 65;
 final double lOGOSpacing = 10;
 final double pageButton = 20;
 
+class UserData {
+  final String username;
+  final String name;
+  final String address;
+  final DateTime birthdate;
+  final String email;
+  final String password;
 
-
+  UserData({
+    required this.username,
+    required this.name,
+    required this.address,
+    required this.birthdate,
+    required this.email,
+    required this.password,
+  });
+}

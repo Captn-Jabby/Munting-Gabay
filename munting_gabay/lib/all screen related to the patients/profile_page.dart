@@ -5,6 +5,8 @@ import 'package:hive/hive.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 
 class UserProfilePage extends StatefulWidget {
+  const UserProfilePage({super.key});
+
   @override
   _UserProfilePageState createState() => _UserProfilePageState();
 }
@@ -13,7 +15,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _ageController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   DateTime selectedDate = DateTime.now();
@@ -93,7 +94,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
     });
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('User data updated successfully')),
+      const SnackBar(content: Text('User data updated successfully')),
     );
   }
 
@@ -105,14 +106,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
         return Column(
           children: [
             SimpleDialog(
-              title: Text('Select Avatar'),
+              title: const Text('Select Avatar'),
               children: <Widget>[
                 SimpleDialogOption(
                   onPressed: () {
                     Navigator.pop(context,
                         'assets/avatar1.png'); // Update with your avatar asset path
                   },
-                  child: ListTile(
+                  child: const ListTile(
                     leading: CircleAvatar(
                       backgroundImage: AssetImage(
                           'assets/avatar1.png'), // Update with your avatar asset path
@@ -125,7 +126,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     Navigator.pop(context,
                         'assets/avatar2.png'); // Update with your avatar asset path
                   },
-                  child: ListTile(
+                  child: const ListTile(
                     leading: CircleAvatar(
                       backgroundImage: AssetImage(
                           'assets/avatar2.png'), // Update with your avatar asset path
@@ -138,7 +139,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     Navigator.pop(context,
                         'assets/avatar3.png'); // Update with your avatar asset path
                   },
-                  child: ListTile(
+                  child: const ListTile(
                     leading: CircleAvatar(
                       backgroundImage: AssetImage(
                           'assets/avatar3.png'), // Update with your avatar asset path
@@ -151,7 +152,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     Navigator.pop(context,
                         'assets/avatar4.png'); // Update with your avatar asset path
                   },
-                  child: ListTile(
+                  child: const ListTile(
                     leading: CircleAvatar(
                       backgroundImage: AssetImage(
                           'assets/avatar4.png'), // Update with your avatar asset path
@@ -180,19 +181,19 @@ class _UserProfilePageState extends State<UserProfilePage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             // Perform your custom action here
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => HomepagePT()),
+              MaterialPageRoute(builder: (context) => const HomepagePT()),
             );
           },
         ),
-        title: Text('User Profile'),
+        title: const Text('User Profile'),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -203,16 +204,16 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 backgroundImage: AssetImage(_avatarPath),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextFormField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(
@@ -224,7 +225,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     labelText: 'Birthdate',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide(color: Colors.blue),
+                      borderSide: const BorderSide(color: Colors.blue),
                     ),
                   ),
                 ),
@@ -232,16 +233,17 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             TextFormField(
               controller: _addressController,
-              decoration: InputDecoration(labelText: 'Address'),
+              decoration: const InputDecoration(labelText: 'Address'),
             ),
             TextFormField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email', enabled: false),
+              decoration:
+                  const InputDecoration(labelText: 'Email', enabled: false),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             ElevatedButton(
               onPressed: _updateUserData,
-              child: Text('Save Changes'),
+              child: const Text('Save Changes'),
             ),
           ],
         ),
