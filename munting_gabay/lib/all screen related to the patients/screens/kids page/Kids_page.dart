@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:munting_gabay/variable.dart';
 import '../../../Doctors screen/movies_screen.dart';
 import '../../../drawer_page.dart';
-import 'games/main.dart';
+import 'games/categories.dart';
 
 class KidsPage extends StatelessWidget {
   @override

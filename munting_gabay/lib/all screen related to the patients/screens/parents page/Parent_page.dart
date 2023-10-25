@@ -4,6 +4,7 @@ import 'package:munting_gabay/resources.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
+import 'forum/forum.dart';
 
 class ParentPage extends StatelessWidget {
   @override
@@ -20,7 +21,7 @@ class ParentPage extends StatelessWidget {
             child: Center(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Row(
+            const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
@@ -29,11 +30,11 @@ class ParentPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 20),
-            Container(
+            const SizedBox(height: 20),
+            SizedBox(
                 height: 600,
                 child: GridView.builder(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     // childAspectRatio: 3.0,
                     crossAxisCount: 2, // Number of columns in the grid
                     mainAxisSpacing: 16.0, // Spacing between rows
@@ -111,8 +112,10 @@ class ParentPage extends StatelessWidget {
                 // Replace with the actual screen navigation code
                 break;
               case 4:
-                // Navigate to the screen for 'Screen 5'
-                // Replace with the actual screen navigation code
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForumPage()),
+                );
                 break;
               case 5:
                 // Navigate to the screen for 'Screen 6'
