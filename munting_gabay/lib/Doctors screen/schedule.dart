@@ -13,12 +13,12 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
   late List<bool> selectedDaysList;
   late TimeOfDay openingTime;
   late TimeOfDay closingTime;
-  late DateTime selectedMonth; // Add selected month
-  int timeSlotGap = 30; // Time slot gap in minutes
+  DateTime selectedDate = DateTime.now(); // Added selectedDate
+  int timeSlotGap = 30;
 
   final TextEditingController doctorNameController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  User? user = FirebaseAuth.instance.currentUser; // Get the current user
+  User? user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -26,21 +26,18 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     selectedDaysList = List.generate(7, (index) => false);
     openingTime = TimeOfDay(hour: 8, minute: 0);
     closingTime = TimeOfDay(hour: 17, minute: 0);
-    selectedMonth = DateTime.now(); // Initialize with the current month
   }
 
-  void _showMonthPicker() async {
-    DateTime? newSelectedMonth = await showDatePicker(
+  Future<void> _showDatePicker() async {
+    final DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: selectedMonth,
+      initialDate: selectedDate,
       firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 1), // You can adjust the range
-      initialEntryMode: DatePickerEntryMode.calendar, // Choose month mode
+      lastDate: DateTime(DateTime.now().year + 1),
     );
-
-    if (newSelectedMonth != null) {
+    if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
-        selectedMonth = newSelectedMonth;
+        selectedDate = pickedDate;
       });
     }
   }
@@ -73,12 +70,19 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
               },
               child: Text('Select Opening and Closing Times'),
             ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                _showDatePicker(); // Added date picker
+              },
+              child: Text('Select Date'),
+            ),
             SizedBox(height: 40),
             ElevatedButton(
               onPressed: () {
-                _setSchedule();
+                _setScheduleForYear();
               },
-              child: Text('Set Schedule'),
+              child: Text('Set Schedule for Year'),
             ),
           ],
         ),
@@ -125,13 +129,13 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
           actions: <Widget>[
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),
             ElevatedButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
+                Navigator.of(context).pop();
               },
               child: Text('Confirm'),
             ),
@@ -162,11 +166,11 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
     }
   }
 
-  void _setSchedule() {
-    EasyLoading.show(status: 'ADDING SCHEDULE');
+  void _setScheduleForYear() {
+    EasyLoading.show(status: 'adding');
+    print('pressed');
     try {
       String doctorName = doctorNameController.text;
-      String selectedMonthText = DateFormat.yMMMM().format(selectedMonth);
 
       List<String> daysOfWeek = [
         'Monday',
@@ -179,41 +183,56 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
       ];
 
       List<Map<String, dynamic>> availableDays = [];
-      for (int i = 0; i < daysOfWeek.length; i++) {
-        if (selectedDaysList[i]) {
-          String day = daysOfWeek[i];
-          List<String> slots = _generateTimeSlots(openingTime, closingTime);
-          List<Map<String, String>> slotsWithStatus = slots.map((slot) {
-            return {
-              'slot': slot,
-              'status': 'Available', // Set the status to "Available"
-            };
-          }).toList();
-          availableDays.add({
-            'day': day,
-            'slots': slotsWithStatus,
-          });
+
+      // Create schedules for each month of the year
+      for (int month = 1; month <= 12; month++) {
+        // Set the day to the 1st of the month
+        DateTime currentDate = DateTime(selectedDate.year, month, 1);
+
+        // Calculate the expiration date for the current month
+        DateTime expirationDate =
+            DateTime(currentDate.year, currentDate.month + 1, currentDate.day);
+
+        // Create a map to match the selected days to the date in the selected month
+        final selectedDaysWithDate = {
+          'Monday': currentDate,
+          'Tuesday': currentDate.add(Duration(days: 1)),
+          'Wednesday': currentDate.add(Duration(days: 2)),
+          'Thursday': currentDate.add(Duration(days: 3)),
+          'Friday': currentDate.add(Duration(days: 4)),
+          'Saturday': currentDate.add(Duration(days: 5)),
+          'Sunday': currentDate.add(Duration(days: 6)),
+        };
+
+        for (int i = 0; i < daysOfWeek.length; i++) {
+          if (selectedDaysList[i]) {
+            String day = daysOfWeek[i];
+            DateTime date = selectedDaysWithDate[day]!;
+            List<String> slots = _generateTimeSlots(openingTime, closingTime);
+            List<Map<String, String>> slotsWithStatus = slots.map((slot) {
+              return {
+                'slot': slot,
+                'status': 'Available',
+                'patients': '',
+              };
+            }).toList();
+            availableDays.add({
+              'day': day,
+              'date': DateFormat('d MMMM').format(date),
+              'slots': slotsWithStatus,
+            });
+          }
         }
       }
 
-      // Use the current user's UID as the document name
       firestore.collection('schedule').doc(user?.email).set({
         'doctor_name': doctorName,
-        'month': selectedMonthText,
         'available_days': availableDays,
       });
-
-      // Show success message or navigate to another screen
-      print('Schedule set successfully.');
     } catch (e) {
-      // Handle errors
       print('Error setting schedule: $e');
     }
-
-    // Dismiss EasyLoading after a delay
-    Future.delayed(Duration(seconds: 1), () {
-      EasyLoading.dismiss();
-    });
+    EasyLoading.dismiss();
   }
 
   List<String> _generateTimeSlots(TimeOfDay start, TimeOfDay end) {
@@ -234,15 +253,4 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
 
     return timeSlots;
   }
-
-  TimeOfDay _addMinutesToTime(TimeOfDay time, int minutesToAdd) {
-    int totalMinutes = time.hour * 60 + time.minute;
-    totalMinutes += minutesToAdd;
-
-    int newHour = totalMinutes ~/ 60;
-    int newMinute = totalMinutes % 60;
-
-    return TimeOfDay(hour: newHour, minute: newMinute);
-  }
 }
-

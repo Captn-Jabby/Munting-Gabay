@@ -1,110 +1,130 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart'; // Import the url_launcher package
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-class ImageGridScreen extends StatelessWidget {
+class Movie {
+  final String title;
+  final String imageAsset;
+  final String description;
+  final String trailerUrl;
+
+  Movie({
+    required this.title,
+    required this.imageAsset,
+    required this.description,
+    required this.trailerUrl,
+  });
+}
+
+List<Movie> movies = [
+  Movie(
+    title: 'Rain Man (1988)',
+    imageAsset: 'assets/mov1.jpg',
+    description:
+        'Directed by Barry Levinson, this classic film stars Dustin Hoffman as an autistic savant named Raymond Babbitt...',
+    trailerUrl: 'https://www.youtube.com/watch?v=mlNwXuHUA8I',
+  ),
+  Movie(
+    title: 'Temple Grandin (2010)',
+    imageAsset: 'assets/mov2.jpg',
+    description:
+        'This biographical film tells the inspiring story of Temple Grandin, an autistic woman who becomes a renowned animal behaviorist...',
+    trailerUrl: 'https://www.youtube.com/watch?v=cpkN0JdXRpM',
+  ),
+  Movie(
+    title: 'The Story of Luke (2012)',
+    imageAsset: 'assets/mov3.jpg',
+    description:
+        'This indie drama-comedy focuses on Luke, a young man with autism, as he embarks on a journey of self-discovery and independence...',
+    trailerUrl: 'https://www.youtube.com/watch?v=i3c6Jy5sHhc',
+  ),
+  Movie(
+    title: 'A Beautiful Mind (2001)',
+    imageAsset: 'assets/mov4.png',
+    description:
+        'While not specifically about autism, this film tells the story of John Nash, a brilliant mathematician who struggles with schizophrenia...',
+    trailerUrl: 'https://www.youtube.com/watch?v=jT51irTIrAc',
+  ),
+];
+
+class MovieScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Inspirational Movies '),
+        title: Text('Inspirational Movies'),
       ),
       body: GridView.builder(
-        itemCount: 4, // Number of items in the grid
+        itemCount: movies.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2, // Number of columns in the grid
+          crossAxisCount: 2,
         ),
         itemBuilder: (context, index) {
-          List<String> imagePaths = [
-              'assets/mov1.jpg',
-            'assets/mov2.jpg',
-            'assets/mov3.jpg',
-            'assets/mov4.png',
-          ];
-          List<String> Title = [
-            'Rain Man (1988)',
-            'Temple Grandin (2010)',
-            'The Story of Luke (2012)',
-            'A Beautiful Mind (2001)',
-          ];
-          List<String> moviePrev = [
-            'Rain Man (1988) - Directed by Barry Levinson, this classic film stars Dustin Hoffman as an autistic savant named Raymond Babbitt. Tom Cruise plays his brother, who takes him on a cross-country trip. The film offers insight into autism and the complexities of family relationships.',
-            'Temple Grandin (2010) - This biographical film tells the inspiring story of Temple Grandin, an autistic woman who becomes a renowned animal behaviorist and advocate for autism awareness. Claire Danes delivers a remarkable performance as Temple Grandin.',
-            'The Story of Luke (2012) - This indie drama-comedy focuses on Luke, a young man with autism, as he embarks on a journey of self-discovery and independence after his grandmother passes away. It offers a heartfelt portrayal of the challenges faced by individuals with autism.',
-            'A Beautiful Mind (2001) - While not specifically about autism, this film tells the story of John Nash, a brilliant mathematician who struggles with schizophrenia. It showcases the power of the human spirit and determination in overcoming mental health challenges.',
-          ];
-          List<String> Movietrailler = [
-            'https://www.youtube.com/watch?v=mlNwXuHUA8I',
-            'https://www.youtube.com/watch?v=cpkN0JdXRpM',
-            'https://www.youtube.com/watch?v=i3c6Jy5sHhc',
-            'https://www.youtube.com/watch?v=jT51irTIrAc',
-          ];
-
-
-          return GestureDetector(
-            onTap: () {
-              // Show a dialog with the movie preview when tapped.
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(Title[index]),
-                    content: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(moviePrev[index]),
-                        SizedBox(height: 20),
-                        ElevatedButton.icon(
-                          onPressed: () async {
-                            // Use url_launcher to open the movie trailer URL
-                            final url = Movietrailler[index];
-                            if (await canLaunch(url)) {
-                              print ('asdasdas');
-                              await launch(url);
-                            } else {
-                              // Handle the error if the URL cannot be launched
-                              print('Could not launch $url');
-                            }
-                          },
-                          icon: Icon(
-                            Icons.play_circle,
-                            size: 50, // Adjust the size of the icon as needed
-                          ),
-                          label: Text('Play'),
-
-                        ),
-                      ],
-                    ),
-                    actions: <Widget>[
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text('Close'),
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-            child: GridTile(
-              child: Column(
-                children: [
-                  SizedBox(
-                    width: 150,
-                    height: 150,
-                    child: Image.asset(
-                      imagePaths[index],
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  Text(
-                    Title[index],
-                  ),
-                ],
-              ),
-            ),
-          );
+          return MovieTile(movie: movies[index]);
         },
+      ),
+    );
+  }
+}
+
+class MovieTile extends StatelessWidget {
+  final Movie movie;
+
+  MovieTile({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        // Handle tap to open the movie trailer in an in-app web view
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => InAppWebViewPage(movie: movie),
+          ),
+        );
+      },
+      child: GridTile(
+        child: Column(
+          children: [
+            Image.asset(
+              movie.imageAsset,
+              fit: BoxFit.cover,
+              width: 150, // Adjust the width and height as needed
+              height: 150,
+            ),
+            Text(movie.title),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class InAppWebViewPage extends StatelessWidget {
+  final Movie movie;
+
+  InAppWebViewPage({required this.movie});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(movie.title),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: InAppWebView(
+              initialUrlRequest: URLRequest(url: Uri.parse(movie.trailerUrl)),
+            ),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Close Trailer'),
+          ),
+        ],
       ),
     );
   }

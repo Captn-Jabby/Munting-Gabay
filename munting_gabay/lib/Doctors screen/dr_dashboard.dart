@@ -2,12 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
-import 'package:munting_gabay/Doctors%20screen/schedule.dart';
-import 'package:munting_gabay/Dr_Profile.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/message_screen.dart';
+import 'package:munting_gabay/Doctors%20screen/newsched.dart';
+
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
-import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -97,7 +94,8 @@ class _DocDashboardState extends State<DocDashboard> {
               // For example, navigate to the chat screen
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => ScheduleScreen()),
+                MaterialPageRoute(builder: (context) => DateListScreen()),
+                // MaterialPageRoute(builder: (context) => ScheduleScreen()),
               );
             },
           ),

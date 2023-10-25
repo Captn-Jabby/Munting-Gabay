@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class BookResourcesApp extends StatelessWidget {
   @override
@@ -31,7 +31,7 @@ class Book {
 class BookResourcesScreen extends StatelessWidget {
   final List<Book> books = [
     Book(
-      title: 'Autism spectrum disorder',
+      title: 'Autism Spectrum Disorder',
       author: 'Mayo Clinic Press',
       description: 'What is Autism Spectrum Disorder?.',
       coverImage: 'assets/b.png', // Replace with actual asset path
@@ -65,20 +65,34 @@ class BookResourcesScreen extends StatelessWidget {
             onTap: () {
               // Handle tap on the book
               // You can navigate to the book link or perform any other action here
-              launchURL(books[index].link);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => WebViewPage(url: books[index].link),
+                ),
+              );
             },
           );
         },
       ),
     );
   }
+}
 
-  // Function to launch a URL
-  void launchURL(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not launch $url';
-    }
+class WebViewPage extends StatelessWidget {
+  final String url;
+
+  WebViewPage({required this.url});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Web View'),
+      ),
+      body: InAppWebView(
+        initialUrlRequest: URLRequest(url: Uri.parse(url)),
+      ),
+    );
   }
 }

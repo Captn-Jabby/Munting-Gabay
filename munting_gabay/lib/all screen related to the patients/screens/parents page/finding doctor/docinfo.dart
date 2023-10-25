@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
-import 'package:munting_gabay/Doctors%20screen/schedule_trial.dart';
+import 'package:munting_gabay/Doctors%20screen/schedule_request.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
 
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
@@ -82,6 +82,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                   MainAxisAlignment.spaceEvenly, // Adjust alignment as needed
               children: [
                 IconButton(
+                  color: Colors.pink,
                   icon: const Icon(
                       Icons.calendar_month_rounded), // Scheduling icon
                   onPressed: () {

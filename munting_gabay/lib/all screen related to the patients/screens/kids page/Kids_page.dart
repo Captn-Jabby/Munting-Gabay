@@ -23,13 +23,11 @@ class KidsPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-              "KIDS PAGE",
-              style: buttonTextStyle,
-            ),
-
+                  "KIDS PAGE",
+                  style: buttonTextStyle,
+                ),
               ],
             ),
-
             SizedBox(height: 40),
             Center(
               child: Column(
@@ -58,12 +56,14 @@ class KidsPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // TODO: Add Games button functionality here
-                            Navigator.push(context, CupertinoPageRoute(builder: (context)=>const KiddieHome()));
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => const KiddieHome()));
                             print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                          backgroundColor: secondaryColor
-                          ),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Games',
                             style: buttonTextStyle,
@@ -98,8 +98,7 @@ class KidsPage extends StatelessWidget {
                             print('Song button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor
-                          ),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Music',
                             style: buttonTextStyle,
@@ -133,13 +132,12 @@ class KidsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => ImageGridScreen()),
+                                  builder: (context) => MovieScreen()),
                             );
                             print('Movies button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor
-                          ),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Movies',
                             style: buttonTextStyle,
@@ -174,8 +172,7 @@ class KidsPage extends StatelessWidget {
                             print('Videos button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor
-                          ),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Videos',
                             style: buttonTextStyle,
