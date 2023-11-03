@@ -160,7 +160,10 @@ class _DrUserProfileState extends State<DrUserProfile> {
             // Perform your custom action here
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => DocDashboard()),
+              MaterialPageRoute(
+                  builder: (context) => DocDashboard(
+                        docId: '',
+                      )),
             );
           },
         ),

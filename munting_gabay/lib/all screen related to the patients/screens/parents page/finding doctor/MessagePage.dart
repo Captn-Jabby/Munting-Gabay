@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
 
 class ChatPage extends StatefulWidget {
-  final String doctorId; // Doctor's UID
-  final String doctorName; // Doctor's name
+  final String currentUserUid; // User's UID
+  final String currentUserName; // User's name
+  final String docId; // Chat document ID
+  final String recipientName; // Recipient's name
+  final bool senderIsDoctor; // Indicates if the sender is a doctor
+  final bool recipientIsDoctor; // Indicates if the recipient is a doctor
 
-  ChatPage({required this.doctorId, required this.doctorName});
+  ChatPage({
+    required this.currentUserUid,
+    required this.currentUserName,
+    required this.docId,
+    required this.recipientName,
+    required this.senderIsDoctor,
+    required this.recipientIsDoctor,
+  });
 
   @override
   _ChatPageState createState() => _ChatPageState();
@@ -17,29 +27,51 @@ class _ChatPageState extends State<ChatPage> {
   final TextEditingController messageController = TextEditingController();
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late User currentUser;
+  String chatDocId = ''; // Variable to store chat document ID
 
   @override
   void initState() {
     super.initState();
     // Get the current authenticated user
     currentUser = FirebaseAuth.instance.currentUser!;
+    // Generate chat document ID
+    chatDocId = widget.senderIsDoctor
+        ? 'chat_${widget.currentUserUid}_${widget.docId}'
+        : 'chat_${widget.docId}_${widget.currentUserUid}';
+  }
+
+  void sendMessage(String messageText) async {
+    try {
+      final String currentUserUid = widget.currentUserUid;
+
+      final CollectionReference messagesCollection =
+          firestore.collection('chats/$chatDocId/messages');
+
+      await messagesCollection.add({
+        'sender': currentUserUid,
+        'text': messageText,
+        'timestamp': FieldValue.serverTimestamp(),
+      });
+
+      // Clear the message input field
+      messageController.clear();
+    } catch (e) {
+      print('Error sending message: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.doctorName),
+        title: Text(widget.recipientName),
       ),
       body: Column(
         children: [
           Expanded(
-            child: StreamBuilder(
+            child: StreamBuilder<QuerySnapshot>(
               stream: firestore
-                  .collection('messages')
-                  .doc(widget.doctorId) // Use doctor's ID as the document ID
-                  .collection(currentUser
-                      .email!) // Use user's email as sub-collection name
+                  .collection('chats/$chatDocId/messages')
                   .orderBy('timestamp')
                   .snapshots(),
               builder: (context, snapshot) {
@@ -49,70 +81,38 @@ class _ChatPageState extends State<ChatPage> {
                   );
                 }
 
-                final List<DocumentSnapshot> documents = snapshot.data!.docs;
+                final List<QueryDocumentSnapshot> documents =
+                    snapshot.data!.docs;
 
-                List<Widget> messageWidgets = [];
+                return ListView.builder(
+                  itemCount: documents.length,
+                  itemBuilder: (context, index) {
+                    final message = documents[index];
+                    final messageText = message['text'];
+                    final senderId = message['sender'];
 
-                for (var message in documents) {
-                  final messageText = message['messageText'];
-                  final senderName = message['senderName'];
-                  final receiverName = message['receiverName'];
-
-                  messageWidgets.add(
-                    ListTile(
-                      title: Row(
-                        mainAxisAlignment:
-                            message['senderId'] == currentUser.email
-                                ? MainAxisAlignment.end
-                                : MainAxisAlignment.start,
-                        children: [
-                          Flexible(
-                            child: Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0),
-                                color: message['senderId'] == currentUser.email
-                                    ? Colors.blue
-                                    : Colors.green,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    messageText,
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  SizedBox(height: 4.0),
-                                  Text(
-                                    // Format the timestamp to display date and time without seconds
-                                    (message['timestamp'] != null &&
-                                            message['timestamp'] is Timestamp)
-                                        ? DateFormat('yyyy-MM-dd HH:mm').format(
-                                            (message['timestamp'] as Timestamp)
-                                                .toDate())
-                                        : 'N/A',
-                                    style: TextStyle(
-                                        color: Colors.white70, fontSize: 12.0),
-                                  ),
-                                ],
-                              ),
-                            ),
+                    return ListTile(
+                      title: Center(
+                        child: Container(
+                          width: MediaQuery.of(context).size.width *
+                              0.7, // Adjust the width as needed
+                          padding: EdgeInsets.all(8.0),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0),
+                            color: Colors.blue, // You can adjust the color
                           ),
-                        ],
+                          child: Text(
+                            messageText,
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        ),
                       ),
-                      // No subtitle for any message
-                      subtitle: null,
-                      // No trailing widget for any message
+                      subtitle: Text(senderId),
                       trailing: null,
-                      // No leading widget for any message
                       leading: null,
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
-                    ),
-                  );
-                }
-
-                return ListView(
-                  children: messageWidgets,
+                    );
+                  },
                 );
               },
             ),
@@ -130,46 +130,19 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
+                  icon: Icon(
+                    Icons.send,
+                    color: Colors.cyan,
+                  ),
+                  onPressed: () async {
                     sendMessage(messageController.text);
                   },
-                ),
+                )
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  void sendMessage(String messageText) async {
-    try {
-      // Get the current authenticated user's email
-      final String currentUserEmail = currentUser.email!;
-
-      final CollectionReference messagesCollection =
-          firestore.collection('messages');
-
-      // Create a new message document in the receiver's collection
-      await messagesCollection
-          .doc(widget.doctorId) // Use doctor's ID as the document ID
-          .collection(
-              currentUserEmail) // Use user's email as sub-collection name
-          .add({
-        'senderId': currentUserEmail,
-        'senderName': currentUser.displayName, // Store sender's name
-        'receiverId': widget.doctorId,
-        'receiverName': widget.doctorName, // Store receiver's name
-        'messageText': messageText,
-        'timestamp': FieldValue.serverTimestamp(),
-      });
-
-      // Clear the message input field
-      messageController.clear();
-    } catch (e) {
-      // Handle message sending errors here
-      print('Error sending message: $e');
-    }
   }
 }

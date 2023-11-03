@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:munting_gabay/login%20and%20register/login.dart';
 import 'package:munting_gabay/variable.dart';
@@ -21,6 +22,7 @@ class DoctorsIdentificationScreen extends StatefulWidget {
 // CLINIC INFORMATION
 TextEditingController _clinicController = TextEditingController();
 TextEditingController _addressHospital = TextEditingController();
+TextEditingController _phoneNumber = TextEditingController();
 FirebaseAuth _auth = FirebaseAuth.instance;
 
 class _DoctorsIdentificationScreenState
@@ -42,8 +44,9 @@ class _DoctorsIdentificationScreenState
   }
 
   void _registerUser() async {
-    _clinicController.clear();
-    _addressHospital.clear();
+    // _clinicController.clear();
+    // _addressHospital.clear();
+    // _phoneNumber.clear();
 
     // Sign out the user (if already authenticated) to clear the session
     if (_auth.currentUser != null) {
@@ -78,8 +81,9 @@ class _DoctorsIdentificationScreenState
         'email': userData.email,
         'status': 'Waiting',
         'avatarPath': 'assets/avatar1.png',
-        'clinic': _clinicController.text, // Add clinic data
-        'addressHospital': _addressHospital.text, // Add clinic address data
+        'clinic': _clinicController.text,
+        'addressHospital': _addressHospital.text,
+        'phoneNumber': _phoneNumber.text,
       });
 
       // Perform further actions like saving additional user data to Firestore
@@ -207,6 +211,22 @@ class _DoctorsIdentificationScreenState
                     borderSide: BorderSide(color: Colors.blue),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              TextField(
+                controller: _phoneNumber,
+                decoration: InputDecoration(
+                  labelText: 'Phone Number',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                    borderSide: BorderSide(color: Colors.blue),
+                  ),
+                ),
+                inputFormatters: <TextInputFormatter>[
+                  FilteringTextInputFormatter.digitsOnly, // Allow only digits
+                ],
               ),
               SizedBox(
                 height: 15,

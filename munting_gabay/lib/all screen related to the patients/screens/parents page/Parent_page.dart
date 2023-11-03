@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/psych.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/finding_doctors.dart';
 import 'package:munting_gabay/resources.dart';
 import 'package:munting_gabay/variable.dart';
 

@@ -1,23 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:intl/intl.dart';
 import 'package:munting_gabay/Doctors%20screen/schedule_request.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
 
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
 import 'package:munting_gabay/drawer_page.dart';
+import 'package:munting_gabay/login%20and%20register/calling_doctor.dart';
 import 'package:munting_gabay/variable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 class DoctorInfoPage extends StatefulWidget {
   final String docId;
   final String initialName;
+  final String NameOfHospital;
+  final DateTime birthdate;
   final String initialAddress;
+  final String IMAGE;
+  final String avatarPath;
+  final String currentUserUid;
+  final String currentUserName;
+  final bool isDoctor;
+  final String phoneNumber;
 
   DoctorInfoPage({
+    required this.birthdate,
+    required this.phoneNumber,
+    required this.avatarPath,
+    required this.IMAGE,
+    required this.NameOfHospital,
     required this.docId,
     required this.initialName,
     required this.initialAddress,
+    required this.currentUserUid,
+    required this.currentUserName,
+    required this.isDoctor,
   });
 
   @override
@@ -25,8 +41,6 @@ class DoctorInfoPage extends StatefulWidget {
 }
 
 class _DoctorInfoPageState extends State<DoctorInfoPage> {
-  final TextEditingController _dateRequestController = TextEditingController();
-
   @override
   void initState() {
     super.initState();
@@ -103,8 +117,11 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => ChatPage(
-                          doctorId: widget.docId,
-                          doctorName: widget.initialName,
+                          currentUserUid: widget.currentUserUid,
+                          currentUserName: widget.currentUserName,
+                          // isDoctor: widget.isDoctor,
+                          docId: widget.docId, recipientName: '',
+                          senderIsDoctor: false, recipientIsDoctor: true,
                         ),
                       ),
                     );
@@ -113,7 +130,16 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                 IconButton(
                   icon: const Icon(Icons.call), // Calling icon
                   onPressed: () {
-                    // Add functionality for calling here
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PhoneCallScreen(
+                          docId: widget.docId,
+                          phoneNumber: widget.phoneNumber,
+                          currentUserName: widget.currentUserName,
+                        ),
+                      ),
+                    );
                   },
                 ),
                 IconButton(
@@ -122,12 +148,20 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => HistoryScreen(),
+                        builder: (context) => RequestListScreen(
+                          docId: widget.docId,
+                        ),
                       ),
                     );
                   },
                 ),
               ],
+            ),
+            CircleAvatar(
+              radius: 40,
+              backgroundImage: AssetImage(
+                widget.avatarPath, // Use the avatarPath from the widget
+              ),
             ),
             SizedBox(
               height: BtnSpacing,
@@ -141,25 +175,25 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
             const SizedBox(height: 16),
             Text('Address: ${widget.initialAddress}',
                 style: const TextStyle(fontSize: 16)),
-            SizedBox(
-              height: BtnSpacing,
-            ),
+            Text(
+                'Birthdate: ${DateFormat('MMMM d, y').format(widget.birthdate)}',
+                style: const TextStyle(fontSize: 16)),
             const Text(
-              'Send Date Request',
+              'CLINIC INFORMATION',
               style: buttonTextStyle,
             ),
             const Divider(
               color: Colors.black,
               thickness: 2.0,
             ),
-            // Create a text field for entering the date request
-            ElevatedButton(
-              onPressed: () async {},
-              child: const Text('Select Date and Time'),
+            Text('Clinic  Address: ${widget.NameOfHospital}',
+                style: const TextStyle(fontSize: 16)),
+            SizedBox(
+              height: BtnSpacing,
             ),
-
+            Text('phone Number: ${widget.phoneNumber}',
+                style: const TextStyle(fontSize: 16)),
             SizedBox(height: BtnSpacing),
-
             SizedBox(height: BtnSpacing),
           ],
         ),

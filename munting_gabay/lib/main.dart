@@ -9,7 +9,7 @@ import 'package:munting_gabay/login%20and%20register/register_doctor.dart';
 import 'package:munting_gabay/login%20and%20register/register_patients.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
-import 'package:hive/hive.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 import 'Adminpage/adminpage.dart';
 
@@ -55,7 +55,6 @@ void configLoading() {
 //     );
 //   }
 // }
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -88,7 +87,9 @@ class MyApp extends StatelessWidget {
                     String status = userDataSnapshot.data?.get('status') ?? '';
 
                     if (status == 'Accepted') {
-                      return DocDashboard();
+                      return DocDashboard(
+                          docId:
+                              user.email!); // Pass the user's email as 'docId'
                     } else if (status == 'ADMIN') {
                       return AdminPage();
                     } else {
@@ -108,7 +109,8 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       routes: {
         '/homePT': (context) => HomepagePT(),
-        '/homeDoctor': (context) => DocDashboard(),
+        '/homeDoctor': (context) =>
+            DocDashboard(docId: ''), // You can pass an empty string here
         '/homeAdmin': (context) => AdminPage(),
       },
     );

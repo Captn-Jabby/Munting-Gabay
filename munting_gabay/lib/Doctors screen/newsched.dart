@@ -44,31 +44,79 @@ class _DateListScreenState extends State<DateListScreen> {
     });
   }
 
-  // Function to create and save slots in Firestore with status "Available"
+// Function to create and save slots in Firestore with status "Available"
   void createSlotsForDate(DateTime date) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    User? user = FirebaseAuth.instance.currentUser;
 
-    List<Map<String, String>> slotsWithStatus = List.generate(18, (index) {
-      final startTime = DateTime(date.year, date.month, date.day, 8, 0)
-          .add(Duration(minutes: 30 * index));
-      final endTime = startTime.add(Duration(minutes: 30));
+    if (user == null || user.email == null) {
+      print('User is not authenticated or does not have an email.');
+      // Handle this case appropriately, such as showing an error message to the user.
+      return;
+    }
 
-      return {
-        'slot':
-            '${DateFormat.jm().format(startTime)} - ${DateFormat.jm().format(endTime)}',
-        'status': 'Available',
-        'patients': '',
-      };
-    });
+    // Define the document reference
+    final documentReference = firestore.collection('schedule').doc(user.email);
 
-    firestore.collection('schedule').doc(user?.email).update({
-      'available_days': FieldValue.arrayUnion([
-        {
-          'day': DateFormat('E').format(date),
-          'date': DateFormat('d MMMM').format(date),
-          'slots': slotsWithStatus,
+    // Check if the document exists
+    documentReference.get().then((docSnapshot) {
+      if (docSnapshot.exists) {
+        // The document exists, update it
+        List<Map<String, String>> slotsWithStatus = List.generate(18, (index) {
+          final startTime = DateTime(date.year, date.month, date.day, 8, 0)
+              .add(Duration(minutes: 30 * index));
+          final endTime = startTime.add(Duration(minutes: 30));
+
+          return {
+            'slot':
+                '${DateFormat.jm().format(startTime)} - ${DateFormat.jm().format(endTime)}',
+            'status': 'Available',
+            'patients': '',
+          };
+        });
+
+        try {
+          documentReference.update({
+            'available_days': FieldValue.arrayUnion([
+              {
+                'day': DateFormat('E').format(date),
+                'date': DateFormat('d MMMM').format(date),
+                'slots': slotsWithStatus,
+              }
+            ]),
+          });
+        } catch (e) {
+          print('Error updating Firestore document: $e');
+          // Handle the error appropriately, such as showing an error message to the user.
         }
-      ]),
+      } else {
+        // The document doesn't exist, create it
+        List<Map<String, String>> slotsWithStatus = List.generate(18, (index) {
+          final startTime = DateTime(date.year, date.month, date.day, 8, 0)
+              .add(Duration(minutes: 30 * index));
+          final endTime = startTime.add(Duration(minutes: 30));
+
+          return {
+            'slot':
+                '${DateFormat.jm().format(startTime)} - ${DateFormat.jm().format(endTime)}',
+            'status': 'Available',
+            'patients': '',
+          };
+        });
+
+        documentReference.set({
+          'available_days': [
+            {
+              'day': DateFormat('E').format(date),
+              'date': DateFormat('d MMMM').format(date),
+              'slots': slotsWithStatus,
+            }
+          ],
+        });
+      }
+    }).catchError((error) {
+      print('Error checking Firestore document: $error');
+      // Handle the error appropriately, such as showing an error message to the user.
     });
   }
 

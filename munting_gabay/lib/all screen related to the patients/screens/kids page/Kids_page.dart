@@ -56,11 +56,11 @@ class KidsPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // TODO: Add Games button functionality here
-                            Navigator.push(
-                                context,
-                                CupertinoPageRoute(
-                                    builder: (context) => const KiddieHome()));
-                            print('Games button pressed!');
+                            // Navigator.push(
+                            //     context,
+                            //     CupertinoPageRoute(
+                            //         builder: (context) => const KiddieHome()));
+                            // print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: secondaryColor),

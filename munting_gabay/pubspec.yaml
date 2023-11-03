@@ -39,6 +39,7 @@ dependencies:
   flutter_easyloading: ^3.0.5
   flutter_inappwebview: ^5.8.0
   flutter_launcher_icons: ^0.13.1
+  flutter_phone_direct_caller: ^2.1.1
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   image_picker: ^1.0.4

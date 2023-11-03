@@ -1,102 +1,150 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 
-class HistoryScreen extends StatefulWidget {
+class RequestListScreen extends StatefulWidget {
+  final String docId;
+
+  RequestListScreen({required this.docId});
+
   @override
-  _HistoryScreenState createState() => _HistoryScreenState();
+  _RequestListScreenState createState() => _RequestListScreenState();
 }
 
-class _HistoryScreenState extends State<HistoryScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final CollectionReference _schedulesCollection =
-      FirebaseFirestore.instance.collection('usersdata');
+class _RequestListScreenState extends State<RequestListScreen> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  User? user = FirebaseAuth.instance.currentUser;
+  List<Map<String, dynamic>> myRequests = []; // Store both slot and date
 
   @override
   void initState() {
     super.initState();
-    // Call the function to check user schedules when this screen is loaded
-    checkUserSchedules();
+    // Load the requests made by the user from Firestore.
+    loadMyRequests();
+  }
+
+  Future<void> loadMyRequests() async {
+    if (user != null) {
+      final querySnapshot =
+          await firestore.collection('schedule').doc(widget.docId).get();
+
+      if (querySnapshot.exists) {
+        final requestData = querySnapshot.data() as Map<String, dynamic>;
+        if (requestData.containsKey('available_days')) {
+          final requestList = (requestData['available_days'] as List)
+              .expand((dayData) => (dayData['slots'] as List)
+                      .where((slotData) =>
+                          (slotData['patients'] as String) == user?.email)
+                      .map((slotData) {
+                    return {
+                      'slot': slotData['slot'] as String,
+                      'date': dayData['date'] as String, // Add the date
+                    };
+                  }))
+              .toList();
+
+          setState(() {
+            myRequests = requestList;
+          });
+        }
+      }
+    }
+  }
+
+  bool isCancelling = false;
+
+  Future<void> _cancelRequest(String requestSlot) async {
+    if (isCancelling) {
+      return;
+    }
+
+    if (user != null) {
+      // Set the flag to true to prevent further calls
+      isCancelling = true;
+
+      // Get the Firestore document for the specific slot and update it
+      final slotDocument = firestore.collection('schedule').doc(widget.docId);
+
+      final snapshot = await slotDocument.get();
+      if (snapshot.exists) {
+        final requestData = snapshot.data() as Map<String, dynamic>;
+
+        if (requestData.containsKey('available_days')) {
+          final availableDays = requestData['available_days'] as List;
+
+          for (var dayData in availableDays) {
+            final slots = dayData['slots'] as List;
+
+            final slotToCancel = slots.firstWhere(
+              (slotData) => (slotData['slot'] as String) == requestSlot,
+              orElse: () => null,
+            );
+
+            if (slotToCancel != null) {
+              // Check if the slot has 'Pending' status
+              if (slotToCancel['status'] == 'Pending') {
+                // Update the status to 'Canceled'
+                slotToCancel['status'] = 'Canceled';
+
+                // Update the Firestore document
+                await slotDocument.update({
+                  'available_days': availableDays,
+                });
+
+                // Remove the canceled request from the local list
+                setState(() {
+                  myRequests.remove(requestSlot);
+                });
+
+                // Show a confirmation message or handle any other UI updates
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Request canceled for $requestSlot')),
+                );
+              } else {
+                // Handle cases where the slot is not 'Pending' (e.g., it's 'Accepted')
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                      content: Text('You can only cancel pending requests.')),
+                );
+              }
+            }
+          }
+        }
+      }
+
+      // Set the flag back to false
+      isCancelling = false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('History'),
+        title: Text('My Requests'),
       ),
-      body: FutureBuilder(
-        future: _fetchUserSchedules(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No history available.'));
-          } else {
-            // Display the retrieved schedules here, for example, in a ListView
-            return ListView.builder(
-              itemCount: snapshot.data?.length,
+      body: myRequests.isEmpty
+          ? Center(
+              child: Text('You have not made any requests.'),
+            )
+          : ListView.builder(
+              itemCount: myRequests.length,
               itemBuilder: (context, index) {
-                final schedule = snapshot.data?[index];
-                final DateTime schedDateTime = schedule?['sched'].toDate();
-                final String formattedDateTime =
-                    DateFormat('yyyy-MM-dd HH:mm').format(schedDateTime);
+                final requestSlot = myRequests[index];
+                final slot = requestSlot['slot'] as String;
+                final date = requestSlot['date'] as String;
+
                 return ListTile(
-                  title: Text('Scheduled Date and Time: $formattedDateTime'),
+                  title: Text('Date: $date, Slot: $slot'),
+                  trailing: ElevatedButton(
+                    onPressed: () {
+                      _cancelRequest(slot);
+                    },
+                    child: Text('Cancel'),
+                  ),
                 );
               },
-            );
-          }
-        },
-      ),
+            ),
     );
-  }
-
-  Future<List<DocumentSnapshot>> _fetchUserSchedules() async {
-    final User? user = _auth.currentUser;
-
-    if (user != null) {
-      final String currentUserId = user.uid;
-      print('Current User ID: $currentUserId'); // Debugging: Print user's UID
-      final querySnapshot = await _schedulesCollection
-          .where('DoctorId', isEqualTo: currentUserId) // Change to DoctorId
-          .get();
-
-      print(
-          'Query Result: ${querySnapshot.docs}'); // Debugging: Print query result
-
-      return querySnapshot.docs;
-    }
-
-    return [];
-  }
-
-  Future<void> checkUserSchedules() async {
-    final User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      final String currentUserId = user.uid;
-      final DocumentSnapshot userDoc = await FirebaseFirestore.instance
-          .collection('usersdata')
-          .doc(currentUserId)
-          .get();
-
-      if (userDoc.exists) {
-        final List<dynamic> schedules = userDoc['schedule'];
-        if (schedules.isNotEmpty) {
-          // User has schedules, you can process them here
-          print('User has schedules: $schedules');
-        } else {
-          // User has no schedules
-          print('User has no schedules.');
-        }
-      } else {
-        // User document doesn't exist
-        print('User document does not exist.');
-      }
-    }
   }
 }
