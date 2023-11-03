@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DateListScreen extends StatefulWidget {
@@ -14,6 +16,7 @@ class _DateListScreenState extends State<DateListScreen> {
   late List<DateTime> allDates;
   late List<DateTime> filteredDates;
   List<String> selectedDays = [];
+  bool hasSchedule = false; // Indicates whether a schedule has been created
 
   @override
   void initState() {
@@ -21,6 +24,7 @@ class _DateListScreenState extends State<DateListScreen> {
     allDates = getDatesForYear(DateTime.now().year);
     // Initially, display all the dates
     filteredDates = allDates;
+    checkIfScheduleExists(); // Check if a schedule has been created
   }
 
   List<DateTime> getDatesForYear(int year) {
@@ -44,8 +48,7 @@ class _DateListScreenState extends State<DateListScreen> {
     });
   }
 
-// Function to create and save slots in Firestore with status "Available"
-  void createSlotsForDate(DateTime date) {
+  void createSlotsForDateRange(List<DateTime> dates) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -55,35 +58,36 @@ class _DateListScreenState extends State<DateListScreen> {
       return;
     }
 
-    // Define the document reference
     final documentReference = firestore.collection('schedule').doc(user.email);
 
-    // Check if the document exists
     documentReference.get().then((docSnapshot) {
+      final availableDays = dates.map((date) {
+        return {
+          'day': DateFormat('E').format(date),
+          'date': DateFormat('d MMMM').format(date),
+          'slots': List.generate(18, (index) {
+            final startTime = DateTime(date.year, date.month, date.day, 8, 0)
+                .add(Duration(minutes: 30 * index));
+            final endTime = startTime.add(Duration(minutes: 30));
+
+            return {
+              'slot':
+                  '${DateFormat.jm().format(startTime)} - ${DateFormat.jm().format(endTime)}',
+              'status': 'Available',
+              'patients': '',
+            };
+          }),
+        };
+      }).toList();
+
       if (docSnapshot.exists) {
         // The document exists, update it
-        List<Map<String, String>> slotsWithStatus = List.generate(18, (index) {
-          final startTime = DateTime(date.year, date.month, date.day, 8, 0)
-              .add(Duration(minutes: 30 * index));
-          final endTime = startTime.add(Duration(minutes: 30));
-
-          return {
-            'slot':
-                '${DateFormat.jm().format(startTime)} - ${DateFormat.jm().format(endTime)}',
-            'status': 'Available',
-            'patients': '',
-          };
-        });
-
         try {
           documentReference.update({
-            'available_days': FieldValue.arrayUnion([
-              {
-                'day': DateFormat('E').format(date),
-                'date': DateFormat('d MMMM').format(date),
-                'slots': slotsWithStatus,
-              }
-            ]),
+            'available_days': FieldValue.arrayUnion(availableDays),
+          });
+          setState(() {
+            hasSchedule = true; // Mark as having a schedule
           });
         } catch (e) {
           print('Error updating Firestore document: $e');
@@ -91,27 +95,11 @@ class _DateListScreenState extends State<DateListScreen> {
         }
       } else {
         // The document doesn't exist, create it
-        List<Map<String, String>> slotsWithStatus = List.generate(18, (index) {
-          final startTime = DateTime(date.year, date.month, date.day, 8, 0)
-              .add(Duration(minutes: 30 * index));
-          final endTime = startTime.add(Duration(minutes: 30));
-
-          return {
-            'slot':
-                '${DateFormat.jm().format(startTime)} - ${DateFormat.jm().format(endTime)}',
-            'status': 'Available',
-            'patients': '',
-          };
-        });
-
         documentReference.set({
-          'available_days': [
-            {
-              'day': DateFormat('E').format(date),
-              'date': DateFormat('d MMMM').format(date),
-              'slots': slotsWithStatus,
-            }
-          ],
+          'available_days': availableDays,
+        });
+        setState(() {
+          hasSchedule = true; // Mark as having a schedule
         });
       }
     }).catchError((error) {
@@ -120,11 +108,95 @@ class _DateListScreenState extends State<DateListScreen> {
     });
   }
 
+// Function to create and save slots for the entire year
+  void createSlotsForYear(int year) {
+    final currentDate = DateTime.now();
+    final endOfYear = DateTime(year, 12, 31);
+
+    // Generate a list of dates from the current date to the end of the year
+    final dateRange = <DateTime>[];
+    var currentDatePointer = currentDate;
+
+    while (currentDatePointer.isBefore(endOfYear) ||
+        currentDatePointer.isAtSameMomentAs(endOfYear)) {
+      dateRange.add(currentDatePointer);
+      currentDatePointer = currentDatePointer.add(Duration(days: 1));
+    }
+
+    // Create and save slots for the range of dates
+    createSlotsForDateRange(dateRange);
+  }
+
+  // Function to check if a schedule exists for the user
+  void checkIfScheduleExists() {
+    if (user != null && user?.email != null) {
+      final documentReference =
+          firestore.collection('schedule').doc(user?.email);
+      documentReference.get().then((docSnapshot) {
+        if (docSnapshot.exists) {
+          setState(() {
+            hasSchedule = true; // Mark as having a schedule
+          });
+        }
+      });
+    }
+  }
+
+  void deleteSchedule() {
+    if (user != null && user?.email != null) {
+      final documentReference =
+          firestore.collection('schedule').doc(user?.email);
+
+      // Check if any slot has content before deletion
+      documentReference.get().then((docSnapshot) {
+        if (docSnapshot.exists) {
+          final data = docSnapshot.data() as Map<String, dynamic>?;
+          if (data != null && data['available_days'] != null) {
+            final List<dynamic> availableDays =
+                data['available_days'] as List<dynamic>;
+            final hasContent = availableDays.any((day) {
+              final slots = day['slots'] as List<dynamic>;
+              return slots.any((slot) =>
+                  slot['patients'] != null && slot['patients'].isNotEmpty);
+            });
+
+            if (hasContent) {
+              EasyLoading.showToast('Cannot delete: Some slots have content',
+                  toastPosition: EasyLoadingToastPosition.bottom);
+            } else {
+              documentReference.delete().then((_) {
+                setState(() {
+                  hasSchedule = false; // Mark as not having a schedule
+                });
+                EasyLoading.showToast('Schedule Deleted',
+                    toastPosition: EasyLoadingToastPosition.bottom);
+              });
+            }
+          }
+        }
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Yearly Dates'),
+        actions: [
+          ElevatedButton(
+            onPressed: () {
+              deleteSchedule();
+            },
+            child: Text('Delete Schedule'),
+          ),
+          if (hasSchedule)
+            Icon(
+              Icons.check_circle, // Show a checkmark icon if a schedule exists
+              color: Colors.green,
+              size: 24.0,
+            ),
+        ],
       ),
       body: Column(
         children: <Widget>[
@@ -167,16 +239,26 @@ class _DateListScreenState extends State<DateListScreen> {
               ],
             ),
           ),
-          ElevatedButton(
-            onPressed: () {
-              filterDates();
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () {
+                  filterDates();
+                },
+                child: Text('Filter'),
+              ),
+              SizedBox(width: 16), // Add some spacing
+              ElevatedButton(
+                onPressed: () {
+                  // Create and save slots for all filtered dates
+                  createSlotsForDateRange(filteredDates);
+                },
+                child: Text('Save'),
+              ),
 
-              // Create and save slots for filtered dates
-              for (var date in filteredDates) {
-                createSlotsForDate(date);
-              }
-            },
-            child: Text('Filter and Save'),
+              SizedBox(width: 16),
+            ],
           ),
           Expanded(
             child: ListView.builder(

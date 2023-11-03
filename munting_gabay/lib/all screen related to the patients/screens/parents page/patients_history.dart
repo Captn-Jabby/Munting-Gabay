@@ -14,12 +14,11 @@ class RequestListScreen extends StatefulWidget {
 class _RequestListScreenState extends State<RequestListScreen> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   User? user = FirebaseAuth.instance.currentUser;
-  List<Map<String, dynamic>> myRequests = []; // Store both slot and date
+  List<Map<String, dynamic>> myRequests = [];
 
   @override
   void initState() {
     super.initState();
-    // Load the requests made by the user from Firestore.
     loadMyRequests();
   }
 
@@ -38,7 +37,8 @@ class _RequestListScreenState extends State<RequestListScreen> {
                       .map((slotData) {
                     return {
                       'slot': slotData['slot'] as String,
-                      'date': dayData['date'] as String, // Add the date
+                      'date': dayData['date'] as String,
+                      'status': slotData['status'] as String,
                     };
                   }))
               .toList();
@@ -59,10 +59,8 @@ class _RequestListScreenState extends State<RequestListScreen> {
     }
 
     if (user != null) {
-      // Set the flag to true to prevent further calls
       isCancelling = true;
 
-      // Get the Firestore document for the specific slot and update it
       final slotDocument = firestore.collection('schedule').doc(widget.docId);
 
       final snapshot = await slotDocument.get();
@@ -81,27 +79,22 @@ class _RequestListScreenState extends State<RequestListScreen> {
             );
 
             if (slotToCancel != null) {
-              // Check if the slot has 'Pending' status
               if (slotToCancel['status'] == 'Pending') {
-                // Update the status to 'Canceled'
                 slotToCancel['status'] = 'Canceled';
 
-                // Update the Firestore document
                 await slotDocument.update({
                   'available_days': availableDays,
                 });
 
-                // Remove the canceled request from the local list
                 setState(() {
                   myRequests.remove(requestSlot);
                 });
 
-                // Show a confirmation message or handle any other UI updates
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text('Request canceled for $requestSlot')),
                 );
+                break; // Exit the loop after a successful cancel
               } else {
-                // Handle cases where the slot is not 'Pending' (e.g., it's 'Accepted')
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                       content: Text('You can only cancel pending requests.')),
@@ -112,7 +105,6 @@ class _RequestListScreenState extends State<RequestListScreen> {
         }
       }
 
-      // Set the flag back to false
       isCancelling = false;
     }
   }
@@ -133,12 +125,21 @@ class _RequestListScreenState extends State<RequestListScreen> {
                 final requestSlot = myRequests[index];
                 final slot = requestSlot['slot'] as String;
                 final date = requestSlot['date'] as String;
+                final status = requestSlot['status'] as String;
 
                 return ListTile(
-                  title: Text('Date: $date, Slot: $slot'),
+                  title: Text('Date: $date, Slot: $slot, Status: $status'),
                   trailing: ElevatedButton(
                     onPressed: () {
-                      _cancelRequest(slot);
+                      if (status == 'Pending') {
+                        _cancelRequest(slot);
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(
+                                  'You can only cancel pending requests.')),
+                        );
+                      }
                     },
                     child: Text('Cancel'),
                   ),

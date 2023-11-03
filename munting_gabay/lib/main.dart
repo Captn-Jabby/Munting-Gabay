@@ -87,9 +87,7 @@ class MyApp extends StatelessWidget {
                     String status = userDataSnapshot.data?.get('status') ?? '';
 
                     if (status == 'Accepted') {
-                      return DocDashboard(
-                          docId:
-                              user.email!); // Pass the user's email as 'docId'
+                      return DocDashboard(docId: user.email!);
                     } else if (status == 'ADMIN') {
                       return AdminPage();
                     } else {
@@ -109,8 +107,13 @@ class MyApp extends StatelessWidget {
       builder: EasyLoading.init(),
       routes: {
         '/homePT': (context) => HomepagePT(),
-        '/homeDoctor': (context) =>
-            DocDashboard(docId: ''), // You can pass an empty string here
+        '/homeDoctor': (context) {
+          // Access user.email and pass it as docId
+          User? user = FirebaseAuth.instance.currentUser;
+          return DocDashboard(
+              docId: user?.email ??
+                  ''); // You can pass an empty string or handle null values
+        },
         '/homeAdmin': (context) => AdminPage(),
       },
     );
