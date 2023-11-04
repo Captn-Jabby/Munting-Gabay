@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ChatPage extends StatefulWidget {
   final String currentUserUid; // User's UID
@@ -40,7 +44,7 @@ class _ChatPageState extends State<ChatPage> {
         : 'chat_${widget.docId}_${widget.currentUserUid}';
   }
 
-  void sendMessage(String messageText) async {
+  void sendMessage(String messageText, String messageType) async {
     try {
       final String currentUserUid = widget.currentUserUid;
 
@@ -50,6 +54,7 @@ class _ChatPageState extends State<ChatPage> {
       await messagesCollection.add({
         'sender': currentUserUid,
         'text': messageText,
+        'type': messageType,
         'timestamp': FieldValue.serverTimestamp(),
       });
 
@@ -58,6 +63,11 @@ class _ChatPageState extends State<ChatPage> {
     } catch (e) {
       print('Error sending message: $e');
     }
+  }
+
+  // Function to send an image message
+  void sendImageMessage(String imageUrl) {
+    sendMessage(imageUrl, 'image');
   }
 
   @override
@@ -84,32 +94,67 @@ class _ChatPageState extends State<ChatPage> {
                 final List<QueryDocumentSnapshot> documents =
                     snapshot.data!.docs;
 
+                final currentEmail = FirebaseAuth.instance.currentUser?.email;
+
                 return ListView.builder(
                   itemCount: documents.length,
                   itemBuilder: (context, index) {
                     final message = documents[index];
-                    final messageText = message['text'];
-                    final senderId = message['sender'];
+                    final messageType = message['type'];
+                    final senderName = message['sender'];
+                    final isCurrentUser = senderName == currentEmail;
+
+                    // Debug prints
+                    print(
+                        'Sender: $senderName, Is Current User: $isCurrentUser');
 
                     return ListTile(
-                      title: Center(
+                      title: Align(
+                        alignment: isCurrentUser
+                            ? Alignment.centerRight
+                            : Alignment.centerLeft,
                         child: Container(
-                          width: MediaQuery.of(context).size.width *
-                              0.7, // Adjust the width as needed
+                          width: MediaQuery.of(context).size.width * 0.5,
                           padding: EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
-                            color: Colors.blue, // You can adjust the color
+                            color: isCurrentUser ? Colors.blue : Colors.grey,
                           ),
-                          child: Text(
-                            messageText,
-                            style: TextStyle(color: Colors.white),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (messageType == 'text')
+                                Text(
+                                  message['text'],
+                                  style: TextStyle(
+                                    color: isCurrentUser
+                                        ? Colors.white
+                                        : Colors.black,
+                                  ),
+                                )
+                              else if (messageType == 'image')
+                                Image.network(
+                                  message[
+                                      'text'], // Assuming 'text' contains the image URL
+                                  width: 200, // Adjust the size as needed
+                                ),
+                            ],
                           ),
                         ),
                       ),
-                      subtitle: Text(senderId),
-                      trailing: null,
-                      leading: null,
+                      subtitle: Column(
+                        crossAxisAlignment: isCurrentUser
+                            ? CrossAxisAlignment.end
+                            : CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            senderName,
+                            style: TextStyle(
+                              color: isCurrentUser ? Colors.grey : Colors.blue,
+                            ),
+                          ),
+                        ],
+                      ),
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                     );
                   },
@@ -131,18 +176,50 @@ class _ChatPageState extends State<ChatPage> {
                 ),
                 IconButton(
                   icon: Icon(
+                    Icons.camera,
+                    color: Colors.cyan,
+                  ),
+                  onPressed: () async {
+                    final imagePicker = ImagePicker();
+                    final imageFile = await imagePicker.pickImage(
+                        source: ImageSource.gallery);
+
+                    if (imageFile != null) {
+                      // Implement image upload to Firebase Storage
+                      final imageUrl =
+                          await uploadImageToFirebase(imageFile.path);
+
+                      // Send the image message with the obtained image URL
+                      sendImageMessage(imageUrl);
+                    }
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
                     Icons.send,
                     color: Colors.cyan,
                   ),
                   onPressed: () async {
-                    sendMessage(messageController.text);
+                    sendMessage(messageController.text, 'text');
                   },
-                )
+                ),
               ],
             ),
           ),
         ],
       ),
     );
+  }
+
+  Future<String> uploadImageToFirebase(String imagePath) async {
+    // Use Firebase Storage or any other cloud storage service to upload the image
+    // Replace the code below with your actual image upload logic
+    // Example using Firebase Storage:
+    final storageReference =
+        FirebaseStorage.instance.ref().child('images/${DateTime.now()}.jpg');
+    final uploadTask = storageReference.putFile(File(imagePath));
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 }
