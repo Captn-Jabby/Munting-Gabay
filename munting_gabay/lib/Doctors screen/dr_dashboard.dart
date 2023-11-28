@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
 import 'package:munting_gabay/Doctors%20screen/newsched.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
+import 'package:munting_gabay/variable.dart';
 
 class DocDashboard extends StatefulWidget {
   final String docId; // Doctor's ID
@@ -80,7 +81,19 @@ class _DocDashboardState extends State<DocDashboard> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return Center(
+                    child: CircularProgressIndicator(
+                      // Color of the loading indicator
+                      valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                      // Width of the indicator's line
+                      strokeWidth: 4,
+
+                      // Optional: Background color of the circle
+                      backgroundColor: bgloadingColor,
+                    ),
+                  );
+                  ;
                 } else if (snapshot.hasError) {
                   return Center(
                     child: Text('Error: ${snapshot.error}'),

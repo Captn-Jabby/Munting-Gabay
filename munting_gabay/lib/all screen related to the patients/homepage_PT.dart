@@ -1,19 +1,63 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/Kids_page.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
+import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/login%20and%20register/pincode.dart';
 import 'package:munting_gabay/variable.dart';
 
-import '../drawer_page.dart';
+class HomepagePT extends StatefulWidget {
+  const HomepagePT({Key? key});
 
-class HomepagePT extends StatelessWidget {
-  const HomepagePT({super.key});
+  @override
+  State<HomepagePT> createState() => _HomepagePTState();
+}
+
+class _HomepagePTState extends State<HomepagePT> {
+  bool pinEnabled = false; // Initially set to false
+
+  @override
+  void initState() {
+    super.initState();
+    getPinEnabledFromFirebase();
+  }
+
+  void getPinEnabledFromFirebase() async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        final CollectionReference usersDataCollection =
+            FirebaseFirestore.instance.collection('usersdata');
+
+        final String? currentUserEmail = user.email;
+
+        final DocumentSnapshot userData =
+            await usersDataCollection.doc(currentUserEmail).get();
+
+        if (userData.exists) {
+          final Map<String, dynamic> userDataMap =
+              userData.data() as Map<String, dynamic>;
+          setState(() {
+            pinEnabled = userDataMap['pinStatus'] ?? false;
+          });
+        } else {
+          print('User data not found in Firestore.');
+        }
+      } else {
+        print('User not authenticated.');
+      }
+    } catch (e) {
+      print('Error retrieving PIN status: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
         backgroundColor: scaffoldBgColor,
         elevation: 0,
         iconTheme: const IconThemeData(color: BtnColor),
@@ -70,16 +114,27 @@ class HomepagePT extends StatelessWidget {
                     height: BtnHeight,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => PinScreen()),
-                        );
+                        if (pinEnabled) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => ParentPage()),
+                          );
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => PinScreen()),
+                          );
+                        }
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: secondaryColor,
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(BtnCircularRadius))),
+                        backgroundColor: secondaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(BtnCircularRadius),
+                        ),
+                      ),
                       child: const Text(
                         'Parents',
                         style: buttonTextStyle,

@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 // scafold settings
 const Color scaffoldBgColor = Color(0xFF8FCC62); // Use the correct format
 const Color secondaryColor = Color(0xFFFA893D);
-
+const Color LoadingColor = Colors.blue;
+const Color bgloadingColor = Colors.grey;
+//MediaQuery.of(context).size.height * 0.8,
 // Button Settings
 final double BtnHeight = 50;
 final double BtnWidth = 250;

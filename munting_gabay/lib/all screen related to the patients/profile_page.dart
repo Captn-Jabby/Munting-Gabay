@@ -1,7 +1,11 @@
+import 'dart:io';
+
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 
 class UserProfilePage extends StatefulWidget {
@@ -21,6 +25,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
   late User _currentUser;
   final Box<String> _avatarBox = Hive.box<String>('avatarBox');
   late String _avatarPath;
+
+  final FirebaseStorage _storage =
+      FirebaseStorage.instance; // Instantiate FirebaseStorage
 
   @override
   void initState() {
@@ -160,6 +167,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
                     title: Text('Avatar 4'),
                   ),
                 ),
+                SimpleDialogOption(
+                  onPressed: () async {
+                    // Close the dialog
+                    Navigator.pop(context);
+
+                    // Pick and upload a new avatar
+                    await _pickAndUploadAvatar();
+                  },
+                  child: const ListTile(
+                    title: Text('Choose from Gallery'),
+                  ),
+                ),
                 // Add more SimpleDialogOption for additional avatars
               ],
             ),
@@ -201,7 +220,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
               onTap: _showAvatarSelectionDialog,
               child: CircleAvatar(
                 radius: 60,
-                backgroundImage: AssetImage(_avatarPath),
+                backgroundImage: NetworkImage(
+                    _avatarPath), // Use NetworkImage for Firebase Storage URLs
               ),
             ),
             const SizedBox(height: 16.0),
@@ -249,5 +269,40 @@ class _UserProfilePageState extends State<UserProfilePage> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickAndUploadAvatar() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      // Upload the image to Firebase Storage
+      Reference storageReference =
+          _storage.ref().child('avatars/${_currentUser.email}.jpg');
+      UploadTask uploadTask = storageReference.putFile(File(pickedFile.path));
+      await uploadTask.whenComplete(() async {
+        // Get the download URL of the uploaded image
+        String downloadURL = await storageReference.getDownloadURL();
+
+        // Update the avatar path in Firestore
+        await FirebaseFirestore.instance
+            .collection('usersdata')
+            .doc(_currentUser.email)
+            .update({
+          'avatarPath': downloadURL,
+        });
+
+        // Update the local state
+        setState(() {
+          _avatarPath = downloadURL;
+        });
+
+        // Show a success message
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Avatar updated successfully')),
+        );
+      });
+    }
   }
 }

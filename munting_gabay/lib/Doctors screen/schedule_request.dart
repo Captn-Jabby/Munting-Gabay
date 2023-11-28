@@ -124,18 +124,28 @@ class SlotTile extends StatefulWidget {
 
 class _SlotTileState extends State<SlotTile> {
   bool requesting = false;
+  bool alreadyRequestedOnDate = false; // Add this variable
 
   @override
   Widget build(BuildContext context) {
     if (widget.slotData['status'] == 'Available') {
       return ListTile(
-        title: Text('Time Slot: ${widget.slotData['slot']}'),
+        title: Text('${widget.slotData['slot']}'),
         trailing: ElevatedButton(
           onPressed: () {
-            setState(() {
-              requesting = true;
-            });
-            _requestAppointment(widget.day, widget.slotData['slot'] as String);
+            if (!alreadyRequestedOnDate) {
+              setState(() {
+                requesting = true;
+              });
+              _requestAppointment(
+                  widget.day, widget.slotData['slot'] as String);
+            } else {
+              // Display a message to the user that they've already requested on this date
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                    content: Text('You have already requested on this date.')),
+              );
+            }
           },
           child: Text(requesting ? 'Requesting...' : 'Request'),
         ),
@@ -161,6 +171,28 @@ class _SlotTileState extends State<SlotTile> {
         Map<String, dynamic> dayData =
             daySnapshot.data() as Map<String, dynamic>;
 
+        // Check if the user has already made a request for any slot on this date
+        if ((dayData['available_days'] as List<dynamic>).any((dayEntry) {
+          var slots = dayEntry['slots'] as List<dynamic>;
+          return slots.any((slotEntry) =>
+              slotEntry['patients'] == user?.email &&
+              slotEntry['status'] == 'Pending');
+        })) {
+          setState(() {
+            requesting = false;
+            alreadyRequestedOnDate = true;
+          });
+
+          // Display a message to the user that they've already requested on this date
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('You have already requested.')),
+          );
+
+          // Print statement for additional information
+          print('Already requested on $day at $timeSlot');
+          return;
+        }
+
         // Find the day with the matching 'day' field
         var selectedDay = dayData['available_days'].firstWhere(
           (dayEntry) => dayEntry['day'] == day,
@@ -174,6 +206,9 @@ class _SlotTileState extends State<SlotTile> {
               slots.indexWhere((slotEntry) => slotEntry['slot'] == timeSlot);
 
           if (slotIndex != -1) {
+            // Print the date and slot before updating
+            print('Date: ${dayData['date']}, Slot: $timeSlot');
+
             // Update the status and add the user's email
             slots[slotIndex]['status'] = 'Pending';
             slots[slotIndex]['patients'] = user?.email;
@@ -182,6 +217,9 @@ class _SlotTileState extends State<SlotTile> {
             dayData['available_days']
                     [dayData['available_days'].indexOf(selectedDay)]['slots'] =
                 slots;
+
+            // Print again to verify the changes
+            print('After update - Date: ${dayData['date']}, Slot: $timeSlot');
 
             // Update the Firestore document with the modified day data
             dayRef.update({
@@ -192,6 +230,10 @@ class _SlotTileState extends State<SlotTile> {
                 requesting = false;
               });
 
+              // Display a notification for successful appointment request
+              print(
+                  'Appointment Request Your request for $day at $timeSlot has been submitted.');
+
               // Handle success, e.g., show a confirmation message
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text('Appointment request submitted.')),
@@ -201,6 +243,10 @@ class _SlotTileState extends State<SlotTile> {
               setState(() {
                 requesting = false;
               });
+
+              // Display a notification for error in appointment request
+              print(
+                  'Error There was an error submitting your appointment request.');
 
               // Handle errors, e.g., show an error message
               ScaffoldMessenger.of(context).showSnackBar(

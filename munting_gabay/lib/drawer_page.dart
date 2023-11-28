@@ -5,7 +5,6 @@ import 'package:munting_gabay/Adminpage/adminpage.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:hive/hive.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 
 import 'main.dart';
@@ -17,20 +16,31 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
     String? profileImageUrl;
+    String? avatarPath;
 
-    // Function to retrieve the profile image URL from Firebase Storage
-    Future<void> getProfileImageUrl() async {
+    Future<void> getDataFromFirebase() async {
       try {
-        final ref = firebase_storage.FirebaseStorage.instance.ref().child(
-            'profile_images/${user?.uid}.jpg'); // Adjust the path as needed
+        // Retrieve the profile image URL
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('avatars${user?.uid}.jpg');
         profileImageUrl = await ref.getDownloadURL();
+
+        // Retrieve the avatar path
+        final snapshot = await FirebaseFirestore.instance
+            .collection('usersdata')
+            .doc(user?.email)
+            .get();
+
+        if (snapshot.exists) {
+          avatarPath = snapshot['avatarPath'] ?? 'assets/avatar1.png';
+        }
       } catch (e) {
-        print('Error getting profile image URL: $e');
+        print('Error getting data from Firebase: $e');
       }
     }
 
-    // Call the function to get the profile image URL
-    getProfileImageUrl();
+    // Call the function to get data from Firebase
 
     return Drawer(
       child: ListView(
@@ -60,15 +70,10 @@ class AppDrawer extends StatelessWidget {
             currentAccountPicture: CircleAvatar(
               backgroundImage: profileImageUrl != null
                   ? NetworkImage(profileImageUrl!)
-                  : AssetImage(
-                      // Use the avatar path from Hive as the default
-                      Hive.box<String>('avatarBox').get(
-                          'avatarPath${user?.email}',
-                          defaultValue: 'assets/A.png')!,
-                    ) as ImageProvider<Object>,
+                  : AssetImage(avatarPath ?? 'assets/avatar1.png')
+                      as ImageProvider<Object>, // Explicit cast
             ),
           ),
-
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),

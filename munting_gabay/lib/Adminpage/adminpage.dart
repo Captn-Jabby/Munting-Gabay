@@ -105,7 +105,19 @@ class _AdminPageState extends State<AdminPage> {
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const CircularProgressIndicator();
+                    return const Center(
+                      child: CircularProgressIndicator(
+                        // Color of the loading indicator
+                        valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                        // Width of the indicator's line
+                        strokeWidth: 4,
+
+                        // Optional: Background color of the circle
+                        backgroundColor: bgloadingColor,
+                      ),
+                    );
+                    ;
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {

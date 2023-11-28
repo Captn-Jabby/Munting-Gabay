@@ -32,11 +32,11 @@ class ParentPage extends StatelessWidget {
             ),
             const SizedBox(height: 20),
             SizedBox(
-                height: 600,
+                height: MediaQuery.of(context).size.height * 0.8,
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    // childAspectRatio: 3.0,
-                    crossAxisCount: 2, // Number of columns in the grid
+                    childAspectRatio: 3.0,
+                    crossAxisCount: 1, // Number of columns in the grid
                     mainAxisSpacing: 16.0, // Spacing between rows
                     crossAxisSpacing: 16.0, // Spacing between columns
                   ),

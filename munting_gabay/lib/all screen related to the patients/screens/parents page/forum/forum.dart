@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/variable.dart';
 
 class ForumPage extends StatefulWidget {
   @override
@@ -42,7 +43,8 @@ class _ForumPageState extends State<ForumPage> {
 
   void createPost(String content) async {
     String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot = await _firestore.collection('usersdata').doc(_user?.uid).get();
+    DocumentSnapshot userSnapshot =
+        await _firestore.collection('usersdata').doc(_user?.uid).get();
     if (userSnapshot.exists) {
       userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
     }
@@ -57,7 +59,8 @@ class _ForumPageState extends State<ForumPage> {
 
   void addComment(String postId, String userId, String content) async {
     String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot = await _firestore.collection('usersdata').doc(_user?.uid).get();
+    DocumentSnapshot userSnapshot =
+        await _firestore.collection('usersdata').doc(_user?.uid).get();
     if (userSnapshot.exists) {
       userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
     }
@@ -72,15 +75,18 @@ class _ForumPageState extends State<ForumPage> {
   void _showPostModal(String postId, String postContent, String userName) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true, // Set to true to ensure the modal is not full height
+      isScrollControlled:
+          true, // Set to true to ensure the modal is not full height
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
         return Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.6, // Adjust the height of the modal
+            height: MediaQuery.of(context).size.height *
+                0.6, // Adjust the height of the modal
             child: PostModal(
               postId: postId,
               postContent: postContent,
@@ -94,7 +100,6 @@ class _ForumPageState extends State<ForumPage> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,63 +108,75 @@ class _ForumPageState extends State<ForumPage> {
       ),
       body: _user == null
           ? Center(
-        child: ElevatedButton(
-          onPressed: () => _signIn('test@example.com', 'password'),
-          child: Text('Sign in as a test user'),
-        ),
-      )
-          : Column(
-        children: [
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: _firestore.collection('posts').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final posts = snapshot.data!.docs;
-                List<Widget> postWidgets = [];
-                for (var post in posts) {
-                  final postContent = post.get('content');
-                  final userName = post.get('userId');
-                  final postWidget = ListTile(
-                    title: Text(postContent),
-                    subtitle: Text(userName),
-                    trailing: IconButton(
-                      icon: Icon(Icons.add_comment),
-                      onPressed: () {
-                        _showPostModal(post.id, postContent, userName);
-                      },
-                    ),
-                  );
-                  postWidgets.add(postWidget);
-                }
-                return ListView(
-                  children: postWidgets,
-                );
-              },
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextFormField(
-              controller: _postController,
-              decoration: InputDecoration(
-                hintText: 'Write your post...',
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.send),
-                  onPressed: () {
-                    createPost(_postController.text);
-                    _postController.clear();
-                  },
-                ),
+              child: ElevatedButton(
+                onPressed: () => _signIn('test@example.com', 'password'),
+                child: Text('Sign in as a test user'),
               ),
+            )
+          : Column(
+              children: [
+                Expanded(
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: _firestore.collection('posts').snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return Center(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              // Color of the loading indicator
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                              // Width of the indicator's line
+                              strokeWidth: 4,
+
+                              // Optional: Background color of the circle
+                              backgroundColor: bgloadingColor,
+                            ),
+                          ),
+                        );
+                      }
+                      final posts = snapshot.data!.docs;
+                      List<Widget> postWidgets = [];
+                      for (var post in posts) {
+                        final postContent = post.get('content');
+                        final userName = post.get('userId');
+                        final postWidget = ListTile(
+                          title: Text(postContent),
+                          subtitle: Text(userName),
+                          trailing: IconButton(
+                            icon: Icon(Icons.add_comment),
+                            onPressed: () {
+                              _showPostModal(post.id, postContent, userName);
+                            },
+                          ),
+                        );
+                        postWidgets.add(postWidget);
+                      }
+                      return ListView(
+                        children: postWidgets,
+                      );
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    controller: _postController,
+                    decoration: InputDecoration(
+                      hintText: 'Write your post...',
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.send),
+                        onPressed: () {
+                          createPost(_postController.text);
+                          _postController.clear();
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -194,7 +211,10 @@ class _PostModalState extends State<PostModal> {
 
   void addComment(String content) async {
     String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot = await widget.firestore.collection('usersdata').doc(widget.user?.email).get();
+    DocumentSnapshot userSnapshot = await widget.firestore
+        .collection('usersdata')
+        .doc(widget.user?.email)
+        .get();
     if (userSnapshot.exists) {
       userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
     }
@@ -214,7 +234,7 @@ class _PostModalState extends State<PostModal> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-             '${widget.postContent}',
+            '${widget.postContent}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           SizedBox(height: 8.0),
@@ -223,11 +243,26 @@ class _PostModalState extends State<PostModal> {
           Container(
             height: 100.0,
             child: StreamBuilder<QuerySnapshot>(
-              stream: widget.firestore.collection('comments').where('postId', isEqualTo: widget.postId).snapshots(),
-              builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              stream: widget.firestore
+                  .collection('comments')
+                  .where('postId', isEqualTo: widget.postId)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        // Color of the loading indicator
+                        valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                        // Width of the indicator's line
+                        strokeWidth: 4,
+
+                        // Optional: Background color of the circle
+                        backgroundColor: bgloadingColor,
+                      ),
+                    ),
                   );
                 }
                 final comments = snapshot.data!.docs;

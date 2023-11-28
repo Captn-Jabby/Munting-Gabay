@@ -43,6 +43,14 @@ class _DoctorsIdentificationScreenState
     return await storageRef.getDownloadURL();
   }
 
+  Future<String> uploadImage(String title) async {
+    final fileName = '$title-${DateTime.now()}.png';
+    final storageRef =
+        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
+    await storageRef.putFile(profilepic!);
+    return await storageRef.getDownloadURL();
+  }
+
   void _registerUser() async {
     // _clinicController.clear();
     // _addressHospital.clear();
@@ -54,6 +62,7 @@ class _DoctorsIdentificationScreenState
     }
     final imageUrl = await uploadImageToStorage("IDENTIFICATION");
     final imageUrl2 = await uploadImageToStorage2("LICENSURE");
+    final ProfilePicture = await uploadImageToStorage2("ProfilePicture");
     UserData userData = widget.userData;
     try {
       UserCredential userCredential =
@@ -80,7 +89,7 @@ class _DoctorsIdentificationScreenState
         'birthdate': userData.birthdate,
         'email': userData.email,
         'status': 'Waiting',
-        'avatarPath': 'assets/avatar1.png',
+        'avatarPath': ProfilePicture,
         'clinic': _clinicController.text,
         'addressHospital': _addressHospital.text,
         'phoneNumber': _phoneNumber.text,
@@ -152,6 +161,27 @@ class _DoctorsIdentificationScreenState
 
       if (_imageFile != null) {
         uploadImageToFirebase(_imageFile!, widget.userData.email);
+      }
+    }
+  }
+
+  final ImagePicker profile = ImagePicker();
+  File? profilepic;
+
+  Future<void> _profilepic() async {
+    final image = await profile.pickImage(source: ImageSource.gallery);
+
+    if (image == null) {
+      setState(() {
+        profilepic = null;
+      });
+    } else {
+      setState(() {
+        profilepic = File(image.path);
+      });
+
+      if (profilepic != null) {
+        uploadImageToFirebase(profilepic!, widget.userData.email);
       }
     }
   }
@@ -254,6 +284,22 @@ class _DoctorsIdentificationScreenState
                   _pickImage2(); // Call the function to pick an image from storage
                 },
                 child: Text('Select Image from Gallery (LICENSURE)'),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              if (_imageFile2 != null)
+                Image.file(
+                  _imageFile2!,
+                  width: 200,
+                  height: 200,
+                ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  _profilepic(); // Call the function to pick an image from storage
+                },
+                child: Text('Select Image from Gallery (Profile Picture)'),
               ),
               SizedBox(
                 height: 20,

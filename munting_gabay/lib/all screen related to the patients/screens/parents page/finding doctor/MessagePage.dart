@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:munting_gabay/variable.dart';
 
 class ChatPage extends StatefulWidget {
   final String currentUserUid; // User's UID
@@ -87,8 +88,18 @@ class _ChatPageState extends State<ChatPage> {
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return Center(
-                    child: CircularProgressIndicator(),
-                  );
+                      child: Center(
+                    child: CircularProgressIndicator(
+                      // Color of the loading indicator
+                      valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                      // Width of the indicator's line
+                      strokeWidth: 4,
+
+                      // Optional: Background color of the circle
+                      backgroundColor: bgloadingColor,
+                    ),
+                  ));
                 }
 
                 final List<QueryDocumentSnapshot> documents =

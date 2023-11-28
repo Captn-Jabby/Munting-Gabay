@@ -5,6 +5,7 @@ import 'package:munting_gabay/Doctors%20screen/schedule_request.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
 
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
+import 'package:munting_gabay/call.dart';
 import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/login%20and%20register/calling_doctor.dart';
 import 'package:munting_gabay/variable.dart';
@@ -137,6 +138,21 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                           docId: widget.docId,
                           phoneNumber: widget.phoneNumber,
                           currentUserName: widget.currentUserName,
+                        ),
+                      ),
+                    );
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.call_end), // Calling icon
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => Call(
+                          currentUserUid: widget.currentUserUid,
+                          currentUserName: widget.currentUserName,
+                          docId: widget.docId,
                         ),
                       ),
                     );

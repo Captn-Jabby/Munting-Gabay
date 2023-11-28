@@ -12,6 +12,7 @@ class ChangePin extends StatefulWidget {
 class _ChangePinState extends State<ChangePin> {
   String currentPin = '';
   String newPin = '';
+  bool pinEnabled = false;
 
   @override
   Widget build(BuildContext context) {
@@ -24,14 +25,13 @@ class _ChangePinState extends State<ChangePin> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            // Text fields for current PIN and new PIN
             TextField(
               onChanged: (value) {
                 setState(() {
                   currentPin = value;
                 });
               },
-              obscureText: true, // Hide the PIN input
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'Current PIN',
               ),
@@ -43,18 +43,47 @@ class _ChangePinState extends State<ChangePin> {
                   newPin = value;
                 });
               },
-              obscureText: true, // Hide the PIN input
+              obscureText: true,
               decoration: InputDecoration(
                 labelText: 'New PIN',
               ),
             ),
             SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('PIN Enabled'),
+                Switch(
+                  value: pinEnabled,
+                  onChanged: (value) {
+                    setState(() {
+                      pinEnabled = value;
+                    });
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: () {
-                // Validate the current PIN and change it to the new one
-                changePin(currentPin, newPin);
+                if (currentPin.isNotEmpty && newPin.isNotEmpty) {
+                  changePin(currentPin, newPin);
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Please fill in both current and new PIN.'),
+                    ),
+                  );
+                }
               },
               child: Text('Change PIN'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                // Update only the pinStatus in Firestore
+                updatePinStatusInFirestore(pinEnabled);
+              },
+              child: Text('Update PIN Status'),
             ),
           ],
         ),
@@ -62,7 +91,6 @@ class _ChangePinState extends State<ChangePin> {
     );
   }
 
-  // Function to set the new PIN in Firestore
   Future<void> setPinInFirestore(String pin) async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
@@ -73,7 +101,6 @@ class _ChangePinState extends State<ChangePin> {
 
         final String? currentUserEmail = user.email;
 
-        // Update the 'pin' field for the current user using their email
         await usersDataCollection.doc(currentUserEmail).update({
           'pin': pin,
         });
@@ -87,7 +114,29 @@ class _ChangePinState extends State<ChangePin> {
     }
   }
 
-// Function to change the PIN
+  Future<void> updatePinStatusInFirestore(bool pinStatus) async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        final CollectionReference usersDataCollection =
+            FirebaseFirestore.instance.collection('usersdata');
+
+        final String? currentUserEmail = user.email;
+
+        await usersDataCollection.doc(currentUserEmail).update({
+          'pinStatus': pinStatus,
+        });
+
+        print('PIN status updated successfully in Firestore.');
+      } else {
+        print('User not authenticated.');
+      }
+    } catch (e) {
+      print('Error updating PIN status in Firestore: $e');
+    }
+  }
+
   void changePin(String currentPin, String newPin) async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
@@ -98,7 +147,6 @@ class _ChangePinState extends State<ChangePin> {
 
         final String? currentUserEmail = user.email;
 
-        // Retrieve the 'pin' field for the current user from Firestore using their email
         final DocumentSnapshot userData =
             await usersDataCollection.doc(currentUserEmail).get();
 
@@ -107,12 +155,9 @@ class _ChangePinState extends State<ChangePin> {
               userData.data() as Map<String, dynamic>;
           final String savedPin = userDataMap['pin'];
 
-          // Compare the entered current PIN with the saved PIN
           if (currentPin == savedPin) {
-            // Save the new PIN in Firebase
             await setPinInFirestore(newPin);
 
-            // Navigate back to the previous screen or show a success message
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
@@ -120,7 +165,6 @@ class _ChangePinState extends State<ChangePin> {
               ),
             );
           } else {
-            // Incorrect current PIN, show an error message
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Incorrect current PIN. Please try again.'),

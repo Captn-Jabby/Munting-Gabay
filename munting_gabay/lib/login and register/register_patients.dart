@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'login.dart';
@@ -176,14 +177,20 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       height: 15,
                     ),
                     TextField(
+                      inputFormatters: [
+                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                      ],
                       controller: _pinController,
+                      maxLength: 4, // Set the maximum length to 4 digits
+                      keyboardType:
+                          TextInputType.number, // Set keyboard type to number
+
                       decoration: InputDecoration(
                         labelText: '''Pincode for Parent's Pages''',
+                        counterText: '', // Hide the character counter
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.blue), // Adjust the border color
+                          borderRadius: BorderRadius.circular(10.0),
+                          borderSide: BorderSide(color: Colors.blue),
                         ),
                       ),
                     ),

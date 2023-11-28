@@ -11,6 +11,7 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homep
 import 'package:munting_gabay/variable.dart';
 
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:provider/provider.dart';
 import 'Adminpage/adminpage.dart';
 
 void main() async {
@@ -18,7 +19,9 @@ void main() async {
   await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox<String>('avatarBox');
-  runApp(MyApp());
+  runApp(
+    MyApp(),
+  );
 }
 
 void configLoading() {
@@ -55,7 +58,12 @@ void configLoading() {
 //     );
 //   }
 // }
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -64,7 +72,18 @@ class MyApp extends StatelessWidget {
         stream: FirebaseAuth.instance.authStateChanges(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
+              ),
+            );
           }
 
           if (snapshot.hasData) {
@@ -75,7 +94,18 @@ class MyApp extends StatelessWidget {
                 builder: (context, userDataSnapshot) {
                   if (userDataSnapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(
+                      child: CircularProgressIndicator(
+                        // Color of the loading indicator
+                        valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                        // Width of the indicator's line
+                        strokeWidth: 4,
+
+                        // Optional: Background color of the circle
+                        backgroundColor: bgloadingColor,
+                      ),
+                    );
                   }
 
                   String userType =

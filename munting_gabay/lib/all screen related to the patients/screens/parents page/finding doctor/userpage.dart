@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
+import 'package:munting_gabay/variable.dart';
 
 class UserSelectionPage extends StatelessWidget {
   Future<List<DocumentSnapshot>> fetchUsers() async {
@@ -37,8 +38,18 @@ class UserSelectionPage extends StatelessWidget {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(
-              child: CircularProgressIndicator(),
-            );
+                child: Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
+              ),
+            ));
           }
           if (snapshot.hasError) {
             return Center(
@@ -65,7 +76,19 @@ class UserSelectionPage extends StatelessWidget {
                 builder: (context, emailSnapshot) {
                   if (emailSnapshot.connectionState ==
                       ConnectionState.waiting) {
-                    return CircularProgressIndicator();
+                    return Center(
+                      child: CircularProgressIndicator(
+                        // Color of the loading indicator
+                        valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                        // Width of the indicator's line
+                        strokeWidth: 4,
+
+                        // Optional: Background color of the circle
+                        backgroundColor: bgloadingColor,
+                      ),
+                    );
+                    ;
                   }
 
                   if (emailSnapshot.hasError) {
@@ -81,7 +104,20 @@ class UserSelectionPage extends StatelessWidget {
                     builder: (context, nameSnapshot) {
                       if (nameSnapshot.connectionState ==
                           ConnectionState.waiting) {
-                        return CircularProgressIndicator();
+                        return Center(
+                          child: CircularProgressIndicator(
+                            // Color of the loading indicator
+                            valueColor:
+                                AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                            // Width of the indicator's line
+                            strokeWidth: 4,
+
+                            // Optional: Background color of the circle
+                            backgroundColor: bgloadingColor,
+                          ),
+                        );
+                        ;
                       }
 
                       if (nameSnapshot.hasError) {
