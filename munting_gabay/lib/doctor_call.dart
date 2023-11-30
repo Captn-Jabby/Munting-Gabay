@@ -1,30 +1,32 @@
+
     // In call.dart file
     import 'package:flutter/material.dart';
     import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/finding_doctors.dart';
     import 'package:munting_gabay/call/models/agora_connection_data.dart';
     import 'package:munting_gabay/call/src/agora_client.dart'
-        as callAgoraClient; // Rename to avoid conflict
+    as callAgoraClient; // Rename to avoid conflict
     import 'package:munting_gabay/call/src/buttons/buttons.dart';
     import 'package:munting_gabay/call/src/enums.dart';
     import 'package:munting_gabay/call/src/layout/layout.dart';
 
-    class Call extends StatefulWidget {
-      const Call({
+    class CallDoctor extends StatefulWidget {
+      const CallDoctor({
         Key? key,
         required this.currentUserUid,
+        required this.currentemailId,
         required this.currentUserName,
         required this.docId,
       }) : super(key: key);
-
+    final String currentemailId;
       final String currentUserUid;
       final String currentUserName;
       final String docId;
 
       @override
-      State<Call> createState() => _CallState();
+      State<CallDoctor> createState() => _CallDoctorState();
     }
 
-    class _CallState extends State<Call> {
+    class _CallDoctorState extends State<CallDoctor> {
       late final callAgoraClient.AgoraClient client;
 
       @override
@@ -33,8 +35,8 @@
         client = callAgoraClient.AgoraClient(
           agoraConnectionData: AgoraConnectionData(
             appId: "ce045b781cb94043a99410d2a476fadd",
-            channelName: widget.currentUserUid+widget.docId, // Default channel name, update as needed
-            username: widget.currentUserUid, // Default username, update as needed
+            channelName: widget.docId+widget.currentUserUid, // Default channel name, update as needed
+            username: widget.currentUserName, // Default username, update as needed
           ),
           currentUserUid: widget.currentUserUid,
           currentUserName: widget.currentUserName,
@@ -47,7 +49,7 @@
       void initAgora() async {
         client.initialize(
           appId: "ce045b781cb94043a99410d2a476fadd",
-          channelName: widget.currentUserUid+widget.docId,
+          channelName: widget.docId+widget.currentUserUid ,
           username: widget.currentUserName,
         );
       }
@@ -56,21 +58,9 @@
       Widget build(BuildContext context) {
         return Scaffold(
           appBar: AppBar(
-            title: const Text('VIDEO CALL'),
+            title: const Text('VIDEO DOCTOR SIDE CALL'),
             centerTitle: true,
-            actions: [
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => pscyh(),
-                    ),
-                  );
-                },
-                child: Text('.'),
-              ),
-            ],
+
           ),
           body: SafeArea(
             child: Stack(
@@ -97,8 +87,7 @@
                         Text('Doc ID: ${widget.docId}'),
                         Text('Channel Name: ${client.agoraConnectionData.channelName}'),
 
-                        Text('Channel username: ${client.agoraConnectionData.username}'),
-
+                        Text('Channel uid: ${client.agoraConnectionData.username}')
 
                       ],
                     ),

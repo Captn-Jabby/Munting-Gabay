@@ -7,6 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:munting_gabay/variable.dart';
 
+import '../../../../doctor_call.dart';
+
 class ChatPage extends StatefulWidget {
   final String currentUserUid; // User's UID
   final String currentUserName; // User's name
@@ -76,6 +78,22 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.recipientName),
+        actions: [ElevatedButton.icon(onPressed: (){
+print("userUID ${widget.currentUserUid}");
+print("docID ${widget.docId}");
+print("NAME ${widget.recipientName}}");
+        Navigator.push(
+          context,
+            MaterialPageRoute(
+              builder: (context) => CallDoctor(
+                currentUserUid: widget.currentUserUid,
+                currentUserName: widget.currentUserUid,
+                docId: widget.docId, currentemailId: widget.recipientName,
+
+              ),
+          ),
+        );}, icon: Icon(Icons.call_made),
+            label: Text('call'))],
       ),
       body: Column(
         children: [

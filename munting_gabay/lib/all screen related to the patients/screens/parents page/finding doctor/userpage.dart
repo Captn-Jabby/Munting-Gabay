@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
+import 'package:munting_gabay/call.dart';
 import 'package:munting_gabay/variable.dart';
+
+import '../../../../doctor_call.dart';
 
 class UserSelectionPage extends StatelessWidget {
   Future<List<DocumentSnapshot>> fetchUsers() async {
@@ -128,33 +131,39 @@ class UserSelectionPage extends StatelessWidget {
 
                       final currentUserName = nameSnapshot.data ?? '';
 
-                      return ListTile(
-                        title: Text(userName),
-                        onTap: () {
-                          String senderUid = currentEmail;
-                          String senderName = currentUserName;
-                          bool senderIsDoctor =
-                              true; // Assuming the sender is a doctor
+                      return Column(
+                        children: [
+                          ListTile(
+                            title: Text('$userName',textScaleFactor: 1.5,),
+                            onTap: () {
+                              String senderUid = currentEmail;
+                              String senderName = currentUserName;
+                              bool senderIsDoctor =
+                                  true; // Assuming the sender is a doctor
 
-                          String recipientUid = userId;
-                          String recipientName = userName;
-                          bool recipientIsDoctor =
-                              true; // Assuming the recipient is a doctor
+                              String recipientUid = userId;
+                              String recipientName = userName;
+                              bool recipientIsDoctor =
+                                  true; // Assuming the recipient is a doctor
 
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ChatPage(
-                                currentUserUid: senderUid,
-                                currentUserName: senderName,
-                                docId: recipientUid,
-                                recipientName: recipientName,
-                                recipientIsDoctor: recipientIsDoctor,
-                                senderIsDoctor: senderIsDoctor,
-                              ),
-                            ),
-                          );
-                        },
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                    currentUserUid: senderUid,
+                                    currentUserName: senderName,
+                                    docId: recipientUid,
+                                    recipientName: recipientName,
+                                    recipientIsDoctor: recipientIsDoctor,
+                                    senderIsDoctor: senderIsDoctor,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          Divider(),
+
+                        ],
                       );
                     },
                   );

@@ -8,6 +8,8 @@ import 'package:hive/hive.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/main.dart';
 
+import '../ringtone/ringtone.dart';
+
 class DrDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -74,6 +76,16 @@ class DrDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => DrUserProfile()),
+              );
+            },
+          ), ListTile(
+            leading: Icon(Icons.person),
+            title: Text('Profile'),
+            onTap: () {
+              // Handle navigation to profile
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ringtone()),
               );
             },
           ),
