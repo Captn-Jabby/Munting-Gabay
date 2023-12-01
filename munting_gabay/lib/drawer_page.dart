@@ -67,11 +67,27 @@ class AppDrawer extends StatelessWidget {
               },
             ),
             accountEmail: Text(user?.email ?? ""),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: profileImageUrl != null
-                  ? NetworkImage(profileImageUrl!)
-                  : AssetImage(avatarPath ?? 'assets/avatar1.png')
-                      as ImageProvider<Object>, // Explicit cast
+            currentAccountPicture: FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('usersdata')
+                  .doc(user?.email)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // Show a loading indicator
+                }
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return CircleAvatar(
+                    backgroundImage: AssetImage('assets/avatar1.png'),
+                  );
+                }
+                String profileImageUrl = snapshot.data!['avatarPath'];
+                return CircleAvatar(
+                    backgroundImage: NetworkImage(profileImageUrl));
+              },
             ),
           ),
           ListTile(

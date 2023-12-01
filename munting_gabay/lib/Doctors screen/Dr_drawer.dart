@@ -1,14 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/Adminpage/adminpage.dart';
+import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
 import 'package:munting_gabay/Dr_Profile.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:hive/hive.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/main.dart';
-
-import '../ringtone/ringtone.dart';
 
 class DrDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -17,20 +17,31 @@ class DrDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
     String? profileImageUrl;
+    String? avatarPath;
 
-    // Function to retrieve the profile image URL from Firebase Storage
-    Future<void> getProfileImageUrl() async {
+    Future<void> getDataFromFirebase() async {
       try {
-        final ref = firebase_storage.FirebaseStorage.instance.ref().child(
-            'profile_images/${user?.uid}.jpg'); // Adjust the path as needed
+        // Retrieve the profile image URL
+        final ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('avatars${user?.uid}.jpg');
         profileImageUrl = await ref.getDownloadURL();
+
+        // Retrieve the avatar path
+        final snapshot = await FirebaseFirestore.instance
+            .collection('usersdata')
+            .doc(user?.email)
+            .get();
+
+        if (snapshot.exists) {
+          avatarPath = snapshot['avatarPath'] ?? 'assets/avatar1.png';
+        }
       } catch (e) {
-        print('Error getting profile image URL: $e');
+        print('Error getting data from Firebase: $e');
       }
     }
 
-    // Call the function to get the profile image URL
-    getProfileImageUrl();
+    // Call the function to get data from Firebase
 
     return Drawer(
       child: ListView(
@@ -57,17 +68,30 @@ class DrDrawer extends StatelessWidget {
               },
             ),
             accountEmail: Text(user?.email ?? ""),
-            currentAccountPicture: CircleAvatar(
-              backgroundImage: profileImageUrl != null
-                  ? NetworkImage(profileImageUrl!)
-                  : AssetImage(
-                      // Use the avatar path from Hive as the default
-                      Hive.box<String>('avatarBox').get(
-                          'avatarPath${user?.email}',
-                          defaultValue: 'assets/A.png')!,
-                    ) as ImageProvider<Object>,
+            currentAccountPicture: FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('usersdata')
+                  .doc(user?.email)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator(); // Show a loading indicator
+                }
+                if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                }
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return CircleAvatar(
+                    backgroundImage: AssetImage('assets/avatar1.png'),
+                  );
+                }
+                String profileImageUrl = snapshot.data!['avatarPath'];
+                return CircleAvatar(
+                    backgroundImage: NetworkImage(profileImageUrl));
+              },
             ),
           ),
+
           ListTile(
             leading: Icon(Icons.person),
             title: Text('Profile'),
@@ -78,27 +102,21 @@ class DrDrawer extends StatelessWidget {
                 MaterialPageRoute(builder: (context) => DrUserProfile()),
               );
             },
-          ), ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
+          ),
+          ListTile(
+            leading: Icon(Icons.home_filled),
+            title: Text('Home'),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => ringtone()),
+                MaterialPageRoute(
+                    builder: (context) => DocDashboard(
+                          docId: '',
+                        )),
               );
             },
           ),
-          // ListTile(
-          //   leading: Icon(Icons.settings),
-          //   title: Text('Settings'),
-          //   onTap: () {
-          //     // Navigator.pushReplacement(
-          //     //   context,
-          //     //   MaterialPageRoute(builder: (context) => ChnagePin()),
-          //     // );
-          //   },
-          // ),
           Divider(
             color: Colors.black,
           ), // Adds a visual divider

@@ -304,9 +304,9 @@ class _DoctorsIdentificationScreenState
               SizedBox(
                 height: 20,
               ),
-              if (_imageFile2 != null)
+              if (profilepic != null)
                 Image.file(
-                  _imageFile2!,
+                  profilepic!,
                   width: 200,
                   height: 200,
                 ),

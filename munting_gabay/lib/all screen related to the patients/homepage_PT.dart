@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/Kids_page.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/drawer_page.dart';
@@ -51,6 +52,23 @@ class _HomepagePTState extends State<HomepagePT> {
     } catch (e) {
       print('Error retrieving PIN status: $e');
     }
+  }
+
+  Future<void> _onButtonPressed() async {
+    EasyLoading.show(status: 'Please wait');
+    await Future.delayed(Duration(seconds: 2));
+    if (pinEnabled) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ParentPage()),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => PinScreen()),
+      );
+    }
+    EasyLoading.dismiss();
   }
 
   @override
@@ -114,19 +132,7 @@ class _HomepagePTState extends State<HomepagePT> {
                     height: BtnHeight,
                     child: ElevatedButton(
                       onPressed: () {
-                        if (pinEnabled) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ParentPage()),
-                          );
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => PinScreen()),
-                          );
-                        }
+                        _onButtonPressed();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: secondaryColor,

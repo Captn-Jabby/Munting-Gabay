@@ -6,7 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
+import 'package:munting_gabay/variable.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -23,8 +25,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   late User _currentUser;
-  final Box<String> _avatarBox = Hive.box<String>('avatarBox');
-  late String _avatarPath;
+  // final Box<String> _avatarBox = Hive.box<String>('avatarBox');
+  String _avatarPath = '';
 
   final FirebaseStorage _storage =
       FirebaseStorage.instance; // Instantiate FirebaseStorage
@@ -33,35 +35,48 @@ class _UserProfilePageState extends State<UserProfilePage> {
   void initState() {
     super.initState();
     _currentUser = _auth.currentUser!;
-    _avatarPath = _avatarBox.get('avatarPath${_currentUser.email}',
-        defaultValue: 'assets/avatar1.png')!;
+    // _avatarPath =
+    //     _avatarBox.get('avatarPath${_currentUser.email}', defaultValue: '')!;
+    _loadUserData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     _loadUserData();
   }
 
   void _loadUserData() async {
-    final snapshot = await FirebaseFirestore.instance
-        .collection('usersdata')
-        .doc(_currentUser.email)
-        .get();
+    if (_currentUser.email!.isNotEmpty) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('usersdata')
+          .doc(_currentUser.email)
+          .get();
 
-    if (snapshot.exists) {
-      setState(() {
-        _nameController.text = snapshot['name'];
-        _usernameController.text = snapshot['username'];
-        // Convert Timestamp to DateTime
-        Timestamp birthdateTimestamp = snapshot['birthdate'];
-        selectedDate = birthdateTimestamp.toDate();
-        _addressController.text = snapshot['address'];
-        _emailController.text = snapshot['email'];
-        _avatarPath = _avatarBox.get('avatarPath${_currentUser.email}',
-            defaultValue: snapshot['avatarPath'] ?? 'assets/avatar1.png')!;
-      });
+      if (snapshot.exists) {
+        setState(() {
+          _nameController.text = snapshot['name'];
+          _usernameController.text = snapshot['username'];
+          // Convert Timestamp to DateTime
+          Timestamp birthdateTimestamp = snapshot['birthdate'];
+          selectedDate = birthdateTimestamp.toDate();
+          _addressController.text = snapshot['address'];
+          _emailController.text = snapshot['email'];
+          _avatarPath = snapshot['avatarPath'] ?? '';
+          // 'https://firebasestorage.googleapis.com/v0/b/munting-gabay-4f845.appspot.com/o/avatars%2Fbened8ct12%40gmail.com.jpg?alt=media&token=0d9e85c8-bcf3-4789-986c-caeda85e16ce';
+        });
+      }
+    } else {
+      print('Error: User email is empty');
+      // Handle the case where user email is empty
     }
   }
 
-  void _updateAvatarPath(String path) {
-    _avatarBox.put('avatarPath${_currentUser.email}', path);
-  }
+  // void _updateAvatarPath(String path) {
+  //   print("Avatar Path: $_avatarPath"); // Add this line for debugging
+
+  //   _avatarBox.put('avatarPath${_currentUser.email}', path);
+  // }
 
   // Selection of date
   Future<void> _selectDate(BuildContext context) async {
@@ -88,6 +103,8 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _updateUserData() async {
+    print("Avatar Path: $_avatarPath"); // Add this line for debugging
+
     await FirebaseFirestore.instance
         .collection('usersdata')
         .doc(_currentUser.email)
@@ -116,58 +133,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
               title: const Text('Select Avatar'),
               children: <Widget>[
                 SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context,
-                        'assets/avatar1.png'); // Update with your avatar asset path
-                  },
-                  child: const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage(
-                          'assets/avatar1.png'), // Update with your avatar asset path
-                    ),
-                    title: Text('Avatar 1'),
-                  ),
-                ),
-                SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context,
-                        'assets/avatar2.png'); // Update with your avatar asset path
-                  },
-                  child: const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage(
-                          'assets/avatar2.png'), // Update with your avatar asset path
-                    ),
-                    title: Text('Avatar 2'),
-                  ),
-                ),
-                SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context,
-                        'assets/avatar3.png'); // Update with your avatar asset path
-                  },
-                  child: const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage(
-                          'assets/avatar3.png'), // Update with your avatar asset path
-                    ),
-                    title: Text('Avatar 3'),
-                  ),
-                ),
-                SimpleDialogOption(
-                  onPressed: () {
-                    Navigator.pop(context,
-                        'assets/avatar4.png'); // Update with your avatar asset path
-                  },
-                  child: const ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: AssetImage(
-                          'assets/avatar4.png'), // Update with your avatar asset path
-                    ),
-                    title: Text('Avatar 4'),
-                  ),
-                ),
-                SimpleDialogOption(
                   onPressed: () async {
                     // Close the dialog
                     Navigator.pop(context);
@@ -190,29 +155,33 @@ class _UserProfilePageState extends State<UserProfilePage> {
     if (selectedAvatar != null) {
       setState(() {
         _avatarPath = selectedAvatar;
-        _updateAvatarPath(_avatarPath); // Update avatar path in Hive
+        // _updateAvatarPath(_avatarPath); // Update avatar path in Hive
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print("Avatar Path: $_avatarPath"); // Add this line for debugging
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
+        title: Text('Profile'),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: Icon(Icons.arrow_back),
           onPressed: () {
-            // Perform your custom action here
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomepagePT()),
+              MaterialPageRoute(
+                builder: (context) => HomepagePT(),
+              ),
             );
           },
         ),
-        title: const Text('User Profile'),
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -220,20 +189,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
               onTap: _showAvatarSelectionDialog,
               child: CircleAvatar(
                 radius: 60,
-                backgroundImage: NetworkImage(
-                    _avatarPath), // Use NetworkImage for Firebase Storage URLs
+                backgroundImage: NetworkImage(_avatarPath),
               ),
             ),
-            const SizedBox(height: 16.0),
+            SizedBox(height: 16.0),
             TextFormField(
               controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
+              decoration: InputDecoration(labelText: 'Name'),
             ),
             TextFormField(
               controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
+              decoration: InputDecoration(labelText: 'Username'),
             ),
-            const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(
@@ -253,17 +220,29 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             TextFormField(
               controller: _addressController,
-              decoration: const InputDecoration(labelText: 'Address'),
+              decoration: InputDecoration(labelText: 'Address'),
             ),
             TextFormField(
               controller: _emailController,
-              decoration:
-                  const InputDecoration(labelText: 'Email', enabled: false),
+              decoration: InputDecoration(labelText: 'Email', enabled: false),
             ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _updateUserData,
-              child: const Text('Save Changes'),
+            SizedBox(height: 16.0),
+            Container(
+              // width: BtnWidth,
+              // height: BtnHeight,
+              child: ElevatedButton(
+                onPressed: _updateUserData,
+                child: Text(
+                  'Save',
+                  style: buttonTextStyle,
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: BtnColor, // Use the specified color
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(BtnCircularRadius),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

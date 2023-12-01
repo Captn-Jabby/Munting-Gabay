@@ -78,22 +78,27 @@ class _ChatPageState extends State<ChatPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.recipientName),
-        actions: [ElevatedButton.icon(onPressed: (){
-print("userUID ${widget.currentUserUid}");
-print("docID ${widget.docId}");
-print("NAME ${widget.recipientName}}");
-        Navigator.push(
-          context,
-            MaterialPageRoute(
-              builder: (context) => CallDoctor(
-                currentUserUid: widget.currentUserUid,
-                currentUserName: widget.currentUserUid,
-                docId: widget.docId, currentemailId: widget.recipientName,
-
-              ),
-          ),
-        );}, icon: Icon(Icons.call_made),
-            label: Text('call'))],
+        actions: [
+          ElevatedButton.icon(
+              onPressed: () {
+                print("userUID ${widget.currentUserUid}");
+                print("docID ${widget.docId}");
+                print("NAME ${widget.recipientName}}");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CallDoctor(
+                      currentUserUid: widget.currentUserUid,
+                      currentUserName: widget.currentUserUid,
+                      docId: widget.docId,
+                      currentemailId: widget.recipientName,
+                    ),
+                  ),
+                );
+              },
+              icon: Icon(Icons.call_made),
+              label: Text('call'))
+        ],
       ),
       body: Column(
         children: [

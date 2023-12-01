@@ -128,9 +128,8 @@ class _pscyhState extends State<pscyh> {
                                       children: [
                                         CircleAvatar(
                                           radius: 40,
-                                          backgroundImage: AssetImage(
-                                            doc['avatarPath'] ??
-                                                'assets/avatar1.png',
+                                          backgroundImage: NetworkImage(
+                                            doc['avatarPath'] ?? '',
                                           ),
                                         ),
                                         SizedBox(height: 10),
