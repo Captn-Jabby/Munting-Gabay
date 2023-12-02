@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/variable.dart';
 
 class ViewPINScreen extends StatefulWidget {
   @override
@@ -48,7 +49,9 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('View PIN'),
       ),
       body: Padding(

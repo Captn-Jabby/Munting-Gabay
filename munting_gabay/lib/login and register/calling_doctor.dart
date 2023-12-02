@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:munting_gabay/variable.dart';
 
 class PhoneCallScreen extends StatelessWidget {
   final String phoneNumber; // The phone number you want to call
@@ -28,7 +29,9 @@ class PhoneCallScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Make a Phone Call'),
       ),
       body: Center(

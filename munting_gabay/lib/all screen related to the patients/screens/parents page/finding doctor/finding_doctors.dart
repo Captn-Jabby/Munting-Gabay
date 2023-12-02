@@ -47,7 +47,7 @@ class _pscyhState extends State<pscyh> {
     return Scaffold(
         backgroundColor: scaffoldBgColor,
         appBar: AppBar(
-          backgroundColor: scaffoldBgColor,
+          backgroundColor: secondaryColor,
           elevation: 0,
           toolbarHeight: 150,
           iconTheme: IconThemeData(color: BtnColor),
@@ -118,75 +118,78 @@ class _pscyhState extends State<pscyh> {
                           return Center(
                             child: Column(
                               children: [
-                                Card(
-                                  elevation: 3,
-                                  margin: EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 20),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Column(
-                                      children: [
-                                        CircleAvatar(
-                                          radius: 40,
-                                          backgroundImage: NetworkImage(
-                                            doc['avatarPath'] ?? '',
+                                Container(
+                                  width: double.infinity,
+                                  child: Card(
+                                    elevation: 30,
+                                    margin: EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16.0),
+                                      child: Column(
+                                        children: [
+                                          CircleAvatar(
+                                            radius: 40,
+                                            backgroundImage: NetworkImage(
+                                              doc['avatarPath'] ?? '',
+                                            ),
                                           ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Text(
-                                          'Name: $psychologistName',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                        Text(
-                                          'Address: $psychologistAddress',
-                                          style: TextStyle(fontSize: 16),
-                                        ),
-                                        SizedBox(height: 10),
-                                        ElevatedButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    DoctorInfoPage(
-                                                  docId: doc.id,
-                                                  initialName: doc['name'],
-
-                                                  initialAddress:
-                                                      doc['address'],
-                                                  NameOfHospital: doc.get(
-                                                          'addressHospital') ??
-                                                      'Unknown',
-                                                  IMAGE: doc['avatarPath'] ??
-                                                      'assets/avatar1.png',
-                                                  avatarPath:
-                                                      doc['avatarPath'] ??
-                                                          'assets/avatar1.png',
-                                                  birthdate:
-                                                      doc['birthdate'].toDate(),
-                                                  currentUserUid:
-                                                      currentEmail ?? '',
-                                                  currentUserName:
-                                                      currentUserName ??
-                                                          '', // Pass currentUserName here
-                                                  isDoctor: false,
-                                                  phoneNumber:
-                                                      doc['phoneNumber'] ??
-                                                          'Unknown',
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.blue,
-                                            onPrimary: Colors.white,
-                                          ),
-                                          child: Text(
-                                            'View Details',
+                                          SizedBox(height: 10),
+                                          Text(
+                                            'Name: $psychologistName',
                                             style: TextStyle(fontSize: 16),
                                           ),
-                                        ),
-                                      ],
+                                          Text(
+                                            'Address: $psychologistAddress',
+                                            style: TextStyle(fontSize: 16),
+                                          ),
+                                          SizedBox(height: 10),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      DoctorInfoPage(
+                                                    docId: doc.id,
+                                                    initialName: doc['name'],
+
+                                                    initialAddress:
+                                                        doc['address'],
+                                                    NameOfHospital: doc.get(
+                                                            'addressHospital') ??
+                                                        'Unknown',
+                                                    IMAGE: doc['avatarPath'] ??
+                                                        'assets/avatar1.png',
+                                                    avatarPath: doc[
+                                                            'avatarPath'] ??
+                                                        'assets/avatar1.png',
+                                                    birthdate: doc['birthdate']
+                                                        .toDate(),
+                                                    currentUserUid:
+                                                        currentEmail ?? '',
+                                                    currentUserName:
+                                                        currentUserName ??
+                                                            '', // Pass currentUserName here
+                                                    isDoctor: false,
+                                                    phoneNumber:
+                                                        doc['phoneNumber'] ??
+                                                            'Unknown',
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              primary: Colors.blue,
+                                              onPrimary: Colors.white,
+                                            ),
+                                            child: Text(
+                                              'View Details',
+                                              style: TextStyle(fontSize: 16),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),

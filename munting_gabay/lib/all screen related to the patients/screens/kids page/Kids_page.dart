@@ -11,7 +11,7 @@ class KidsPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
+        backgroundColor: secondaryColor,
         elevation: 0,
         iconTheme: IconThemeData(color: BtnColor),
       ),

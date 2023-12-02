@@ -33,7 +33,9 @@ class UserSelectionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Select User to Message'),
       ),
       body: FutureBuilder<List<DocumentSnapshot>>(
@@ -134,7 +136,10 @@ class UserSelectionPage extends StatelessWidget {
                       return Column(
                         children: [
                           ListTile(
-                            title: Text('$userName',textScaleFactor: 1.5,),
+                            title: Text(
+                              '$userName',
+                              textScaleFactor: 1.5,
+                            ),
                             onTap: () {
                               String senderUid = currentEmail;
                               String senderName = currentUserName;
@@ -162,7 +167,6 @@ class UserSelectionPage extends StatelessWidget {
                             },
                           ),
                           Divider(),
-
                         ],
                       );
                     },

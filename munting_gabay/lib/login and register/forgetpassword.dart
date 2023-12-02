@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:munting_gabay/variable.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
   @override
@@ -33,7 +34,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Forgot Password'),
       ),
       body: Padding(

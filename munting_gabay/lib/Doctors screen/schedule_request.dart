@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/variable.dart';
 
 class DoctorScheduleScreen extends StatelessWidget {
   final String docId; // Doctor's ID
@@ -13,7 +14,9 @@ class DoctorScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Request Appointment'),
       ),
       body: StreamBuilder<DocumentSnapshot>(
@@ -23,7 +26,18 @@ class DoctorScheduleScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator();
+            return Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
+              ),
+            );
           } else if (snapshot.hasError) {
             return Center(
               child: Text('Error: ${snapshot.error}'),

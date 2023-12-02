@@ -10,7 +10,7 @@ class DoctorsHM extends StatelessWidget {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
+        backgroundColor: secondaryColor,
         elevation: 0,
         toolbarHeight: 150,
         iconTheme: IconThemeData(color: BtnColor),

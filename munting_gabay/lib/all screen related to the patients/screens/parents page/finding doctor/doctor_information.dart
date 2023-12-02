@@ -60,7 +60,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
+        backgroundColor: secondaryColor,
         elevation: 0,
         toolbarHeight: 150,
         iconTheme: const IconThemeData(color: BtnColor),
@@ -184,7 +184,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
             ),
             CircleAvatar(
               radius: 40,
-              backgroundImage: AssetImage(
+              backgroundImage: NetworkImage(
                 widget.avatarPath, // Use the avatarPath from the widget
               ),
             ),

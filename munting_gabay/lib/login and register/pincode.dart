@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/login%20and%20register/forgot_pin.dart';
+import 'package:munting_gabay/variable.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinScreen extends StatefulWidget {
@@ -17,7 +18,9 @@ class _PinScreenState extends State<PinScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Enter PIN'),
       ),
       body: Padding(

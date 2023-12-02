@@ -7,6 +7,7 @@ import 'package:munting_gabay/call/src/agora_client.dart'
 import 'package:munting_gabay/call/src/buttons/buttons.dart';
 import 'package:munting_gabay/call/src/enums.dart';
 import 'package:munting_gabay/call/src/layout/layout.dart';
+import 'package:munting_gabay/variable.dart';
 
 class CallDoctor extends StatefulWidget {
   const CallDoctor({
@@ -66,7 +67,9 @@ class _CallDoctorState extends State<CallDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: const Text('VIDEO DOCTOR SIDE CALL'),
         centerTitle: true,
       ),

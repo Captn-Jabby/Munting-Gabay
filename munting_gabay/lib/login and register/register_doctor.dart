@@ -146,7 +146,9 @@ class _PersonalIdentificationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Personal Identification'),
       ),
       body: SingleChildScrollView(

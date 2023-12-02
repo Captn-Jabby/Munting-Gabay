@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/variable.dart';
 
 class RequestListScreen extends StatefulWidget {
   final String docId;
@@ -112,7 +113,9 @@ class _RequestListScreenState extends State<RequestListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('My Requests'),
       ),
       body: myRequests.isEmpty

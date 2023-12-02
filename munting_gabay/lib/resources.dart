@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:munting_gabay/variable.dart';
 
 class BookResourcesApp extends StatelessWidget {
   @override
@@ -50,7 +51,9 @@ class BookResourcesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Book Resources'),
       ),
       body: ListView.builder(
@@ -87,7 +90,9 @@ class WebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Web View'),
       ),
       body: InAppWebView(

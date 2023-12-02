@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:munting_gabay/variable.dart';
 
 class Movie {
   final String title;
@@ -50,7 +51,9 @@ class MovieScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Inspirational Movies'),
       ),
       body: GridView.builder(
@@ -108,7 +111,9 @@ class InAppWebViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text(movie.title),
       ),
       body: Column(

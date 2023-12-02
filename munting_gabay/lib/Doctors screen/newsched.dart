@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/variable.dart';
 
 class DateListScreen extends StatefulWidget {
   @override
@@ -181,7 +182,9 @@ class _DateListScreenState extends State<DateListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Yearly Dates'),
         actions: [
           ElevatedButton(

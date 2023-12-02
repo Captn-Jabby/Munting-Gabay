@@ -143,7 +143,9 @@ class _DocDashboardState extends State<DocDashboard>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: secondaryColor,
         title: Text('Dr Dashboard'),
         actions: [
           IconButton(

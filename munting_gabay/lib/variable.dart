@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 // scafold settings
+const Color secondaryColors = Color(0xFFFA893D);
 const Color scaffoldBgColor = Color(0xFF8FCC62); // Use the correct format
-const Color secondaryColor = Color(0xFFFA893D);
+const Color secondaryColor = Color(0xFF8FCC62);
 const Color LoadingColor = Colors.blue;
 const Color bgloadingColor = Colors.grey;
 //MediaQuery.of(context).size.height * 0.8,
@@ -30,6 +31,7 @@ final double LOGOSIZE = 65;
 final double lOGOSpacing = 10;
 final double pageButton = 20;
 bool callStatus = false;
+
 class UserData {
   final String username;
   final String name;

@@ -9,6 +9,7 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profi
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/main.dart';
+import 'package:munting_gabay/variable.dart';
 
 class DrDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -75,7 +76,18 @@ class DrDrawer extends StatelessWidget {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Show a loading indicator
+                  return Center(
+                    child: CircularProgressIndicator(
+                      // Color of the loading indicator
+                      valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                      // Width of the indicator's line
+                      strokeWidth: 4,
+
+                      // Optional: Background color of the circle
+                      backgroundColor: bgloadingColor,
+                    ),
+                  ); // Show a loading indicator
                 }
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
