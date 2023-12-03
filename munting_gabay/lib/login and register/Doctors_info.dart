@@ -319,7 +319,25 @@ class _DoctorsIdentificationScreenState
                     uploadImageToFirebase(_imageFile!,
                         widget.userData.email); // Call the image upload process
                   } else {
-                    print('Please select both images before registering.');
+                    // Alert dialog when images are not selected
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text('Error'),
+                          content: Text(
+                              'Please select both images before registering.'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                              child: Text('OK'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   }
                 },
                 child: Text('Register'),
