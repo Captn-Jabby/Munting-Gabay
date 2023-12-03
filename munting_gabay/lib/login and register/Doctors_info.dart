@@ -62,7 +62,7 @@ class _DoctorsIdentificationScreenState
     }
     final imageUrl = await uploadImageToStorage("IDENTIFICATION");
     final imageUrl2 = await uploadImageToStorage2("LICENSURE");
-    final ProfilePicture = await uploadImageToStorage2("ProfilePicture");
+    final ProfilePicture = await uploadImage("ProfilePicture");
     UserData userData = widget.userData;
     try {
       UserCredential userCredential =
