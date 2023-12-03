@@ -76,7 +76,7 @@ class _DoctorsIdentificationScreenState
       // User registration successful
       print(
           'User registration successful! User ID: ${userCredential.user?.uid}');
-
+      EasyLoading.dismiss();
       // Save additional user data to Firestore
       await FirebaseFirestore.instance
           .collection('usersdata')
@@ -128,7 +128,7 @@ class _DoctorsIdentificationScreenState
   }
 
   /// IMAGEEEEEEEE
-  ///
+
   Future<void> uploadImageToFirebase(File imageFile, String email) async {
     try {
       final Reference storageReference = FirebaseStorage.instance.ref().child(

@@ -97,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                     } else if (status == 'ADMIN') {
                       return AdminPage();
                     } else {
-                      return Text("EMPTY");
+                      return LoginScreen();
                     }
                   } else {
                     return InvalidUserTypeScreen();
