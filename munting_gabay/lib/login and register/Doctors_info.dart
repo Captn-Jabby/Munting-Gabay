@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:munting_gabay/login%20and%20register/login.dart';
 import 'package:munting_gabay/variable.dart';
@@ -52,6 +53,7 @@ class _DoctorsIdentificationScreenState
   }
 
   void _registerUser() async {
+    EasyLoading.show(status: 'PlEASE WAIT');
     // _clinicController.clear();
     // _addressHospital.clear();
     // _phoneNumber.clear();
