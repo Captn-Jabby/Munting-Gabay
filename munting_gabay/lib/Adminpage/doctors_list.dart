@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../drawer_page.dart';
 import '../variable.dart';
@@ -14,6 +15,7 @@ class DoctorDetailsScreen extends StatefulWidget {
   final String addressHospital; // Add addressHospital argument
   final String imageUrl;
   final String imageUrl2;
+  final String profilepic;
 
   DoctorDetailsScreen({
     required this.imageUrl,
@@ -25,6 +27,7 @@ class DoctorDetailsScreen extends StatefulWidget {
     required this.initialAddress,
     required this.initialBirthdate,
     required this.initialStatus,
+    required this.profilepic,
   });
 
   @override
@@ -108,19 +111,105 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 style: TextStyle(fontSize: 16)),
             SizedBox(height: 16),
             Text('Identification:', style: TextStyle(fontSize: 16)),
-            Image.network(
-              widget.imageUrl,
-              width: 100,
-              height: 100,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ZoomableImage(widget.imageUrl),
+                  ),
+                );
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      widget.imageUrl,
+                    ),
+                  ),
+                ),
+                child: Hero(
+                  tag: widget.imageUrl,
+                  child: Image.network(
+                    widget.imageUrl,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
+
             Text('lICENSURE:', style: TextStyle(fontSize: 16)),
             // if (widget.imageUrl2 !=
-            //     null)
-            Image.network(
-              widget.imageUrl2,
-              width: 100,
-              height: 100,
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ZoomableImage(widget.imageUrl2),
+                  ),
+                );
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      widget.imageUrl2,
+                    ),
+                  ),
+                ),
+                child: Hero(
+                  tag: widget.imageUrl2,
+                  child: Image.network(
+                    widget.imageUrl2,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
             ),
+
+            Text('Profile pic:', style: TextStyle(fontSize: 16)),
+            GestureDetector(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ZoomableImage(widget.profilepic),
+                  ),
+                );
+              },
+              child: Container(
+                width: 200,
+                height: 200,
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: BorderRadius.circular(8.0),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: NetworkImage(
+                      widget.profilepic,
+                    ),
+                  ),
+                ),
+                child: Hero(
+                  tag: widget.profilepic,
+                  child: Image.network(
+                    widget.profilepic,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+
             Text('Status:', style: TextStyle(fontSize: 16)),
             Row(
               children: [
@@ -173,6 +262,75 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               child: Text('Save'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ZoomableImage extends StatelessWidget {
+  final String imageUrl;
+
+  ZoomableImage(this.imageUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+      ),
+      body: Center(
+        child: Hero(
+          tag: imageUrl,
+          child: PhotoView(
+            imageProvider: NetworkImage(imageUrl),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ZoomableImage1 extends StatelessWidget {
+  final String imageUrl2;
+
+  ZoomableImage1(this.imageUrl2);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+      ),
+      body: Center(
+        child: Hero(
+          tag: imageUrl2,
+          child: PhotoView(
+            imageProvider: NetworkImage(imageUrl2),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ZoomableImage2 extends StatelessWidget {
+  final String profilepic;
+
+  ZoomableImage2(this.profilepic);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+      ),
+      body: Center(
+        child: Hero(
+          tag: profilepic,
+          child: PhotoView(
+            imageProvider: NetworkImage(profilepic),
+          ),
         ),
       ),
     );

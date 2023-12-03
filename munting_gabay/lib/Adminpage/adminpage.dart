@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/Adminpage/admin_drawer.dart';
+import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
 import 'package:munting_gabay/variable.dart';
 
 import '../../../drawer_page.dart';
@@ -46,7 +48,7 @@ class _AdminPageState extends State<AdminPage> {
           ),
         ],
       ),
-      drawer: AppDrawer(),
+      drawer: AdminDrawer(),
       body: SingleChildScrollView(
         child: Center(
           child: Column(
@@ -175,6 +177,7 @@ class _AdminPageState extends State<AdminPage> {
                                             imageUrl:
                                                 doc['IDENTIFICATION'] ?? '',
                                             imageUrl2: doc['Licensure'] ?? '',
+                                            profilepic: doc['avatarPath'] ?? '',
                                           ),
                                         ),
                                       );

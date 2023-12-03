@@ -182,10 +182,19 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                 ),
               ],
             ),
-            CircleAvatar(
-              radius: 40,
-              backgroundImage: NetworkImage(
-                widget.avatarPath, // Use the avatarPath from the widget
+            Container(
+              width: 200, // Width of the rectangular avatar
+              height: 200, // Height of the rectangular avatar
+              decoration: BoxDecoration(
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(
+                    8.0), // Adjust the radius for corner roundness
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: NetworkImage(
+                    widget.avatarPath, // Use the avatarPath from the widget
+                  ),
+                ),
               ),
             ),
             SizedBox(
