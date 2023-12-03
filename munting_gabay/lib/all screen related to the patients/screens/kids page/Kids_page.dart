@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/games/animal.dart';
+
 import 'package:munting_gabay/variable.dart';
 import '../../../Doctors screen/movies_screen.dart';
 import '../../../drawer_page.dart';
@@ -56,11 +58,11 @@ class KidsPage extends StatelessWidget {
                         child: ElevatedButton(
                           onPressed: () {
                             // TODO: Add Games button functionality here
-                            // Navigator.push(
-                            //     context,
-                            //     CupertinoPageRoute(
-                            //         builder: (context) => const KiddieHome()));
-                            // print('Games button pressed!');
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => Categories()));
+                            print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: secondaryColor),

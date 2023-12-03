@@ -119,10 +119,7 @@ class AdminDrawer extends StatelessWidget {
               // Handle navigation to profile
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(
-                    builder: (context) => DocDashboard(
-                          docId: '',
-                        )),
+                MaterialPageRoute(builder: (context) => AdminPage()),
               );
             },
           ),

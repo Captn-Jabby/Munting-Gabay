@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
+import 'package:munting_gabay/variable.dart';
 
 class ChangePin extends StatefulWidget {
   const ChangePin({Key? key});
@@ -12,12 +14,25 @@ class ChangePin extends StatefulWidget {
 class _ChangePinState extends State<ChangePin> {
   String currentPin = '';
   String newPin = '';
-  bool pinEnabled = false;
+  bool pinEnabled = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: scaffoldBgColor,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => HomepagePT(),
+              ),
+            );
+          },
+        ),
         title: Text('Change PIN'),
       ),
       body: Padding(

@@ -34,31 +34,6 @@ void configLoading() {
     ..dismissOnTap = false;
 }
 
-// class MyApp extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       // home: LoginScreen(),
-//       home: StreamBuilder(
-//         stream: FirebaseAuth.instance.authStateChanges(),
-//         builder: (context, snapshot) {
-//           if (snapshot.hasData) {
-//             return HomepagePT();
-//           } else {
-//             return LoginScreen();
-//           }
-//         },
-//       ),
-//       builder: EasyLoading.init(),
-//       routes: {
-//         '/homePT': (context) => HomepagePT(),
-//         '/homeDoctor': (context) => DocDashboard(),
-//         '/homeAdmin': (context) => AdminPage(),
-//       },
-//     );
-//   }
-// }
 class MyApp extends StatefulWidget {
   @override
   State<MyApp> createState() => _MyAppState();
@@ -201,11 +176,6 @@ class LoginScreen extends StatelessWidget {
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-              // Image.asset(
-              //   'assets/A.png',
-              //   width: 300,
-              //   height: 300,
-              // ),
               Column(
                 children: [
                   Text('Munting\nGabay',
@@ -231,7 +201,6 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ],
               ),
-
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

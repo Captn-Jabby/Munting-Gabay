@@ -53,7 +53,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         'birthdate': selectedDate,
         'email': email,
         'pin': pin,
-        'avatarPath': 'assets/avatar1.png'
+        'avatarPath':
+            'https://firebasestorage.googleapis.com/v0/b/munting-gabay-4f845.appspot.com/o/avatars%2Fbened8ct12%40gmail.com.jpg?alt=media&token=70d751a6-b53e-4c6c-a146-a916efc1fe93'
       });
 
       // Perform further actions like saving additional user data to Firestore
