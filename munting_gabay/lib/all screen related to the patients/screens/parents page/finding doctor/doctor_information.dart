@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ import 'package:munting_gabay/call.dart';
 import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/login%20and%20register/calling_doctor.dart';
 import 'package:munting_gabay/variable.dart';
+import 'package:photo_view/photo_view.dart';
 
 import '../../../../ringtone/event_service.dart';
 import '../../../../ringtone/flutter_ringtone_player.dart';
@@ -57,10 +60,11 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
 
   @override
   Widget build(BuildContext context) {
+    double width = 10.1;
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: scaffoldBgColor,
         elevation: 0,
         toolbarHeight: 150,
         iconTheme: const IconThemeData(color: BtnColor),
@@ -96,140 +100,243 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
               'DOCTORS INFORMATION',
               style: buttonTextStyle,
             ),
-            const Divider(
-              color: Colors.black,
-              thickness: 2.0,
+            Container(
+              width: double.infinity,
+              child: const Divider(
+                color: Colors.black,
+                thickness: 2.0,
+              ),
             ),
             Row(
               mainAxisAlignment:
                   MainAxisAlignment.spaceEvenly, // Adjust alignment as needed
               children: [
-                IconButton(
-                  color: Colors.pink,
-                  icon: const Icon(
-                      Icons.calendar_month_rounded), // Scheduling icon
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => DoctorScheduleScreen(
-                          docId: widget.docId,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                IconButton(
-                  icon: const Icon(Icons.message), // Messaging icon
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatPage(
-                          currentUserUid: widget.currentUserUid,
-                          currentUserName: widget.currentUserName,
-                          // isDoctor: widget.isDoctor,
-                          docId: widget.docId,
-                          recipientName: widget.currentUserName,
-                          senderIsDoctor: false, recipientIsDoctor: true,
-                        ),
-                      ),
-                    );
-                  },
-                ),
-                // In DocDashboard.dart or equivalent
-                IconButton(
-                  icon: const Icon(Icons.call_end), // Calling icon
-                  onPressed: () async {
-                    final newCallStatus = !callStatus; // Toggle call status
+                Card(
+                    elevation: 4,
+                    margin: const EdgeInsets.all(16),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          IconButton(
+                            color: Colors.pink,
+                            icon: const Icon(Icons
+                                .calendar_month_rounded), // Scheduling icon
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DoctorScheduleScreen(
+                                    docId: widget.docId,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            width: width,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.message), // Messaging icon
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                    currentUserUid: widget.currentUserUid,
+                                    currentUserName: widget.currentUserName,
+                                    // isDoctor: widget.isDoctor,
+                                    docId: widget.docId,
+                                    recipientName: widget.currentUserName,
+                                    senderIsDoctor: false,
+                                    recipientIsDoctor: true,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            width: width,
+                          ), // In DocDashboard.dart or equivalent
+                          IconButton(
+                            icon: const Icon(Icons.call_end), // Calling icon
+                            onPressed: () async {
+                              final newCallStatus =
+                                  !callStatus; // Toggle call status
 
-                    // Update the callStatus field in Firebase
-                    await FirebaseFirestore.instance
-                        .collection(
-                            'usersdata') // Update with your collection name
-                        .doc(widget.docId)
-                        .update({'callStatus': newCallStatus});
+                              // Update the callStatus field in Firebase
+                              await FirebaseFirestore.instance
+                                  .collection(
+                                      'usersdata') // Update with your collection name
+                                  .doc(widget.docId)
+                                  .update({'callStatus': newCallStatus});
 
-                    // Fire the event
-                    eventBus.fire(VideoCallEvent(
-                        docId: widget.docId, isCalling: newCallStatus));
+                              // Fire the event
+                              eventBus.fire(VideoCallEvent(
+                                  docId: widget.docId,
+                                  isCalling: newCallStatus));
 
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => Call(
-                          currentUserUid: widget.currentUserUid,
-                          currentUserName: widget.currentUserName,
-                          docId: widget.docId,
-                        ),
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Call(
+                                    currentUserUid: widget.currentUserUid,
+                                    currentUserName: widget.currentUserName,
+                                    docId: widget.docId,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          SizedBox(
+                            width: width,
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.history), // Calling icon
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => RequestListScreen(
+                                    docId: widget.docId,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.phone,
+                              color: Colors.amber,
+                            ), // Icon for phone call
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => PhoneCallScreen(
+                                    phoneNumber: widget.phoneNumber,
+                                    docId: widget.docId,
+                                    currentUserName: widget.initialName,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+
+                          SizedBox(
+                            width: width,
+                          ),
+                        ],
                       ),
-                    );
-                  },
-                ),
-
-                IconButton(
-                  icon: const Icon(Icons.lock_clock), // Calling icon
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RequestListScreen(
-                          docId: widget.docId,
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                    ))
               ],
             ),
-            Container(
-              width: 200, // Width of the rectangular avatar
-              height: 200, // Height of the rectangular avatar
-              decoration: BoxDecoration(
-                shape: BoxShape.rectangle,
-                borderRadius: BorderRadius.circular(
-                    8.0), // Adjust the radius for corner roundness
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: NetworkImage(
-                    widget.avatarPath, // Use the avatarPath from the widget
-                  ),
+            Card(
+              elevation: 4,
+              margin: const EdgeInsets.all(16),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: BtnSpacing,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ZoomableImage(widget.avatarPath),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        width: 200,
+                        height: 200,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.circular(8.0),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(
+                              widget.avatarPath,
+                            ),
+                          ),
+                        ),
+                        child: Hero(
+                          tag: widget.avatarPath,
+                          child: Image.network(
+                            widget.avatarPath,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const Divider(
+                      color: Colors.black,
+                      thickness: 2.0,
+                    ),
+                    SizedBox(
+                      height: BtnSpacing,
+                    ),
+                    Text(
+                      'Doctor Email: ${widget.docId}',
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Text('Name: ${widget.initialName}',
+                        style: const TextStyle(fontSize: 16)),
+                    Text('Address: ${widget.initialAddress}',
+                        style: const TextStyle(fontSize: 16)),
+                    Text(
+                        'Birthdate: ${DateFormat('MMMM d, y').format(widget.birthdate)}',
+                        style: const TextStyle(fontSize: 16)),
+                    SizedBox(
+                      height: BtnSpacing,
+                    ),
+                    const Text(
+                      'CLINIC INFORMATION',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    const Divider(
+                      color: Colors.black,
+                      thickness: 2.0,
+                    ),
+                    Text('Clinic Address: ${widget.NameOfHospital}',
+                        style: const TextStyle(fontSize: 16)),
+                    Text('Phone Number: ${widget.phoneNumber}',
+                        style: const TextStyle(fontSize: 16)),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: BtnSpacing,
-            ),
-            Text('Doctor Email: ${widget.docId}',
-                style:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 16),
-            Text('Name: ${widget.initialName}',
-                style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 16),
-            Text('Address: ${widget.initialAddress}',
-                style: const TextStyle(fontSize: 16)),
-            Text(
-                'Birthdate: ${DateFormat('MMMM d, y').format(widget.birthdate)}',
-                style: const TextStyle(fontSize: 16)),
-            const Text(
-              'CLINIC INFORMATION',
-              style: buttonTextStyle,
-            ),
-            const Divider(
-              color: Colors.black,
-              thickness: 2.0,
-            ),
-            Text('Clinic  Address: ${widget.NameOfHospital}',
-                style: const TextStyle(fontSize: 16)),
-            SizedBox(
-              height: BtnSpacing,
-            ),
-            Text('phone Number: ${widget.phoneNumber}',
-                style: const TextStyle(fontSize: 16)),
-            SizedBox(height: BtnSpacing),
-            SizedBox(height: BtnSpacing),
+            )
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ZoomableImage extends StatelessWidget {
+  final String imageUrl;
+
+  ZoomableImage(this.imageUrl);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+      ),
+      body: Center(
+        child: Hero(
+          tag: imageUrl,
+          child: PhotoView(
+            imageProvider: NetworkImage(imageUrl),
+          ),
         ),
       ),
     );

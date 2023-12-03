@@ -78,7 +78,7 @@ class _HomepagePTState extends State<HomepagePT> {
       appBar: AppBar(
         backgroundColor: scaffoldBgColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: BtnColor),
+        iconTheme: const IconThemeData(color: text),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
@@ -135,7 +135,7 @@ class _HomepagePTState extends State<HomepagePT> {
                         _onButtonPressed();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: secondaryColor,
+                        backgroundColor: text,
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(BtnCircularRadius),

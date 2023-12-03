@@ -316,6 +316,10 @@ class _DayCardDOCState extends State<DayCardDOC> {
             title: Text('Day: ${widget.dayData['day']}'),
             subtitle: Text('Date: ${widget.dayData['date']}'),
             trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 setState(() {
                   slotsVisible = !slotsVisible;
@@ -379,6 +383,10 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
           visible: status !=
               'Available', // Hide the button if the status is 'Available'
           child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary:
+                  BtnColor, // Change this color to the desired background color
+            ),
             onPressed: () {
               if (widget.slotData['status'] == 'Canceled') {
                 // Clear the 'patients' field and set the status to 'Available'

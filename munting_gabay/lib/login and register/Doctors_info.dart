@@ -266,6 +266,10 @@ class _DoctorsIdentificationScreenState
               Text(
                   'Please upload your Identification (ID) and Licensure photos.'),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      BtnColor, // Change this color to the desired background color
+                ),
                 onPressed: () {
                   _pickImage(); // Call the function to pick an image from storage
                 },
@@ -282,6 +286,10 @@ class _DoctorsIdentificationScreenState
                 ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      BtnColor, // Change this color to the desired background color
+                ),
                 onPressed: () {
                   _pickImage2(); // Call the function to pick an image from storage
                 },
@@ -298,6 +306,10 @@ class _DoctorsIdentificationScreenState
                 ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      BtnColor, // Change this color to the desired background color
+                ),
                 onPressed: () {
                   _profilepic(); // Call the function to pick an image from storage
                 },
@@ -314,6 +326,10 @@ class _DoctorsIdentificationScreenState
                 ),
               const SizedBox(height: 20),
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      BtnColor, // Change this color to the desired background color
+                ),
                 onPressed: () {
                   if (_imageFile != null && _imageFile2 != null) {
                     // Both images are selected, you can call the registration process here

@@ -183,7 +183,7 @@ class _AdminPageState extends State<AdminPage> {
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
-                                      backgroundColor: secondaryColor,
+                                      backgroundColor: BtnColor,
                                     ),
                                     child: Column(
                                       crossAxisAlignment:

@@ -6,6 +6,7 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homep
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
+import 'package:munting_gabay/variable.dart';
 
 import 'main.dart';
 
@@ -54,13 +55,22 @@ class AppDrawer extends StatelessWidget {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading...');
+                  return Text(
+                    'Loading...',
+                    style: TextStyle(color: text),
+                  );
                 }
                 if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(color: text),
+                  );
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return Text('User not found');
+                  return Text(
+                    'User not found',
+                    style: TextStyle(color: text),
+                  );
                 }
                 String username = snapshot.data!['username'];
                 return Text(username);
@@ -77,7 +87,10 @@ class AppDrawer extends StatelessWidget {
                   return CircularProgressIndicator(); // Show a loading indicator
                 }
                 if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
+                  return Text(
+                    'Error: ${snapshot.error}',
+                    style: TextStyle(color: text),
+                  );
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
                   return CircleAvatar(
@@ -92,7 +105,10 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Profile'),
+            title: Text(
+              'Profile',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
@@ -103,7 +119,10 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home_filled),
-            title: Text('Home'),
+            title: Text(
+              'Home',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
@@ -114,7 +133,10 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.settings),
-            title: Text('Settings'),
+            title: Text(
+              'Settings',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               Navigator.pushReplacement(
                 context,
@@ -127,17 +149,29 @@ class AppDrawer extends StatelessWidget {
           ), // Adds a visual divider
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            title: Text(
+              'Logout',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Confirm Logout'),
-                    content: Text('Are you sure you want to log out?'),
+                    title: Text(
+                      'Confirm Logout',
+                      style: TextStyle(color: text),
+                    ),
+                    content: Text(
+                      'Are you sure you want to log out?',
+                      style: TextStyle(color: text),
+                    ),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('Cancel'),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: text),
+                        ),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the dialog
                         },

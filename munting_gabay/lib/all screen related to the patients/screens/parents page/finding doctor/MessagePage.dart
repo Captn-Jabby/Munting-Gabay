@@ -82,6 +82,10 @@ class _ChatPageState extends State<ChatPage> {
         title: Text(widget.recipientName),
         actions: [
           ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 print("userUID ${widget.currentUserUid}");
                 print("docID ${widget.docId}");

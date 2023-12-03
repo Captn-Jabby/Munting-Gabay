@@ -265,7 +265,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       child: ElevatedButton(
                         onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xBA205007),
+                            backgroundColor: BtnColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),

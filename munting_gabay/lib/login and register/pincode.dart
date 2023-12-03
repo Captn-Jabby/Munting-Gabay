@@ -48,6 +48,10 @@ class _PinScreenState extends State<PinScreen> {
             ),
             // Inside your PinScreen widget build method:
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 // Navigate to the ForgotPINScreen when the button is pressed
                 Navigator.push(

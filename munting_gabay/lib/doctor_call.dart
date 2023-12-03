@@ -94,11 +94,22 @@ class _CallDoctorState extends State<CallDoctor> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Username: ${widget.currentUserName}'),
-                    Text('Doc ID: ${widget.docId}'),
                     Text(
-                        'Channel Name: ${client.agoraConnectionData.channelName}'),
-                    Text('Channel uid: ${client.agoraConnectionData.username}')
+                      'Username: ${widget.currentUserName}',
+                      style: TextStyle(color: text),
+                    ),
+                    Text(
+                      'Doc ID: ${widget.docId}',
+                      style: TextStyle(color: text),
+                    ),
+                    Text(
+                      'Channel Name: ${client.agoraConnectionData.channelName}',
+                      style: TextStyle(color: text),
+                    ),
+                    Text(
+                      'Channel uid: ${client.agoraConnectionData.username}',
+                      style: TextStyle(color: text),
+                    )
                   ],
                 ),
               ),

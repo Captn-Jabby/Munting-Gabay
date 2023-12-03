@@ -80,6 +80,10 @@ class _ChangePinState extends State<ChangePin> {
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 if (currentPin.isNotEmpty && newPin.isNotEmpty) {
                   changePin(currentPin, newPin);
@@ -94,6 +98,10 @@ class _ChangePinState extends State<ChangePin> {
               child: Text('Change PIN'),
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 // Update only the pinStatus in Firestore
                 updatePinStatusInFirestore(pinEnabled);

@@ -65,7 +65,7 @@ class KidsPage extends StatelessWidget {
                             print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor),
+                              backgroundColor: BtnColor),
                           child: Text(
                             'Games',
                             style: buttonTextStyle,
@@ -100,7 +100,7 @@ class KidsPage extends StatelessWidget {
                             print('Song button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor),
+                              backgroundColor: BtnColor),
                           child: Text(
                             'Music',
                             style: buttonTextStyle,
@@ -139,7 +139,7 @@ class KidsPage extends StatelessWidget {
                             print('Movies button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor),
+                              backgroundColor: BtnColor),
                           child: Text(
                             'Movies',
                             style: buttonTextStyle,
@@ -174,7 +174,7 @@ class KidsPage extends StatelessWidget {
                             print('Videos button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: secondaryColor),
+                              backgroundColor: BtnColor),
                           child: Text(
                             'Videos',
                             style: buttonTextStyle,

@@ -188,6 +188,10 @@ class _DateListScreenState extends State<DateListScreen> {
         title: Text('Yearly Dates'),
         actions: [
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary:
+                  BtnColor, // Change this color to the desired background color
+            ),
             onPressed: () {
               deleteSchedule();
             },
@@ -246,6 +250,10 @@ class _DateListScreenState extends State<DateListScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      BtnColor, // Change this color to the desired background color
+                ),
                 onPressed: () {
                   filterDates();
                 },
@@ -253,6 +261,10 @@ class _DateListScreenState extends State<DateListScreen> {
               ),
               SizedBox(width: 16), // Add some spacing
               ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      BtnColor, // Change this color to the desired background color
+                ),
                 onPressed: () {
                   // Create and save slots for all filtered dates
                   createSlotsForDateRange(filteredDates);

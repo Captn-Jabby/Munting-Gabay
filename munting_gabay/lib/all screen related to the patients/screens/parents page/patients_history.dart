@@ -133,6 +133,10 @@ class _RequestListScreenState extends State<RequestListScreen> {
                 return ListTile(
                   title: Text('Date: $date, Slot: $slot, Status: $status'),
                   trailing: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                          BtnColor, // Change this color to the desired background color
+                    ),
                     onPressed: () {
                       if (status == 'Pending') {
                         _cancelRequest(slot);

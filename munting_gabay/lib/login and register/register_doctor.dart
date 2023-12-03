@@ -46,6 +46,10 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                       height: 500,
                     ),
                     ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            BtnColor, // Change this color to the desired background color
+                      ),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
@@ -266,6 +270,10 @@ class _PersonalIdentificationScreenState
               Row(
                 children: [
                   ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            BtnColor, // Change this color to the desired background color
+                      ),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,

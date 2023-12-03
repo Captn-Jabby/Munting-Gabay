@@ -150,7 +150,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ZoomableImage(widget.imageUrl2),
+                    builder: (context) => ZoomableImage1(widget.imageUrl2),
                   ),
                 );
               },
@@ -183,7 +183,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ZoomableImage(widget.profilepic),
+                    builder: (context) => ZoomableImage2(widget.profilepic),
                   ),
                 );
               },
@@ -236,6 +236,10 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               ],
             ),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 // Update the status in Firestore
                 FirebaseFirestore.instance

@@ -180,7 +180,7 @@ class _pscyhState extends State<pscyh> {
                                               );
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: Colors.blue,
+                                              primary: BtnColor,
                                               onPrimary: Colors.white,
                                             ),
                                             child: Text(

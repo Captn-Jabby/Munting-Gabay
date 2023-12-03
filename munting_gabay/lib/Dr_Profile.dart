@@ -128,7 +128,10 @@ class _DrUserProfileState extends State<DrUserProfile> {
                     await _pickAndUploadAvatar();
                   },
                   child: const ListTile(
-                    title: Text('Choose from Gallery'),
+                    title: Text(
+                      'Choose from Gallery',
+                      style: TextStyle(color: text),
+                    ),
                   ),
                 ),
                 // Add more SimpleDialogOption for additional avatars
@@ -153,7 +156,10 @@ class _DrUserProfileState extends State<DrUserProfile> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Profile'),
+        title: Text(
+          'Profile',
+          style: TextStyle(color: text),
+        ),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {
@@ -220,7 +226,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
                 onPressed: _updateUserData,
                 child: Text(
                   'Save',
-                  style: buttonTextStyle,
+                  style: TextStyle(color: text),
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: BtnColor, // Use the specified color

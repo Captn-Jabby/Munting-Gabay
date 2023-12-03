@@ -40,22 +40,29 @@ class PhoneCallScreen extends StatelessWidget {
           children: <Widget>[
             Text(
               'Doctor ID: $docId',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: text),
             ),
             Text(
               'Doctor Name: $currentUserName',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: text),
             ),
             Text(
               'Phone Number: $phoneNumber',
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 18, color: text),
             ),
             SizedBox(height: 20),
             ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 makePhoneCall(); // Call the function to make a phone call
               },
-              child: Text('Call $phoneNumber'),
+              child: Text(
+                'Call $phoneNumber',
+                style: TextStyle(color: text),
+              ),
             ),
           ],
         ),

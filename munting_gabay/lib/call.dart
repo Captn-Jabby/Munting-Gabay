@@ -63,6 +63,10 @@ class _CallState extends State<Call> {
         centerTitle: true,
         actions: [
           ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary:
+                  BtnColor, // Change this color to the desired background color
+            ),
             onPressed: () {
               Navigator.push(
                 context,
@@ -96,12 +100,22 @@ class _CallState extends State<Call> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text('Username: ${widget.currentUserName}'),
-                    Text('Doc ID: ${widget.docId}'),
                     Text(
-                        'Channel Name: ${client.agoraConnectionData.channelName}'),
+                      'Username: ${widget.currentUserName}',
+                      style: TextStyle(color: text),
+                    ),
                     Text(
-                        'Channel username: ${client.agoraConnectionData.username}'),
+                      'Doc ID: ${widget.docId}',
+                      style: TextStyle(color: text),
+                    ),
+                    Text(
+                      'Channel Name: ${client.agoraConnectionData.channelName}',
+                      style: TextStyle(color: text),
+                    ),
+                    Text(
+                      'Channel username: ${client.agoraConnectionData.username}',
+                      style: TextStyle(color: text),
+                    ),
                   ],
                 ),
               ),

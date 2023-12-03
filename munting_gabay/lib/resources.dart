@@ -93,7 +93,10 @@ class WebViewPage extends StatelessWidget {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Web View'),
+        title: Text(
+          'Web View',
+          style: TextStyle(color: text),
+        ),
       ),
       body: InAppWebView(
         initialUrlRequest: URLRequest(url: Uri.parse(url)),

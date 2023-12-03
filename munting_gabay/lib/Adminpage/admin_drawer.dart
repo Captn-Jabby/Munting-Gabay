@@ -103,7 +103,10 @@ class AdminDrawer extends StatelessWidget {
 
           ListTile(
             leading: Icon(Icons.person),
-            title: Text('Profile'),
+            title: Text(
+              'Profile',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
@@ -114,7 +117,10 @@ class AdminDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.home_filled),
-            title: Text('Home'),
+            title: Text(
+              'Home',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
@@ -128,17 +134,29 @@ class AdminDrawer extends StatelessWidget {
           ), // Adds a visual divider
           ListTile(
             leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            title: Text(
+              'Logout',
+              style: TextStyle(color: text),
+            ),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Confirm Logout'),
-                    content: Text('Are you sure you want to log out?'),
+                    title: Text(
+                      'Confirm Logout',
+                      style: TextStyle(color: text),
+                    ),
+                    content: Text(
+                      'Are you sure you want to log out?',
+                      style: TextStyle(color: text),
+                    ),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('Cancel'),
+                        child: Text(
+                          'Cancel',
+                          style: TextStyle(color: text),
+                        ),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the dialog
                         },

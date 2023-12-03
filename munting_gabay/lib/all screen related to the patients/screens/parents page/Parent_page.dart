@@ -125,10 +125,10 @@ class ParentPage extends StatelessWidget {
                 break;
             }
           },
-          style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
+          style: ElevatedButton.styleFrom(backgroundColor: BtnColor),
           child: Text(
             buttonText,
-            style: TextStyle(fontSize: 16.0),
+            style: TextStyle(fontSize: 16.0, color: text),
           ),
         ),
       ),

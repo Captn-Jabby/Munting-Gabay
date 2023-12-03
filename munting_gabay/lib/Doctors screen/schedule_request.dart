@@ -54,7 +54,7 @@ class DoctorScheduleScreen extends StatelessWidget {
             return SingleChildScrollView(
               child: Column(
                 children: <Widget>[
-                  Text('Doctor Name: ${data['doctor_name']}'),
+                  // Text('Doctor Name: ${data['doctor_name']}'),
                   Text('Available Days:'),
                   Column(
                     children: availableDays.map<Widget>((day) {
@@ -96,12 +96,19 @@ class _DayCardState extends State<DayCard> {
             subtitle:
                 Text('Date: ${widget.dayData['date']}'), // Display the date
             trailing: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary:
+                    BtnColor, // Change this color to the desired background color
+              ),
               onPressed: () {
                 setState(() {
                   slotsVisible = !slotsVisible;
                 });
               },
-              child: Text(slotsVisible ? 'Hide Slots' : 'Show Slots'),
+              child: Text(
+                slotsVisible ? 'Hide Slots' : 'Show Slots',
+                style: TextStyle(color: text),
+              ),
             ),
           ),
           if (slotsVisible)
@@ -146,6 +153,10 @@ class _SlotTileState extends State<SlotTile> {
       return ListTile(
         title: Text('${widget.slotData['slot']}'),
         trailing: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary:
+                BtnColor, // Change this color to the desired background color
+          ),
           onPressed: () {
             if (!alreadyRequestedOnDate) {
               setState(() {
@@ -161,7 +172,10 @@ class _SlotTileState extends State<SlotTile> {
               );
             }
           },
-          child: Text(requesting ? 'Requesting...' : 'Request'),
+          child: Text(
+            requesting ? 'Requesting...' : 'Request',
+            style: TextStyle(color: text),
+          ),
         ),
       );
     } else {
