@@ -64,31 +64,9 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
+        backgroundColor: secondaryColor,
         elevation: 0,
-        toolbarHeight: 150,
         iconTheme: const IconThemeData(color: BtnColor),
-        actions: [
-          Center(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/A.png', // Replace with the path to your first image
-                  width: 130,
-                  height: 150,
-                ),
-                const SizedBox(width: 60), // Add spacing between images
-                Image.asset(
-                  'assets/LOGO.png',
-                  height: 150,
-                  width: 130,
-                ),
-                const SizedBox(width: 40),
-              ],
-            ),
-          ),
-        ],
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
@@ -159,7 +137,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                             width: width,
                           ), // In DocDashboard.dart or equivalent
                           IconButton(
-                            icon: const Icon(Icons.call_end), // Calling icon
+                            icon: const Icon(Icons.video_camera_front_rounded), // Calling icon
                             onPressed: () async {
                               final newCallStatus =
                                   !callStatus; // Toggle call status
@@ -242,34 +220,40 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                     SizedBox(
                       height: BtnSpacing,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ZoomableImage(widget.avatarPath),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 200,
-                        height: 200,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.circular(8.0),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: NetworkImage(
-                              widget.avatarPath,
+
+                    Center(
+
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  Container(
+                                    color: Colors.red,
+                                      child: ZoomableImage(widget.avatarPath)),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 200,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.rectangle,
+                            borderRadius: BorderRadius.circular(8.0),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: NetworkImage(
+                                widget.avatarPath,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Hero(
-                          tag: widget.avatarPath,
-                          child: Image.network(
-                            widget.avatarPath,
-                            fit: BoxFit.cover,
+                          child: Hero(
+                            tag: widget.avatarPath,
+                            child: Image.network(
+                              widget.avatarPath,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

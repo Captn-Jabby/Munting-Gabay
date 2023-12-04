@@ -49,29 +49,8 @@ class _pscyhState extends State<pscyh> {
         appBar: AppBar(
           backgroundColor: secondaryColor,
           elevation: 0,
-          toolbarHeight: 150,
           iconTheme: IconThemeData(color: BtnColor),
-          actions: [
-            Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    'assets/A.png', // Replace with the path to your first image
-                    width: 130,
-                    height: 150,
-                  ),
-                  SizedBox(width: 60), // Add spacing between images
-                  Image.asset(
-                    'assets/LOGO.png',
-                    height: 150,
-                    width: 130,
-                  ),
-                  SizedBox(width: 40),
-                ],
-              ),
-            ),
-          ],
+
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -121,6 +100,7 @@ class _pscyhState extends State<pscyh> {
                                 Container(
                                   width: double.infinity,
                                   child: Card(
+                                    color: secondaryColor,
                                     elevation: 30,
                                     margin: EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 20),
@@ -193,9 +173,7 @@ class _pscyhState extends State<pscyh> {
                                     ),
                                   ),
                                 ),
-                                Divider(
-                                  color: Colors.black,
-                                ),
+
                               ],
                             ),
                           );
