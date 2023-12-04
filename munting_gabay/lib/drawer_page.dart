@@ -57,19 +57,19 @@ class AppDrawer extends StatelessWidget {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return Text(
                     'Loading...',
-                    style: TextStyle(color: text),
+                    style: TextStyle(color: drawertext),
                   );
                 }
                 if (snapshot.hasError) {
                   return Text(
                     'Error: ${snapshot.error}',
-                    style: TextStyle(color: text),
+                    style: TextStyle(color: drawertext),
                   );
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
                   return Text(
                     'User not found',
-                    style: TextStyle(color: text),
+                    style: TextStyle(color: drawertext),
                   );
                 }
                 String username = snapshot.data!['username'];
@@ -89,7 +89,7 @@ class AppDrawer extends StatelessWidget {
                 if (snapshot.hasError) {
                   return Text(
                     'Error: ${snapshot.error}',
-                    style: TextStyle(color: text),
+                    style: TextStyle(color: drawertext),
                   );
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
@@ -121,7 +121,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.home_filled),
             title: Text(
               'Home',
-              style: TextStyle(color: Colors.black54),
+              style: TextStyle(color: text),
             ),
             onTap: () {
               // Handle navigation to profile
@@ -135,7 +135,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text(
               'Settings',
-              style: TextStyle(color: Colors.black54),
+              style: TextStyle(color: text),
             ),
             onTap: () {
               Navigator.pushReplacement(
@@ -151,7 +151,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text(
               'Logout',
-              style: TextStyle(color: Colors.black54),
+              style: TextStyle(color: text),
             ),
             onTap: () {
               showDialog(
@@ -160,17 +160,17 @@ class AppDrawer extends StatelessWidget {
                   return AlertDialog(
                     title: Text(
                       'Confirm Logout',
-                      style: TextStyle(color: text),
+                      style: TextStyle(color: drawertext),
                     ),
                     content: Text(
                       'Are you sure you want to log out?',
-                      style: TextStyle(color: text),
+                      style: TextStyle(color: drawertext),
                     ),
                     actions: <Widget>[
                       TextButton(
                         child: Text(
                           'Cancel',
-                          style: TextStyle(color: text),
+                          style: TextStyle(color: drawertext),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the dialog

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/finding_doctors.dart';
 import 'package:munting_gabay/resources.dart';
 import 'package:munting_gabay/variable.dart';
+import 'package:munting_gabay/webinars.dart';
 
 import '../../../drawer_page.dart';
 import 'forum/forum.dart';
@@ -98,8 +99,10 @@ class ParentPage extends StatelessWidget {
                 );
                 break;
               case 1:
-                // Navigate to the screen for 'Screen 2'
-                // Replace with the actual screen navigation code
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => webinars()),
+                );
                 break;
               case 2:
                 Navigator.push(
@@ -118,8 +121,10 @@ class ParentPage extends StatelessWidget {
                 );
                 break;
               case 5:
-                // Navigate to the screen for 'Screen 6'
-                // Replace with the actual screen navigation code
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => webinars()),
+                );
                 break;
               default:
                 break;
