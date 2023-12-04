@@ -183,7 +183,7 @@ class _PersonalIdentificationScreenState
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter a Username name';
+                    return 'Please enter a Username';
                   }
                   return null; // Return null if the validation succeeds
                 },

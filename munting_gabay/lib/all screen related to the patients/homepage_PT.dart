@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +19,15 @@ class HomepagePT extends StatefulWidget {
 
 class _HomepagePTState extends State<HomepagePT> {
   bool pinEnabled = false; // Initially set to false
-
+  late StreamSubscription<DocumentSnapshot> _pinStatusSubscription;
   @override
   void initState() {
     super.initState();
-    getPinEnabledFromFirebase();
+    // Call the method to set up the real-time listener
+    setupPinStatusListener();
   }
 
-  void getPinEnabledFromFirebase() async {
+  void setupPinStatusListener() async {
     try {
       final User? user = FirebaseAuth.instance.currentUser;
 
@@ -34,24 +37,34 @@ class _HomepagePTState extends State<HomepagePT> {
 
         final String? currentUserEmail = user.email;
 
-        final DocumentSnapshot userData =
-            await usersDataCollection.doc(currentUserEmail).get();
-
-        if (userData.exists) {
-          final Map<String, dynamic> userDataMap =
-              userData.data() as Map<String, dynamic>;
-          setState(() {
-            pinEnabled = userDataMap['pinStatus'] ?? false;
-          });
-        } else {
-          print('User data not found in Firestore.');
-        }
+        // Set up a real-time listener for changes to the document
+        _pinStatusSubscription =
+            usersDataCollection.doc(currentUserEmail).snapshots().listen(
+          (DocumentSnapshot userData) {
+            if (userData.exists) {
+              final Map<String, dynamic> userDataMap =
+                  userData.data() as Map<String, dynamic>;
+              setState(() {
+                pinEnabled = userDataMap['pinStatus'] ?? false;
+              });
+            } else {
+              print('User data not found in Firestore.');
+            }
+          },
+        );
       } else {
         print('User not authenticated.');
       }
     } catch (e) {
-      print('Error retrieving PIN status: $e');
+      print('Error setting up PIN status listener: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    // Cancel the subscription to avoid setState after dispose
+    _pinStatusSubscription.cancel();
+    super.dispose();
   }
 
   Future<void> _onButtonPressed() async {

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -71,6 +72,8 @@ class _ChangePinState extends State<ChangePin> {
                 Switch(
                   value: pinEnabled,
                   onChanged: (value) {
+                    // Update the PIN status in Firestore when the switch is toggled
+                    updatePinStatusInFirestore(value);
                     setState(() {
                       pinEnabled = value;
                     });
@@ -95,18 +98,10 @@ class _ChangePinState extends State<ChangePin> {
                   );
                 }
               },
-              child: Text('Change PIN'),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary:
-                    BtnColor, // Change this color to the desired background color
+              child: Text(
+                'Change PIN',
+                style: TextStyle(color: text),
               ),
-              onPressed: () {
-                // Update only the pinStatus in Firestore
-                updatePinStatusInFirestore(pinEnabled);
-              },
-              child: Text('Update PIN Status'),
             ),
           ],
         ),
@@ -138,10 +133,11 @@ class _ChangePinState extends State<ChangePin> {
   }
 
   Future<void> updatePinStatusInFirestore(bool pinStatus) async {
+    EasyLoading.show(status: 'Loading');
     try {
       final User? user = FirebaseAuth.instance.currentUser;
 
-      if (user != null) {
+      if (user != null && mounted) {
         final CollectionReference usersDataCollection =
             FirebaseFirestore.instance.collection('usersdata');
 
@@ -151,9 +147,18 @@ class _ChangePinState extends State<ChangePin> {
           'pinStatus': pinStatus,
         });
 
+        // Update the local state only if the widget is still mounted
+        if (mounted) {
+          setState(() {
+            pinEnabled = pinStatus;
+          });
+
+          EasyLoading.dismiss();
+        }
+
         print('PIN status updated successfully in Firestore.');
       } else {
-        print('User not authenticated.');
+        print('User not authenticated or widget not mounted.');
       }
     } catch (e) {
       print('Error updating PIN status in Firestore: $e');

@@ -59,7 +59,10 @@ class _PinScreenState extends State<PinScreen> {
                   MaterialPageRoute(builder: (context) => ViewPINScreen()),
                 );
               },
-              child: Text("Forgot PIN"),
+              child: Text(
+                "Forgot PIN",
+                style: TextStyle(color: text),
+              ),
             )
           ],
         ),

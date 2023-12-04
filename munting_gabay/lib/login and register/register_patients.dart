@@ -23,6 +23,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   DateTime selectedDate = DateTime.now();
   bool _isPasswordVisible = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  bool pinStatus = false;
 
   void _registerUser() async {
     String username = _usernameController.text;
@@ -52,6 +53,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         'address': address,
         'birthdate': selectedDate,
         'email': email,
+        'pinStatus': pinStatus,
         'pin': pin,
         'avatarPath':
             'https://firebasestorage.googleapis.com/v0/b/munting-gabay-4f845.appspot.com/o/avatars%2Fbened8ct12%40gmail.com.jpg?alt=media&token=70d751a6-b53e-4c6c-a146-a916efc1fe93'
@@ -132,7 +134,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                     SizedBox(
                       height: 270,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _usernameController,
                       decoration: InputDecoration(
                         labelText: 'Username',
@@ -143,11 +145,17 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a Username ';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _nameController,
                       decoration: InputDecoration(
                         labelText: 'Name',
@@ -158,11 +166,17 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a  name';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _addressController,
                       decoration: InputDecoration(
                         labelText: 'Address',
@@ -173,6 +187,12 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the address';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
                     ),
                     SizedBox(
                       height: 15,
@@ -185,9 +205,15 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       maxLength: 4, // Set the maximum length to 4 digits
                       keyboardType:
                           TextInputType.number, // Set keyboard type to number
-
+                      onChanged: (value) {
+                        // Check if the pin field is empty and update pinStatus accordingly
+                        setState(() {
+                          pinStatus = (value.isNotEmpty && value.length == 4);
+                        });
+                      },
                       decoration: InputDecoration(
-                        labelText: '''Pincode for Parent's Pages''',
+                        labelText:
+                            '''Pincode for Parent's Pages   (OPTIONAL)''',
                         counterText: '', // Hide the character counter
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10.0),
@@ -201,7 +227,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                     GestureDetector(
                       onTap: () => _selectDate(context),
                       child: AbsorbPointer(
-                        child: TextField(
+                        child: TextFormField(
                           controller: TextEditingController(
                               text: "${selectedDate.toLocal()}".split(
                                   ' ')[0]), // Format to show only the date part
@@ -218,7 +244,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                     SizedBox(
                       height: 15,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: 'Email',
@@ -229,11 +255,17 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               color: Colors.blue), // Adjust the border color
                         ),
                       ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a Email';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
                     ),
                     SizedBox(
                       height: 15,
                     ),
-                    TextField(
+                    TextFormField(
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: 'Password',
@@ -257,6 +289,12 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         ),
                       ),
                       obscureText: !_isPasswordVisible,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter a Password';
+                        }
+                        return null; // Return null if the validation succeeds
+                      },
                     ),
                     SizedBox(height: 20),
                     Container(

@@ -76,7 +76,10 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
                 String password = passwordController.text.trim();
                 authenticateUser(password);
               },
-              child: Text("Submit"),
+              child: Text(
+                "Submit",
+                style: TextStyle(color: text),
+              ),
             ),
             if (isAuthenticated)
               SizedBox(
