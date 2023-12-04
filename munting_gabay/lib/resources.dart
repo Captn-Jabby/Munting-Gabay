@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/variable.dart';
 
 class BookResourcesApp extends StatelessWidget {
@@ -35,7 +36,7 @@ class BookResourcesScreen extends StatelessWidget {
       title: 'Autism Spectrum Disorder',
       author: 'Mayo Clinic Press',
       description: 'What is Autism Spectrum Disorder?.',
-      coverImage: 'assets/b.png', // Replace with actual asset path
+      coverImage: 'assets/b.jpg', // Replace with actual asset path
       link:
           'https://www.mayoclinic.org/diseases-conditions/autism-spectrum-disorder/symptoms-causes/syc-20352928',
     ),
@@ -46,6 +47,15 @@ class BookResourcesScreen extends StatelessWidget {
       coverImage: 'assets/music.png', // Replace with actual asset path
       link: 'https://www.cdc.gov/ncbddd/autism/signs.html',
     ),
+    Book(
+      title: 'WHAT IS AUTISM?  ',
+      author: 'ICDL',
+      description:
+          ' There may be an autism diagnosis or a parent may have been told that their child has a "special need.".',
+      coverImage: 'assets/avatar1.png', // Replace with actual asset path
+      link:
+          'https://www.icdl.com/parents?gclid=Cj0KCQiA67CrBhC1ARIsACKAa8S5NHkKNhkqNLW9WvAfQC6hhND16Zty1lN0G_4XA762ysAdSGPUdGkaAlrfEALw_wcB',
+    ),
   ];
 
   @override
@@ -53,6 +63,17 @@ class BookResourcesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ParentPage(),
+              ),
+            );
+          },
+        ),
         backgroundColor: secondaryColor,
         title: Text('Book Resources'),
       ),
