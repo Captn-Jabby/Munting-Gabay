@@ -196,8 +196,12 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const Text(
                     'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17),
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 17),
                   ),
                 ],
               ),
@@ -233,9 +237,8 @@ class LoginScreen extends StatelessWidget {
                     width: BtnWidth,
                     height: BtnHeight,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF8FCC62),
+                      color: const Color(0xFF18B091),
                       borderRadius: BorderRadius.circular(BtnCircularRadius),
-                      border: Border.all(color: BtnColor),
                     ),
                     child: TextButton(
                       onPressed: () {

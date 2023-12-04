@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // scafold settings
 const Color secondaryColor = Color(0xFFFA893D);
-const Color scaffoldBgColor = Color(0xFF8FCC62); // Use the correct format
+const Color scaffoldBgColor = Color(0xFF3BD2A5); // Use the correct format
 const Color secondaryColors = Color(0xFF8FCC62);
 const Color LoadingColor = Colors.blue;
 const Color bgloadingColor = Colors.grey;
@@ -12,7 +12,7 @@ final double BtnHeight = 50;
 final double BtnWidth = 250;
 final double BtnSpacing = 25;
 final double BtnCircularRadius = 20;
-const Color BtnColor = const Color(0xBA205007); //drawer button color
+const Color BtnColor = const Color(0xBA18B091); //drawer button color
 const Color text = Colors.white;
 const Color drawertext = Colors.black;
 const TextStyle buttonTextStyle = TextStyle(

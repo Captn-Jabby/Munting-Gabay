@@ -105,7 +105,7 @@ class AdminDrawer extends StatelessWidget {
             leading: Icon(Icons.person),
             title: Text(
               'Profile',
-              style: TextStyle(color: text),
+              style: TextStyle(color: Colors.black54),
             ),
             onTap: () {
               // Handle navigation to profile
@@ -119,7 +119,7 @@ class AdminDrawer extends StatelessWidget {
             leading: Icon(Icons.home_filled),
             title: Text(
               'Home',
-              style: TextStyle(color: text),
+              style: TextStyle(color: Colors.black54),
             ),
             onTap: () {
               // Handle navigation to profile
@@ -136,7 +136,7 @@ class AdminDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text(
               'Logout',
-              style: TextStyle(color: text),
+              style: TextStyle(color: Colors.black54),
             ),
             onTap: () {
               showDialog(
@@ -145,17 +145,17 @@ class AdminDrawer extends StatelessWidget {
                   return AlertDialog(
                     title: Text(
                       'Confirm Logout',
-                      style: TextStyle(color: text),
+                      style: TextStyle(color: Colors.black54),
                     ),
                     content: Text(
                       'Are you sure you want to log out?',
-                      style: TextStyle(color: text),
+                      style: TextStyle(color: Colors.black54),
                     ),
                     actions: <Widget>[
                       TextButton(
                         child: Text(
                           'Cancel',
-                          style: TextStyle(color: text),
+                          style: TextStyle(color: Colors.black54),
                         ),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the dialog
