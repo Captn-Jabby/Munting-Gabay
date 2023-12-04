@@ -24,7 +24,6 @@ class _AdminPageState extends State<AdminPage> {
       appBar: AppBar(
         backgroundColor: scaffoldBgColor,
         elevation: 0,
-        toolbarHeight: 150,
         iconTheme: const IconThemeData(color: BtnColor),
         actions: [
           Center(

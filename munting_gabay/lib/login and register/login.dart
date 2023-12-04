@@ -103,7 +103,8 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        elevation: 0,
+        backgroundColor: scaffoldBgColor,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -115,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: [
                     const SizedBox(
-                      height: 23,
+                      height: 5,
                     ),
                     Text('Munting\nGabay',
                         textAlign: TextAlign.center,
@@ -136,7 +137,10 @@ class _LoginPageState extends State<LoginPage> {
                     const Text(
                       'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
                       textAlign: TextAlign.center,
-                      style: TextStyle(fontSize: 17),
+                      style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 17),
+
                     ),
                   ],
                 ),
@@ -296,7 +300,7 @@ class _LoginPageState extends State<LoginPage> {
                       },
                       child: Text(
                         'Forgot Password',
-                        style: TextStyle(color: Colors.black),
+                        style: TextStyle(color: Colors.white),
                       ),
                     )
                   ],
