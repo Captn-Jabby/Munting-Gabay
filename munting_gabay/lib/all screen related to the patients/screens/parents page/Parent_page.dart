@@ -42,7 +42,7 @@ class ParentPage extends StatelessWidget {
                     crossAxisSpacing: 16.0, // Spacing between columns
                   ),
                   padding: const EdgeInsets.all(16.0),
-                  itemCount: 5, // Number of buttons
+                  itemCount: 4, // Number of buttons
                   itemBuilder: (BuildContext context, int index) {
                     return buildButton(index, context);
                   },
@@ -67,17 +67,10 @@ class ParentPage extends StatelessWidget {
         buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 3:
-        buttonText = 'Online Consultation';
-        buttonColor = secondaryColor; // Customize the color for this button
-        break;
-      case 4:
         buttonText = 'Forum and Discussion';
         buttonColor = secondaryColor; // Customize the color for this button
         break;
-      case 5:
-        buttonText = 'Progress Tracker';
-        buttonColor = Colors.amber; // Customize the color for this button
-        break;
+
       default:
         break;
     }
@@ -110,22 +103,14 @@ class ParentPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => BookResourcesApp()),
                 );
                 break;
+
               case 3:
-                // Navigate to the screen for 'Screen 4'
-                // Replace with the actual screen navigation code
-                break;
-              case 4:
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ForumPage()),
                 );
                 break;
-              case 5:
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => webinars()),
-                );
-                break;
+
               default:
                 break;
             }

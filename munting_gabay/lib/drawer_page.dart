@@ -121,7 +121,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.home_filled),
             title: Text(
               'Home',
-              style: TextStyle(color: text),
+              style: TextStyle(color: drawertext),
             ),
             onTap: () {
               // Handle navigation to profile
@@ -135,7 +135,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.settings),
             title: Text(
               'Settings',
-              style: TextStyle(color: text),
+              style: TextStyle(color: drawertext),
             ),
             onTap: () {
               Navigator.pushReplacement(
@@ -151,7 +151,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.logout),
             title: Text(
               'Logout',
-              style: TextStyle(color: text),
+              style: TextStyle(color: drawertext),
             ),
             onTap: () {
               showDialog(
