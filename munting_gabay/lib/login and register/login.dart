@@ -137,10 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                     const Text(
                       'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 17),
-
+                      style: TextStyle(color: Colors.white, fontSize: 17),
                     ),
                   ],
                 ),
@@ -208,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                 style: buttonTextStyle,
                               ),
                               style: ElevatedButton.styleFrom(
-                                  backgroundColor: BtnColor,
+                                  backgroundColor: scaffoldBgColor,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(
                                           BtnCircularRadius))),

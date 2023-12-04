@@ -116,6 +116,9 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+      ),
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
         child: Padding(
@@ -303,7 +306,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                       child: ElevatedButton(
                         onPressed: _registerUser,
                         style: ElevatedButton.styleFrom(
-                            backgroundColor: BtnColor,
+                            backgroundColor: scaffoldBgColor,
                             shape: RoundedRectangleBorder(
                                 borderRadius:
                                     BorderRadius.circular(BtnCircularRadius))),

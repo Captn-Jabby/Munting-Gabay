@@ -16,7 +16,6 @@ class KidsPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: secondaryColor,
         elevation: 0,
-        iconTheme: IconThemeData(color: BtnColor),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
@@ -66,7 +65,7 @@ class KidsPage extends StatelessWidget {
                             print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: BtnColor),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Learn',
                             style: buttonTextStyle,
@@ -101,7 +100,7 @@ class KidsPage extends StatelessWidget {
                             print('Song button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: BtnColor),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Music',
                             style: buttonTextStyle,
@@ -140,7 +139,7 @@ class KidsPage extends StatelessWidget {
                             print('Movies button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: BtnColor),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Movies',
                             style: buttonTextStyle,
@@ -171,11 +170,14 @@ class KidsPage extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.push(context, CupertinoPageRoute(builder: (context)=> KidsVideos()));
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => KidsVideos()));
                             print('Videos button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
-                              backgroundColor: BtnColor),
+                              backgroundColor: secondaryColor),
                           child: Text(
                             'Videos',
                             style: buttonTextStyle,

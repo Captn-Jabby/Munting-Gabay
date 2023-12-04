@@ -5,6 +5,7 @@ import 'package:munting_gabay/Adminpage/adminpage.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:munting_gabay/darltheme.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -107,7 +108,7 @@ class AppDrawer extends StatelessWidget {
             leading: Icon(Icons.person),
             title: Text(
               'Profile',
-              style: TextStyle(color: Colors.black54),
+              style: TextStyle(color: drawertext),
             ),
             onTap: () {
               // Handle navigation to profile
@@ -141,6 +142,19 @@ class AppDrawer extends StatelessWidget {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => ChangePin()),
+              );
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.color_lens),
+            title: Text(
+              'Settings',
+              style: TextStyle(color: drawertext),
+            ),
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => ColorChangerScreen()),
               );
             },
           ),

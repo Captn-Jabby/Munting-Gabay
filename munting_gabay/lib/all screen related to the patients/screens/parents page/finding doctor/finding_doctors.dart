@@ -49,8 +49,7 @@ class _pscyhState extends State<pscyh> {
         appBar: AppBar(
           backgroundColor: secondaryColor,
           elevation: 0,
-          iconTheme: IconThemeData(color: BtnColor),
-
+          iconTheme: IconThemeData(color: scaffoldBgColor),
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -160,7 +159,7 @@ class _pscyhState extends State<pscyh> {
                                               );
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: BtnColor,
+                                              primary: scaffoldBgColor,
                                               onPrimary: Colors.white,
                                             ),
                                             child: Text(
@@ -173,7 +172,6 @@ class _pscyhState extends State<pscyh> {
                                     ),
                                   ),
                                 ),
-
                               ],
                             ),
                           );

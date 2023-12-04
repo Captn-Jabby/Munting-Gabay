@@ -50,7 +50,7 @@ class _PinScreenState extends State<PinScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 // Navigate to the ForgotPINScreen when the button is pressed

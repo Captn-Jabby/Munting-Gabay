@@ -237,7 +237,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                   style: buttonTextStyle,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: BtnColor, // Use the specified color
+                  backgroundColor: scaffoldBgColor, // Use the specified color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(BtnCircularRadius),
                   ),

@@ -66,7 +66,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
       appBar: AppBar(
         backgroundColor: secondaryColor,
         elevation: 0,
-        iconTheme: const IconThemeData(color: BtnColor),
+        iconTheme: IconThemeData(color: scaffoldBgColor),
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(

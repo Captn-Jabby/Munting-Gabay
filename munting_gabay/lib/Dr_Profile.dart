@@ -229,7 +229,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
                   style: TextStyle(color: text),
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: BtnColor, // Use the specified color
+                  backgroundColor: scaffoldBgColor, // Use the specified color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(BtnCircularRadius),
                   ),

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/finding_doctors.dart';
+import 'package:munting_gabay/webinars.dart';
 import 'package:munting_gabay/resources.dart';
 import 'package:munting_gabay/variable.dart';
-import 'package:munting_gabay/webinars.dart';
+import 'package:munting_gabay/educational.dart';
 
 import '../../../drawer_page.dart';
 import 'forum/forum.dart';
@@ -15,7 +16,7 @@ class ParentPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: scaffoldBgColor,
           elevation: 0,
-          iconTheme: IconThemeData(color: BtnColor),
+          // iconTheme: IconThemeData(color: secondaryColors),
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -42,7 +43,7 @@ class ParentPage extends StatelessWidget {
                     crossAxisSpacing: 16.0, // Spacing between columns
                   ),
                   padding: const EdgeInsets.all(16.0),
-                  itemCount: 4, // Number of buttons
+                  itemCount: 5, // Number of buttons
                   itemBuilder: (BuildContext context, int index) {
                     return buildButton(index, context);
                   },
@@ -56,10 +57,10 @@ class ParentPage extends StatelessWidget {
     switch (index) {
       case 0:
         buttonText = 'Psychologist Research';
-        buttonColor = secondaryColor; // Customize the color for this button
+        buttonColor = Colors.black; // Customize the color for this button
         break;
       case 1:
-        buttonText = 'Educational Webinars';
+        buttonText = 'Educational Videos';
         buttonColor = secondaryColor; // Customize the color for this button
         break;
       case 2:
@@ -68,6 +69,10 @@ class ParentPage extends StatelessWidget {
         break;
       case 3:
         buttonText = 'Forum and Discussion';
+        buttonColor = secondaryColor; // Customize the color for this button
+        break;
+      case 4:
+        buttonText = 'Webinars';
         buttonColor = secondaryColor; // Customize the color for this button
         break;
 
@@ -94,13 +99,14 @@ class ParentPage extends StatelessWidget {
               case 1:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => webinars()),
+                  MaterialPageRoute(builder: (context) => webinarsScreen()),
                 );
                 break;
               case 2:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => BookResourcesApp()),
+                  MaterialPageRoute(
+                      builder: (context) => BookResourcesScreen()),
                 );
                 break;
 
@@ -110,12 +116,18 @@ class ParentPage extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => ForumPage()),
                 );
                 break;
-
+              case 4:
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EducationalVdieosScreen()),
+                );
+                break;
               default:
                 break;
             }
           },
-          style: ElevatedButton.styleFrom(backgroundColor: BtnColor),
+          style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
           child: Text(
             buttonText,
             style: TextStyle(fontSize: 16.0, color: text),
@@ -127,4 +139,4 @@ class ParentPage extends StatelessWidget {
 }
 
 String buttonText = "";
-Color buttonColor = Colors.blue;
+Color buttonColor = secondaryColor;

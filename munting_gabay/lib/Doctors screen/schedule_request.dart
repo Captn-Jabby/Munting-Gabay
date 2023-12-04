@@ -98,7 +98,7 @@ class _DayCardState extends State<DayCard> {
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    scaffoldBgColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
@@ -155,7 +155,7 @@ class _SlotTileState extends State<SlotTile> {
         trailing: ElevatedButton(
           style: ElevatedButton.styleFrom(
             primary:
-                BtnColor, // Change this color to the desired background color
+                scaffoldBgColor, // Change this color to the desired background color
           ),
           onPressed: () {
             if (!alreadyRequestedOnDate) {

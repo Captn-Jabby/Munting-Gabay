@@ -53,7 +53,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
         backgroundColor: scaffoldBgColor,
         elevation: 0,
         toolbarHeight: 150,
-        iconTheme: IconThemeData(color: BtnColor),
+        iconTheme: IconThemeData(color: scaffoldBgColor),
         actions: [
           Center(
             child: Row(
@@ -238,7 +238,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    scaffoldBgColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 // Update the status in Firestore

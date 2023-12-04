@@ -13,7 +13,7 @@ class DoctorsHM extends StatelessWidget {
         backgroundColor: secondaryColor,
         elevation: 0,
         toolbarHeight: 150,
-        iconTheme: IconThemeData(color: BtnColor),
+        iconTheme: IconThemeData(color: scaffoldBgColor),
         actions: [
           Center(
             child: Row(

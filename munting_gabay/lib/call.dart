@@ -65,7 +65,7 @@ class _CallState extends State<Call> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary:
-                  BtnColor, // Change this color to the desired background color
+                  scaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               Navigator.push(

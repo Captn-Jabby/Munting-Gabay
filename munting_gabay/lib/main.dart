@@ -17,12 +17,10 @@ import 'Adminpage/adminpage.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  Hive.registerAdapter<Color>(ColorAdapter()); // Register the ColorAdapter
   await Hive.initFlutter();
-  await Firebase.initializeApp();
-  await Hive.openBox<String>('avatarBox');
-  runApp(
-    MyApp(),
-  );
+  await Hive.openBox<Color>('colors'); // Open a box to store colors
+  runApp(MyApp());
 }
 
 void configLoading() {
@@ -196,7 +194,6 @@ class LoginScreen extends StatelessWidget {
                   ),
                   const Text(
                     'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
-
                     textAlign: TextAlign.center,
                     style: TextStyle(
                         color: Colors.white,
@@ -222,7 +219,7 @@ class LoginScreen extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: BtnColor,
+                          backgroundColor: scaffoldBgColor,
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(BtnCircularRadius))),

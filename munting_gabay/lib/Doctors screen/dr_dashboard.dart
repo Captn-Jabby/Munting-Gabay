@@ -318,7 +318,7 @@ class _DayCardDOCState extends State<DayCardDOC> {
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    scaffoldBgColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
@@ -385,7 +385,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary:
-                  BtnColor, // Change this color to the desired background color
+                  scaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               if (widget.slotData['status'] == 'Canceled') {

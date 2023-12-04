@@ -40,6 +40,7 @@ dependencies:
   firebase_storage: ^11.2.6
   flutter:
     sdk: flutter
+  flutter_colorpicker: ^1.0.3
   flutter_date_pickers: ^0.4.2
   flutter_easyloading: ^3.0.5
   flutter_inappwebview: ^5.8.0

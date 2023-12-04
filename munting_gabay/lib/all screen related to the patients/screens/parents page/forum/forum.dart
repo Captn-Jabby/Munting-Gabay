@@ -113,7 +113,7 @@ class _ForumPageState extends State<ForumPage> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () => _signIn('test@example.com', 'password'),
                 child: Text('Sign in as a test user'),
@@ -302,7 +302,7 @@ class _PostModalState extends State<PostModal> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary:
-                  BtnColor, // Change this color to the desired background color
+                  scaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               addComment(_commentController.text);

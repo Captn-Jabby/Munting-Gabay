@@ -54,7 +54,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    secondaryColor, // Change this color to the desired background color
               ),
               onPressed: resetPassword,
               child: Text('Reset Password'),

@@ -3,17 +3,6 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/variable.dart';
 
-class BookResourcesApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Book Resources',
-      home: BookResourcesScreen(),
-    );
-  }
-}
-
 class Book {
   final String title;
   final String author;

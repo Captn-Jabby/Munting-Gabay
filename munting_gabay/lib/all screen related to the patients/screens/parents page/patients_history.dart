@@ -135,7 +135,7 @@ class _RequestListScreenState extends State<RequestListScreen> {
                   trailing: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       primary:
-                          BtnColor, // Change this color to the desired background color
+                          scaffoldBgColor, // Change this color to the desired background color
                     ),
                     onPressed: () {
                       if (status == 'Pending') {

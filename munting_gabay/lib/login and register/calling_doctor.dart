@@ -54,7 +54,7 @@ class PhoneCallScreen extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 makePhoneCall(); // Call the function to make a phone call

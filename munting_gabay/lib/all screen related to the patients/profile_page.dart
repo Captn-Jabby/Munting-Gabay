@@ -237,7 +237,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                   style: buttonTextStyle,
                 ),
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: BtnColor, // Use the specified color
+                  backgroundColor: secondaryColor, // Use the specified color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(BtnCircularRadius),
                   ),

@@ -27,6 +27,9 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+      ),
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
         child: Padding(
@@ -48,7 +51,7 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary:
-                            BtnColor, // Change this color to the desired background color
+                            scaffoldBgColor, // Change this color to the desired background color
                       ),
                       onPressed: () {
                         Navigator.pushReplacement(
@@ -311,7 +314,7 @@ class _PersonalIdentificationScreenState
                   ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary:
-                            BtnColor, // Change this color to the desired background color
+                            scaffoldBgColor, // Change this color to the desired background color
                       ),
                       onPressed: () {
                         Navigator.pushReplacement(
@@ -652,7 +655,7 @@ class _DoctorsIdentificationScreenState
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   _pickImage(); // Call the function to pick an image from storage
@@ -675,7 +678,7 @@ class _DoctorsIdentificationScreenState
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   _pickImage2(); // Call the function to pick an image from storage
@@ -698,7 +701,7 @@ class _DoctorsIdentificationScreenState
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   _profilepic(); // Call the function to pick an image from storage
@@ -721,7 +724,7 @@ class _DoctorsIdentificationScreenState
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   if (_imageFile != null && _imageFile2 != null) {

@@ -190,7 +190,7 @@ class _DateListScreenState extends State<DateListScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary:
-                  BtnColor, // Change this color to the desired background color
+                  scaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               deleteSchedule();
@@ -252,7 +252,7 @@ class _DateListScreenState extends State<DateListScreen> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   filterDates();
@@ -263,7 +263,7 @@ class _DateListScreenState extends State<DateListScreen> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      BtnColor, // Change this color to the desired background color
+                      scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   // Create and save slots for all filtered dates

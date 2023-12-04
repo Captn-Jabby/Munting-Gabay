@@ -70,7 +70,7 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    BtnColor, // Change this color to the desired background color
+                    secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 String password = passwordController.text.trim();
