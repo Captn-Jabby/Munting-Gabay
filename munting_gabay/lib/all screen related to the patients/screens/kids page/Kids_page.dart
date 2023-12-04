@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/games/animal.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/kids_videos.dart';
 
 import 'package:munting_gabay/variable.dart';
-import '../../../Doctors screen/movies_screen.dart';
+import 'movies_screen.dart';
 import '../../../drawer_page.dart';
 import 'games/categories.dart';
 
@@ -67,7 +68,7 @@ class KidsPage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: BtnColor),
                           child: Text(
-                            'Games',
+                            'Learn',
                             style: buttonTextStyle,
                           ),
                         ),
@@ -170,7 +171,7 @@ class KidsPage extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Add Videos button functionality here
+                            Navigator.push(context, CupertinoPageRoute(builder: (context)=> KidsVideos()));
                             print('Videos button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
