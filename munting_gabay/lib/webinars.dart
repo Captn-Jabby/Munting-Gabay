@@ -17,8 +17,20 @@ class webinars {
 class EducationalVdieosScreen extends StatelessWidget {
   final List<webinars> webinarss = [
     webinars(
+      title: 'Teacher Christine Joy Asas',
+      link:
+          'http://www.autismsocietyphilippines.org/2020/10/developing-language-and-reading-skills.html',
+    ),
+    webinars(
       title: 'WHAT IS AUTISM?  ',
-      link: 'https://autism.org/EducationalVdieos/',
+      link:
+          'http://www.autismsocietyphilippines.org/2020/10/happily-every-after-virtual-costume.html',
+    ),
+    webinars(
+      title:
+          'also referred to as autism spectrum disorder ̶ constitutes a diverse group of conditions related to development of the brain.  ',
+      link:
+          'https://www.who.int/news-room/fact-sheets/detail/autism-spectrum-disorders?gclid=CjwKCAiAjrarBhAWEiwA2qWdCLYgr5uQSJcK0eHc5n9iaz81lx_FQ4wEvj35nEn1mkpakjUW791mDhoC4-sQAvD_BwE',
     ),
   ];
 
