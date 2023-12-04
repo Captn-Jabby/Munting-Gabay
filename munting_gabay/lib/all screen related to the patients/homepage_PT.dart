@@ -135,7 +135,7 @@ class _HomepagePTState extends State<HomepagePT> {
                         _onButtonPressed();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: text,
+                        backgroundColor: secondaryColor,
                         shape: RoundedRectangleBorder(
                           borderRadius:
                               BorderRadius.circular(BtnCircularRadius),
