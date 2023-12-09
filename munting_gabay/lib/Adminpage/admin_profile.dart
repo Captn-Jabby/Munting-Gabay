@@ -234,7 +234,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
                 onPressed: _updateUserData,
                 child: Text(
                   'Save',
-                  style: buttonTextStyle,
+                  style: buttonTextStyle1,
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: scaffoldBgColor, // Use the specified color

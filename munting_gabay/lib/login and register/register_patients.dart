@@ -335,7 +335,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                                     BorderRadius.circular(BtnCircularRadius))),
                         child: Text(
                           'Register',
-                          style: buttonTextStyle,
+                          style: buttonTextStyle1,
                         ),
                       ),
                     ),

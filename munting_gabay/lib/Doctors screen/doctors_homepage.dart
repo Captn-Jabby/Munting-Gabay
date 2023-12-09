@@ -55,7 +55,7 @@ class DoctorsHM extends StatelessWidget {
                 child: Center(
                     child: Text(
                   "DOCTORS PAGE",
-                  style: buttonTextStyle,
+                  style: buttonTextStyle1,
                 )),
               ),
               SizedBox(height: 50),

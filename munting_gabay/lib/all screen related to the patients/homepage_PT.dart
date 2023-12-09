@@ -154,9 +154,9 @@ class _HomepagePTState extends State<HomepagePT> {
                               BorderRadius.circular(BtnCircularRadius),
                         ),
                       ),
-                      child: const Text(
+                      child: Text(
                         'Parents',
-                        style: buttonTextStyle,
+                        style: buttonTextStyle1,
                       ),
                     ),
                   ),
@@ -188,9 +188,9 @@ class _HomepagePTState extends State<HomepagePT> {
                           MaterialPageRoute(builder: (context) => KidsPage()),
                         );
                       },
-                      child: const Text(
+                      child: Text(
                         'Child',
-                        style: buttonTextStyle,
+                        style: buttonTextStyle1,
                       ),
                     ),
                   ),

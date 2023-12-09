@@ -84,7 +84,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
           children: [
             Text(
               'DOCTORS INFORMATION',
-              style: buttonTextStyle,
+              style: buttonTextStyle1,
             ),
             Divider(
               color: Colors.black,

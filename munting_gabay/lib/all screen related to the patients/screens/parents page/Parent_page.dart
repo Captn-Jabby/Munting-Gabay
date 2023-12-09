@@ -23,12 +23,12 @@ class ParentPage extends StatelessWidget {
             child: Center(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            const Row(
+             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   "PARENT'S PAGE",
-                  style: buttonTextStyle,
+                  style: buttonTextStyle1,
                 ),
               ],
             ),

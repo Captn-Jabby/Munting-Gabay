@@ -26,7 +26,7 @@ class KidsPage extends StatelessWidget {
               children: [
                 Text(
                   "KIDS PAGE",
-                  style: buttonTextStyle,
+                  style: buttonTextStyle1,
                 ),
               ],
             ),
@@ -68,7 +68,7 @@ class KidsPage extends StatelessWidget {
                               backgroundColor: secondaryColor),
                           child: Text(
                             'Learn',
-                            style: buttonTextStyle,
+                            style: buttonTextStyle1,
                           ),
                         ),
                       ),
@@ -103,7 +103,7 @@ class KidsPage extends StatelessWidget {
                               backgroundColor: secondaryColor),
                           child: Text(
                             'Music',
-                            style: buttonTextStyle,
+                            style: buttonTextStyle1,
                           ),
                         ),
                       ),
@@ -142,7 +142,7 @@ class KidsPage extends StatelessWidget {
                               backgroundColor: secondaryColor),
                           child: Text(
                             'Movies',
-                            style: buttonTextStyle,
+                            style: buttonTextStyle1,
                           ),
                         ),
                       ),
@@ -180,7 +180,7 @@ class KidsPage extends StatelessWidget {
                               backgroundColor: secondaryColor),
                           child: Text(
                             'Videos',
-                            style: buttonTextStyle,
+                            style: buttonTextStyle1,
                           ),
                         ),
                       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
 // scafold settings
@@ -15,20 +16,66 @@ const Color bgloadingColor = Colors.grey;
 //MediaQuery.of(context).size.height * 0.8,
 // Button Settings
 final double BtnHeight = 50;
-final double BtnWidth = 250;
+final double BtnWidth = 350;
 final double BtnSpacing = 25;
 final double BtnCircularRadius = 20;
 // const Color scaffoldBgColor = const Color(0xBA18B091); //drawer button color
 
-const TextStyle buttonTextStyle = TextStyle(
-  color: Colors.white,
-  fontSize: 28,
-  fontWeight: FontWeight.bold,
+final ButtonStyle buttonStyle1 = ElevatedButton.styleFrom(
+  backgroundColor: const Color(0xFF95C440),
+  shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(50)
+  )
+);
+
+final TextStyle buttonTextStyle1 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+);
+
+final TextStyle buttonTextStyle2 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Color(0xFF95C440),
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+);
+
+final TextStyle smallTextStyle1 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Color(0xFF9C9C9C),
+    fontSize: 14,
+  ),
+);
+
+final TextStyle smallTextStyle2 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Color(0xFF9C9C9C),
+    fontSize: 13,
+  ),
+);
+
+final TextStyle smallTextStyle3 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Color(0xFF95C440),
+    fontSize: 13,
+  ),
 );
 // Parents page setting
 const TextStyle ParentbuttonTextStyle = TextStyle(
   fontSize: 20,
   fontWeight: FontWeight.bold,
+);
+// Main BG Theme
+final BoxDecoration mainBackgroundTheme = BoxDecoration(
+  color: const Color(0xFFF4F9EC),
+  border: Border.all(
+    color: const Color(0xFF19360A),
+    width: 7.0,
+  ),
 );
 // Logo width and height
 final double LOGOSIZE = 65;
