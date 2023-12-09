@@ -31,6 +31,7 @@ dependencies:
   agora_rtc_engine: ^6.2.6
   agora_rtm: ^1.5.5
   audioplayers: ^5.2.1
+  calendar_strip: ^1.0.7
   cloud_firestore: ^4.9.0
   cupertino_icons: ^1.0.2
   event_bus: ^2.0.0

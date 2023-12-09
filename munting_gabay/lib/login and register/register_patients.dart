@@ -125,10 +125,33 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
           padding: EdgeInsets.all(16.0),
           child: Center(
             child: Stack(alignment: Alignment.topCenter, children: [
-              Image.asset(
-                'assets/A.png',
-                width: 300,
-                height: 300,
+              Column(
+                children: [
+                  Text('Munting\nGabay',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 5,
+                        shadows: [
+                          Shadow(
+                              color: Color(0xBA205007).withOpacity(1.0),
+                              offset: const Offset(7, 2))
+                        ],
+                        fontSize: 75,
+                        color: Colors.white,
+                      )),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const Text(
+                    'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 17),
+                  ),
+                ],
               ),
               Container(
                 width: 300,

@@ -17,10 +17,6 @@ class RegistrationDOCTORS extends StatefulWidget {
   _RegistrationDOCTORSState createState() => _RegistrationDOCTORSState();
 }
 
-// PERSONAL
-
-DateTime selectedDate = DateTime.now();
-bool _isPasswordVisible = false;
 FirebaseAuth _auth = FirebaseAuth.instance;
 
 class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
@@ -28,7 +24,7 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: scaffoldBgColor,
       ),
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
@@ -36,10 +32,33 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
           padding: EdgeInsets.all(16.0),
           child: Center(
             child: Stack(alignment: Alignment.topCenter, children: [
-              Image.asset(
-                'assets/A.png',
-                width: 300,
-                height: 300,
+              Column(
+                children: [
+                  Text('Munting\nGabay',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 5,
+                        shadows: [
+                          Shadow(
+                              color: Color(0xBA205007).withOpacity(1.0),
+                              offset: const Offset(7, 2))
+                        ],
+                        fontSize: 75,
+                        color: Colors.white,
+                      )),
+                  const SizedBox(
+                    height: 12,
+                  ),
+                  const Text(
+                    'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontStyle: FontStyle.normal,
+                        fontSize: 17),
+                  ),
+                ],
               ),
               Container(
                 width: 300,
@@ -51,7 +70,7 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         primary:
-                            scaffoldBgColor, // Change this color to the desired background color
+                            secondaryColor, // Change this color to the desired background color
                       ),
                       onPressed: () {
                         Navigator.pushReplacement(
@@ -64,7 +83,7 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                       },
                       child: Text(
                         'Fill Up Personal Information Form',
-                        style: TextStyle(color: drawertext),
+                        style: TextStyle(color: text),
                       ),
                     ),
                     SizedBox(
@@ -127,8 +146,13 @@ class PersonalIdentificationScreen extends StatefulWidget {
       _PersonalIdentificationScreenState();
 }
 
+final _formKey = GlobalKey<FormState>();
+
 class _PersonalIdentificationScreenState
     extends State<PersonalIdentificationScreen> {
+  DateTime selectedDate = DateTime.now();
+  bool _isPasswordVisible = false;
+
   // Selection of date
   Future<void> _selectDate(BuildContext context) async {
     DateTime currentDate = DateTime.now();
@@ -163,206 +187,213 @@ class _PersonalIdentificationScreenState
       ),
       body: SingleChildScrollView(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 50,
-              ),
-              // Text(
-              //   'Personal Identification Form',
-              //   style: TextStyle(color: drawertext, fontSize: 20),
-              // ),
-              TextFormField(
-                controller: _usernameController,
-                decoration: InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Adjust the border radius
-                    borderSide: BorderSide(
-                        color: Colors.blue), // Adjust the border color
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a Username';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Name',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Adjust the border radius
-                    borderSide: BorderSide(
-                        color: Colors.blue), // Adjust the border color
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a Name name';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(
-                  labelText: 'Address',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Adjust the border radius
-                    borderSide: BorderSide(
-                        color: Colors.blue), // Adjust the border color
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a address name';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              GestureDetector(
-                onTap: () => _selectDate(context),
-                child: AbsorbPointer(
-                  child: TextFormField(
-                    controller: TextEditingController(
-                        text: "${selectedDate.toLocal()}".split(
-                            ' ')[0]), // Format to show only the date part
-                    decoration: InputDecoration(
-                      labelText: 'Birthdate',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.blue),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Adjust the border radius
-                    borderSide: BorderSide(
-                        color: Colors.blue), // Adjust the border color
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a Email name';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius:
-                        BorderRadius.circular(10.0), // Adjust the border radius
-                    borderSide: BorderSide(
-                        color: Colors.blue), // Adjust the border color
-                  ),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                    child: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
-                    ),
-                  ),
-                ),
-                obscureText: !_isPasswordVisible,
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a Password name';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              const SizedBox(height: 20),
-              Row(
+          child: Form(
+            key: _formKey,
+            child: Container(
+              padding: EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary:
-                            scaffoldBgColor, // Change this color to the desired background color
+                  SizedBox(
+                    height: 50,
+                  ),
+                  // Text(
+                  //   'Personal Identification Form',
+                  //   style: TextStyle(color: drawertext, fontSize: 20),
+                  // ),
+                  TextFormField(
+                    controller: _usernameController,
+                    decoration: InputDecoration(
+                      labelText: 'Username',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the border radius
+                        borderSide: BorderSide(
+                            color: Colors.blue), // Adjust the border color
                       ),
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => RegistrationDOCTORS(),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a Username';
+                      }
+                      return null; // Return null if the validation succeeds
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(
+                      labelText: 'Name',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the border radius
+                        borderSide: BorderSide(
+                            color: Colors.blue), // Adjust the border color
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a Name';
+                      }
+                      return null; // Return null if the validation succeeds
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: _addressController,
+                    decoration: InputDecoration(
+                      labelText: 'Address',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the border radius
+                        borderSide: BorderSide(
+                            color: Colors.blue), // Adjust the border color
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a address';
+                      }
+                      return null; // Return null if the validation succeeds
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  GestureDetector(
+                    onTap: () => _selectDate(context),
+                    child: AbsorbPointer(
+                      child: TextFormField(
+                        controller: TextEditingController(
+                            text: "${selectedDate.toLocal()}".split(
+                                ' ')[0]), // Format to show only the date part
+                        decoration: InputDecoration(
+                          labelText: 'Birthdate',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
-                        );
-                      },
-                      child: Text(
-                        'BACK',
-                        style: TextStyle(color: text),
-                      )),
-                  Container(
-                    width: BtnWidth,
-                    height: BtnHeight,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => DoctorsIdentificationScreen(
-                              userData: UserData(
-                                username: _usernameController.text,
-                                name: _nameController.text,
-                                address: _addressController.text,
-                                birthdate: selectedDate,
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              ),
-                            ),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xBA205007),
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.circular(BtnCircularRadius))),
-                      child: Text(
-                        'Next',
-                        style: buttonTextStyle,
+                        ),
                       ),
                     ),
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the border radius
+                        borderSide: BorderSide(
+                            color: Colors.blue), // Adjust the border color
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a Email';
+                      }
+                      return null; // Return null if the validation succeeds
+                    },
+                  ),
+                  SizedBox(
+                    height: 15,
+                  ),
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the border radius
+                        borderSide: BorderSide(
+                            color: Colors.blue), // Adjust the border color
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                    ),
+                    obscureText: !_isPasswordVisible,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter a Password';
+                      }
+                      return null; // Return null if the validation succeeds
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            primary:
+                                secondaryColor, // Change this color to the desired background color
+                          ),
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => RegistrationDOCTORS(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'BACK',
+                            style: TextStyle(color: text),
+                          )),
+                      SizedBox(
+                        width: 210,
+                      ),
+                      ElevatedButton(
+                        onPressed: () {
+                          if (_formKey.currentState?.validate() ?? false) {
+                            // Form is valid, navigate to the next screen
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    DoctorsIdentificationScreen(
+                                  userData: UserData(
+                                    username: _usernameController.text,
+                                    name: _nameController.text,
+                                    address: _addressController.text,
+                                    birthdate: selectedDate,
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: secondaryColor,
+                        ),
+                        child: Text(
+                          'Next',
+                          style: TextStyle(color: text),
+                        ),
+                      ),
+                    ],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
       ),
@@ -579,8 +610,9 @@ class _DoctorsIdentificationScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        title: Text('Doctor\'s Identification'),
+        backgroundColor: scaffoldBgColor,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -588,82 +620,115 @@ class _DoctorsIdentificationScreenState
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text('Doctor\'s Identification Form'),
-              TextFormField(
-                controller: _clinicController,
-                decoration: InputDecoration(
-                  labelText: 'Clinic Name',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Form(
+                  key: __formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _clinicController,
+                        decoration: InputDecoration(
+                          labelText: 'Clinic Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a clinic name';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: _addressHospital,
+                        decoration: InputDecoration(
+                          labelText: 'Clinic Address',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Address';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: _phoneNumber,
+                        decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter
+                              .digitsOnly, // Allow only digits
+                        ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Phone Number';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                    ],
                   ),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a clinic name';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
               ),
               SizedBox(
                 height: 15,
               ),
-              TextFormField(
-                controller: _addressHospital,
-                decoration: InputDecoration(
-                  labelText: 'Clinic Address',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a Address name';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              TextFormField(
-                controller: _phoneNumber,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10.0),
-                    borderSide: BorderSide(color: Colors.blue),
-                  ),
-                ),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly, // Allow only digits
-                ],
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a Phone Number';
-                  }
-                  return null; // Return null if the validation succeeds
-                },
-              ),
-              SizedBox(
-                height: 15,
+              Divider(
+                thickness: 2,
+                color: secondaryColor,
               ),
               Text(
                 'Please upload your Identification (ID) and Licensure photos.',
                 style: TextStyle(color: drawertext),
               ),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      scaffoldBgColor, // Change this color to the desired background color
-                ),
-                onPressed: () {
-                  _pickImage(); // Call the function to pick an image from storage
-                },
-                child: Text(
-                  'Select Image from Gallery (ID)',
-                  style: TextStyle(color: drawertext),
-                ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Identification',
+                    style: TextStyle(
+                      color: drawertext,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          _pickImage(); // Call the function to pick an image from storage
+                        },
+                        icon: Icon(
+                          Icons.image, // Change to the desired icon
+                          color: drawertext, // Change to the desired icon color
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 20,
@@ -674,19 +739,41 @@ class _DoctorsIdentificationScreenState
                   width: 200,
                   height: 200,
                 ),
+              Divider(
+                thickness: 2,
+                color: secondaryColor,
+              ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      scaffoldBgColor, // Change this color to the desired background color
-                ),
-                onPressed: () {
-                  _pickImage2(); // Call the function to pick an image from storage
-                },
-                child: Text(
-                  'Select Image from Gallery (LICENSURE)',
-                  style: TextStyle(color: drawertext),
-                ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Licensure',
+                    style: TextStyle(
+                      color: drawertext,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          _pickImage2(); // Call the function to pick an image from storage
+                        },
+                        icon: Icon(
+                          Icons.badge, // Change to the desired icon
+                          color: drawertext, // Change to the desired icon color
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 20,
@@ -697,19 +784,41 @@ class _DoctorsIdentificationScreenState
                   width: 200,
                   height: 200,
                 ),
+              Divider(
+                thickness: 2,
+                color: secondaryColor,
+              ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      scaffoldBgColor, // Change this color to the desired background color
-                ),
-                onPressed: () {
-                  _profilepic(); // Call the function to pick an image from storage
-                },
-                child: Text(
-                  'Select Image from Gallery (Profile Picture)',
-                  style: TextStyle(color: drawertext),
-                ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Profile Picture',
+                    style: TextStyle(
+                      color: drawertext,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          _profilepic(); // Call the function to pick an image from storage
+                        },
+                        icon: Icon(
+                          Icons.person, // Change to the desired icon
+                          color: drawertext, // Change to the desired icon color
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
               SizedBox(
                 height: 20,
@@ -724,37 +833,42 @@ class _DoctorsIdentificationScreenState
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      scaffoldBgColor, // Change this color to the desired background color
+                      secondaryColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
-                  if (_imageFile != null && _imageFile2 != null) {
-                    // Both images are selected, you can call the registration process here
-                    _registerUser(); // Call the registration process
-                    uploadImageToFirebase(_imageFile!,
-                        widget.userData.email); // Call the image upload process
-                  } else {
-                    // Alert dialog when images are not selected
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: Text('Error'),
-                          content: Text(
-                              'Please select both images before registering.'),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
-                              child: Text(
-                                'OK',
-                                style: TextStyle(color: drawertext),
+                  if (_formKey.currentState?.validate() ?? false) {
+                    if (_imageFile != null && _imageFile2 != null) {
+                      // Both images are selected, you can call the registration process here
+                      _registerUser(); // Call the registration process
+                      uploadImageToFirebase(
+                          _imageFile!,
+                          widget
+                              .userData.email); // Call the image upload process
+                    } else {
+                      // Alert dialog when images are not selected
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text(
+                                'Please select both images before registering.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                child: Text(
+                                  'OK',
+                                  style: TextStyle(color: drawertext),
+                                ),
                               ),
-                            ),
-                          ],
-                        );
-                      },
-                    );
+                            ],
+                          );
+                        },
+                      );
+                    }
                   }
                 },
                 child: Text(
@@ -768,6 +882,8 @@ class _DoctorsIdentificationScreenState
       ),
     );
   }
+
+  final __formKey = GlobalKey<FormState>();
 }
 
 TextEditingController _usernameController = TextEditingController();

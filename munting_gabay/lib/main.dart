@@ -219,7 +219,7 @@ class LoginScreen extends StatelessWidget {
                         );
                       },
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: scaffoldBgColor,
+                          backgroundColor: secondaryColor,
                           shape: RoundedRectangleBorder(
                               borderRadius:
                                   BorderRadius.circular(BtnCircularRadius))),
@@ -234,7 +234,8 @@ class LoginScreen extends StatelessWidget {
                     width: BtnWidth,
                     height: BtnHeight,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF18B091),
+                      // color: const Color(0xFF18B091),
+                      color: secondaryColor,
                       borderRadius: BorderRadius.circular(BtnCircularRadius),
                     ),
                     child: TextButton(

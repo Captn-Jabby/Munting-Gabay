@@ -252,24 +252,30 @@ class _DateListScreenState extends State<DateListScreen> {
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      scaffoldBgColor, // Change this color to the desired background color
+                      secondaryColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   filterDates();
                 },
-                child: Text('Filter'),
+                child: Text(
+                  'Filter',
+                  style: TextStyle(color: text),
+                ),
               ),
               SizedBox(width: 16), // Add some spacing
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   primary:
-                      scaffoldBgColor, // Change this color to the desired background color
+                      secondaryColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   // Create and save slots for all filtered dates
                   createSlotsForDateRange(filteredDates);
                 },
-                child: Text('Save'),
+                child: Text(
+                  'Save',
+                  style: TextStyle(color: text),
+                ),
               ),
 
               SizedBox(width: 16),
@@ -277,11 +283,26 @@ class _DateListScreenState extends State<DateListScreen> {
           ),
           Expanded(
             child: ListView.builder(
+              key: UniqueKey(),
               itemCount: filteredDates.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(
-                    DateFormat('E, MMM d, y').format(filteredDates[index]),
+                return Dismissible(
+                  key: UniqueKey(), // Ensure each item has a unique key
+                  onDismissed: (direction) {
+                    // Delete the schedule when the item is dismissed
+                    deleteScheduleForDate(filteredDates[index]);
+                  },
+                  background: Container(
+                    color: Colors.red, // Background color for swipe action
+                    child: Icon(Icons.delete, color: Colors.white),
+                    alignment: Alignment.centerRight,
+                    padding: EdgeInsets.only(right: 16.0),
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      DateFormat('E, MMM d, y').format(filteredDates[index]),
+                    ),
+                    // Rest of your ListTile code...
                   ),
                 );
               },
@@ -290,5 +311,52 @@ class _DateListScreenState extends State<DateListScreen> {
         ],
       ),
     );
+  }
+
+  void deleteScheduleForDate(DateTime date) {
+    print('Deleting schedule for date: $date');
+    if (user != null && user?.email != null) {
+      final documentReference =
+          firestore.collection('schedule').doc(user?.email);
+
+      documentReference.get().then((docSnapshot) {
+        if (docSnapshot.exists) {
+          final data = docSnapshot.data() as Map<String, dynamic>?;
+          if (data != null && data['available_days'] != null) {
+            final List<dynamic> availableDays =
+                data['available_days'] as List<dynamic>;
+
+            // Find the index of the date to delete
+            int dateIndex = availableDays.indexWhere(
+              (day) => day['date'] == DateFormat('d MMMM').format(date),
+            );
+
+            if (dateIndex != -1) {
+              // Remove the date from the list
+              availableDays.removeAt(dateIndex);
+
+              // Update the Firestore document with the modified list
+              documentReference.update({
+                'available_days': availableDays,
+              }).then((_) {
+                setState(() {
+                  hasSchedule = false;
+                  filteredDates.remove(date);
+                });
+                print('After deleting schedule');
+                EasyLoading.showToast('Schedule Deleted',
+                    toastPosition: EasyLoadingToastPosition.bottom);
+              }).catchError((error) {
+                // Handle errors during update
+                print('Error updating Firestore document: $error');
+              });
+            }
+          }
+        }
+      }).catchError((error) {
+        // Handle errors during document retrieval
+        print('Error retrieving Firestore document: $error');
+      });
+    }
   }
 }
