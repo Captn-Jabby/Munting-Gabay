@@ -1,13 +1,14 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import the intl package
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
 import 'package:munting_gabay/Doctors%20screen/newsched.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
 import 'package:munting_gabay/doctor_call.dart';
-import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
-import 'package:table_calendar/table_calendar.dart';
+
+import '../ringtone/event_service.dart';
+import '../ringtone/flutter_ringtone_player.dart';
 
 class DocDashboard extends StatefulWidget {
   final String docId; // Doctor's ID
@@ -24,10 +25,7 @@ class DocDashboard extends StatefulWidget {
 class _DocDashboardState extends State<DocDashboard>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  Map<DateTime, List<dynamic>> _events = {};
-  late CalendarFormat _calendarFormat;
-  DateTime _focusedDay = DateTime.now();
-  DateTime _selectedDay = DateTime.now();
+
   // In _DocDashboardState
   bool previousCallStatus = false;
 
@@ -35,8 +33,7 @@ class _DocDashboardState extends State<DocDashboard>
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    _fetchPendingDates();
-    _calendarFormat = CalendarFormat.month;
+
     // Listen to changes in callStatus
     FirebaseFirestore.instance
         .collection('usersdata') // Update with your collection name
@@ -64,275 +61,8 @@ class _DocDashboardState extends State<DocDashboard>
       }
     });
   }
+
   // Add this method to your _DocDashboardState class
-
-  Map<String, dynamic> _getEventMarker(DateTime date) {
-    final formattedDate = DateFormat('dd MMMM').format(date);
-
-    return {
-      'date': formattedDate,
-      'status': 'pending',
-      // Add more information that you want to display when the date is clicked
-      'additionalInfo': 'Your additional information here',
-    };
-  }
-
-  Set<DateTime> pendingDateTimeSet = Set();
-
-  void _updateEvents(List<String> pendingDates) {
-    setState(() {
-      _events = {}; // Clear existing events
-      pendingDateTimeSet = pendingDates.map((date) {
-        // Format the date from the pendingDates list to match the calendar format
-        final formattedDate = DateFormat('d MMMM')
-            .parse(date + ' 2023'); // Assuming the year is 2023
-        return formattedDate;
-      }).toSet();
-
-      for (DateTime date in pendingDateTimeSet) {
-        _events[date] = [_getEventMarker(date)];
-      }
-    });
-  }
-
-  String _getMonthName(int month) {
-    switch (month) {
-      case 1:
-        return 'January';
-      case 2:
-        return 'February';
-      case 3:
-        return 'March';
-      case 4:
-        return 'April';
-      case 5:
-        return 'May';
-      case 6:
-        return 'June';
-      case 7:
-        return 'July';
-      case 8:
-        return 'August';
-      case 9:
-        return 'September';
-      case 10:
-        return 'October';
-      case 11:
-        return 'November';
-      case 12:
-        return 'December';
-      default:
-        throw FormatException('Invalid month number: $month');
-    }
-  }
-
-  // Method to fetch pending dates from Firebase and update events
-  void _fetchPendingDates() {
-    FirebaseFirestore.instance
-        .collection('schedule')
-        .doc(widget.user?.email) // Assuming user.email is the document ID
-        .get()
-        .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
-      if (snapshot.exists) {
-        final Map<String, dynamic> data = snapshot.data()!;
-        final List<dynamic> availableDays = data['available_days'] ?? [];
-
-        // Extract pending dates from availableDays
-        final List<String> pendingDates = availableDays
-            .where((day) {
-              final slots = day['slots'] as List<dynamic>;
-              final pendingSlots = slots.where((slot) {
-                final status = slot['status'] as String;
-                print('Slot status: $status');
-                return status.toLowerCase() == 'pending';
-              }).toList();
-
-              return pendingSlots.isNotEmpty;
-            })
-            .map((day) => day['date'] as String)
-            .toList();
-
-        // Print availableDays and pendingDates for debugging
-        print('Available Days: $availableDays');
-        print('Pending Dates: $pendingDates');
-
-        // Update events with pending dates
-        _updateEvents(pendingDates);
-      } else {
-        print('Document does not exist for user: ${widget.user?.email}');
-      }
-    }).catchError((error) {
-      print('Error fetching pending dates: $error');
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: scaffoldBgColor,
-      appBar: AppBar(
-        backgroundColor: secondaryColor,
-        title: Text('Doctor Dashboard'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.message),
-            onPressed: () {
-              // Handle the action when the message button is pressed
-              // For example, navigate to the chat screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UserSelectionPage(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.calendar_month,
-              color: Colors.indigo,
-            ),
-            onPressed: () {
-              // Handle the action when the calendar button is pressed
-              // For example, navigate to the calendar screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DateListScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-      body: DefaultTabController(
-        length: 4,
-        child: Column(
-          children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2023, 1, 1),
-              lastDay: DateTime.utc(2023, 12, 31),
-              focusedDay: _focusedDay,
-              calendarFormat: _calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-                // Add this print statement to track the selected date
-                print('Selected Date: $_selectedDay');
-
-                // Handle the click event here
-                // _handleDateClick(_events[selectedDay]);
-              },
-              eventLoader: (day) {
-                return _events[day] ?? [];
-              },
-              calendarStyle: const CalendarStyle(
-                markersAlignment: Alignment.bottomRight,
-              ),
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, date, events) {
-                  final formattedDate = DateFormat('d MMMM').format(date);
-
-                  final isPending = pendingDateTimeSet.any((pendingDate) {
-                    final formattedPendingDate =
-                        DateFormat('d MMMM').format(pendingDate);
-                    return formattedDate == formattedPendingDate;
-                  });
-
-                  // Check for cancelled status
-                  final isCancelled = events?.any((event) {
-                        if (event is Map<String, dynamic>) {
-                          if (event['status'] == 'cancelled') {
-                            print(
-                                'Yellow mark for date: $formattedDate'); // Debug print for yellow mark
-                            return true;
-                          }
-                        }
-                        return false;
-                      }) ??
-                      false;
-
-                  if (isPending) {
-                    return Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${date.day}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }
-                  // } else if (isCancelled) {
-                  //   print(
-                  //       'Cancelled date: $formattedDate'); // Debug print for cancelled date
-
-                  //   return Container(
-                  //     width: 24,
-                  //     height: 24,
-                  //     alignment: Alignment.center,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.yellow,
-                  //       shape: BoxShape.circle,
-                  //     ),
-                  //     child: Text(
-                  //       '${date.day}',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //   );
-                  // }
-
-                  // return null;
-                },
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildDayList('Available'),
-                  _buildDayList('Pending'),
-                  _buildDayList('Canceled'),
-                  _buildDayList('Accepted'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-//////////////////////////////////////////////////////////////
-/////    schedule
-  // Function to build date cells with custom background color
-  Widget buildDateCell(DateTime date, bool isSelected) {
-    return Container(
-      margin: const EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        color:
-            isSelected ? Colors.blue : null, // Change the selected date color
-        borderRadius: BorderRadius.circular(8),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        '${date.day}',
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
-        ),
-      ),
-    );
-  }
-
   Future<void> _showRejectDialog(String currentUserUid) async {
     return showDialog(
       context: context,
@@ -404,6 +134,80 @@ class _DocDashboardState extends State<DocDashboard>
     );
   }
 
+  @override
+  void dispose() {
+    // Unsubscribe or cancel any listeners or subscriptions.
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: scaffoldBgColor,
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+        title: Text('Dr Dashboard'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.message),
+            onPressed: () {
+              // Handle the action when the message button is pressed
+              // For example, navigate to the chat screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserSelectionPage(),
+                ),
+              );
+            },
+          ),
+          IconButton(
+            icon: Icon(
+              Icons.calendar_month,
+              color: Colors.indigo,
+            ),
+            onPressed: () {
+              // Handle the action when the calendar button is pressed
+              // For example, navigate to the calendar screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => DateListScreen()),
+              );
+            },
+          ),
+        ],
+      ),
+      drawer: DrDrawer(),
+      body: DefaultTabController(
+        length: 4, // Adjust the length based on the number of statuses
+        child: Column(
+          children: [
+            TabBar(
+              controller: _tabController,
+              tabs: [
+                Tab(text: 'Available'),
+                Tab(text: 'Pending'),
+                Tab(text: 'Canceled'),
+                Tab(text: 'Accepted'),
+              ],
+            ),
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: [
+                  _buildDayList('Available'),
+                  _buildDayList('Pending'),
+                  _buildDayList('Canceled'),
+                  _buildDayList('Accepted'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildDayList(String statusFilter) {
     return StreamBuilder<DocumentSnapshot>(
       stream: FirebaseFirestore.instance
@@ -413,7 +217,16 @@ class _DocDashboardState extends State<DocDashboard>
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              // Color of the loading indicator
+              valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+              // Width of the indicator's line
+              strokeWidth: 4,
+
+              // Optional: Background color of the circle
+              backgroundColor: bgloadingColor,
+            ),
           );
         } else if (snapshot.hasError) {
           return Center(
@@ -427,6 +240,7 @@ class _DocDashboardState extends State<DocDashboard>
           var data = snapshot.data!.data() as Map<String, dynamic>;
           var availableDays = data['available_days'] as List<dynamic>;
 
+          // Filter and display the data from Firestore based on the selected status
           var filteredDays = availableDays.where((day) {
             var dayData = day as Map<String, dynamic>;
             var slots = dayData['slots'] as List<dynamic>;
@@ -439,7 +253,7 @@ class _DocDashboardState extends State<DocDashboard>
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text('Doctor Name: ${widget.docId}'),
+                Text('Doctor Name:  ${widget.docId}'),
                 Text('Available Days:'),
                 filteredDays.isEmpty
                     ? Center(

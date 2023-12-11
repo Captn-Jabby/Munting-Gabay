@@ -19,7 +19,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.19.6 <3.0.0"
+  sdk: ">=3.0.0 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,7 +31,6 @@ dependencies:
   agora_rtc_engine: ^6.2.6
   agora_rtm: ^1.5.5
   audioplayers: ^5.2.1
-  calendar_strip: ^1.0.7
   cloud_firestore: ^4.9.0
   cupertino_icons: ^1.0.2
   event_bus: ^2.0.0

@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/Doctors%20screen/save_scheduled.dart';
 import 'package:munting_gabay/variable.dart';
 
 class DateListScreen extends StatefulWidget {
@@ -195,7 +196,7 @@ class _DateListScreenState extends State<DateListScreen> {
             onPressed: () {
               deleteSchedule();
             },
-            child: Text('Delete Schedule'),
+            child: Text('Delete'),
           ),
           if (hasSchedule)
             Icon(
@@ -203,6 +204,22 @@ class _DateListScreenState extends State<DateListScreen> {
               color: Colors.green,
               size: 24.0,
             ),
+          IconButton(
+            icon: Icon(
+              Icons.access_time,
+              color: scaffoldBgColor,
+            ),
+            onPressed: () {
+              // Handle the action when the message button is pressed
+              // For example, navigate to the chat screen
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => SavedDatesScreen(),
+                ),
+              );
+            },
+          ),
         ],
       ),
       body: Column(

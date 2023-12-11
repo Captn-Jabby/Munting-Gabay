@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart'; // Import the intl package
-import 'package:munting_gabay/Doctors%20screen/newsched.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
 import 'package:munting_gabay/doctor_call.dart';
 import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
@@ -37,171 +34,64 @@ class _DocDashboardState extends State<DocDashboard>
     _tabController = TabController(length: 4, vsync: this);
     _fetchPendingDates();
     _calendarFormat = CalendarFormat.month;
-    // Listen to changes in callStatus
-    FirebaseFirestore.instance
-        .collection('usersdata') // Update with your collection name
-        .doc(widget.docId)
-        .snapshots()
-        .listen((DocumentSnapshot<Map<String, dynamic>> snapshot) {
-      if (snapshot.exists) {
-        final bool newCallStatus = snapshot.data()?['callStatus'] ?? false;
-        final String currentUserUid =
-            snapshot.data()?['currentUserUid'] ?? ''; // Fetch currentUserUid
-
-        if (newCallStatus != previousCallStatus && newCallStatus) {
-          // Value changed from false to true, show the reject dialog
-          _showRejectDialog(currentUserUid); // Pass currentUserUid
-        }
-
-        // Update previousCallStatus
-        previousCallStatus = newCallStatus;
-
-        if (newCallStatus) {
-          FlutterRingtonePlayer().playAlarm(); // Activate ringtone
-        } else {
-          FlutterRingtonePlayer().stop(); // Stop ringtone
-        }
-      }
-    });
-  }
-  // Add this method to your _DocDashboardState class
-
-  Map<String, dynamic> _getEventMarker(DateTime date) {
-    final formattedDate = DateFormat('dd MMMM').format(date);
-
-    return {
-      'date': formattedDate,
-      'status': 'pending',
-      // Add more information that you want to display when the date is clicked
-      'additionalInfo': 'Your additional information here',
-    };
-  }
-
-  Set<DateTime> pendingDateTimeSet = Set();
-
-  void _updateEvents(List<String> pendingDates) {
-    setState(() {
-      _events = {}; // Clear existing events
-      pendingDateTimeSet = pendingDates.map((date) {
-        // Format the date from the pendingDates list to match the calendar format
-        final formattedDate = DateFormat('d MMMM')
-            .parse(date + ' 2023'); // Assuming the year is 2023
-        return formattedDate;
-      }).toSet();
-
-      for (DateTime date in pendingDateTimeSet) {
-        _events[date] = [_getEventMarker(date)];
-      }
-    });
-  }
-
-  String _getMonthName(int month) {
-    switch (month) {
-      case 1:
-        return 'January';
-      case 2:
-        return 'February';
-      case 3:
-        return 'March';
-      case 4:
-        return 'April';
-      case 5:
-        return 'May';
-      case 6:
-        return 'June';
-      case 7:
-        return 'July';
-      case 8:
-        return 'August';
-      case 9:
-        return 'September';
-      case 10:
-        return 'October';
-      case 11:
-        return 'November';
-      case 12:
-        return 'December';
-      default:
-        throw FormatException('Invalid month number: $month');
-    }
   }
 
   // Method to fetch pending dates from Firebase and update events
   void _fetchPendingDates() {
     FirebaseFirestore.instance
-        .collection('schedule')
-        .doc(widget.user?.email) // Assuming user.email is the document ID
+        .collection('pending_dates') // Replace with your collection name
+        .doc(widget.docId)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.exists) {
         final Map<String, dynamic> data = snapshot.data()!;
-        final List<dynamic> availableDays = data['available_days'] ?? [];
-
-        // Extract pending dates from availableDays
-        final List<String> pendingDates = availableDays
-            .where((day) {
-              final slots = day['slots'] as List<dynamic>;
-              final pendingSlots = slots.where((slot) {
-                final status = slot['status'] as String;
-                print('Slot status: $status');
-                return status.toLowerCase() == 'pending';
-              }).toList();
-
-              return pendingSlots.isNotEmpty;
-            })
-            .map((day) => day['date'] as String)
-            .toList();
-
-        // Print availableDays and pendingDates for debugging
-        print('Available Days: $availableDays');
-        print('Pending Dates: $pendingDates');
+        List<String> pendingDates = List<String>.from(data['dates'] ?? []);
 
         // Update events with pending dates
         _updateEvents(pendingDates);
-      } else {
-        print('Document does not exist for user: ${widget.user?.email}');
       }
     }).catchError((error) {
       print('Error fetching pending dates: $error');
     });
   }
 
+  // Method to update events with pending dates
+  void _updateEvents(List<String> pendingDates) {
+    setState(() {
+      _events = {}; // Clear existing events
+
+      // Map pending dates to DateTime objects
+      List<DateTime> pendingDateTimeDates = pendingDates.map((date) {
+        return DateTime.parse(date);
+      }).toList();
+
+      // Update events map
+      for (DateTime date in pendingDateTimeDates) {
+        _events[date] = [
+          _getEventMarker(date)
+        ]; // You can add more information to the event marker if needed
+      }
+    });
+  }
+
+  // Method to get an event marker for a date
+  Map<String, dynamic> _getEventMarker(DateTime date) {
+    return {
+      'date': date,
+      'status':
+          'pending', // You can add more information to the event marker if needed
+    };
+  }
+
+  List<dynamic> _getEventsForDay(DateTime day) {
+    return _events[day] ?? [];
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
         title: Text('Doctor Dashboard'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.message),
-            onPressed: () {
-              // Handle the action when the message button is pressed
-              // For example, navigate to the chat screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UserSelectionPage(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.calendar_month,
-              color: Colors.indigo,
-            ),
-            onPressed: () {
-              // Handle the action when the calendar button is pressed
-              // For example, navigate to the calendar screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DateListScreen()),
-              );
-            },
-          ),
-        ],
       ),
       body: DefaultTabController(
         length: 4,
@@ -212,6 +102,7 @@ class _DocDashboardState extends State<DocDashboard>
               lastDay: DateTime.utc(2023, 12, 31),
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
+              eventLoader: _getEventsForDay,
               onFormatChanged: (format) {
                 setState(() {
                   _calendarFormat = format;
@@ -222,79 +113,10 @@ class _DocDashboardState extends State<DocDashboard>
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
                 });
-                // Add this print statement to track the selected date
-                print('Selected Date: $_selectedDay');
-
-                // Handle the click event here
-                // _handleDateClick(_events[selectedDay]);
+                // Handle day selection as needed
               },
-              eventLoader: (day) {
-                return _events[day] ?? [];
-              },
-              calendarStyle: const CalendarStyle(
-                markersAlignment: Alignment.bottomRight,
-              ),
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, date, events) {
-                  final formattedDate = DateFormat('d MMMM').format(date);
-
-                  final isPending = pendingDateTimeSet.any((pendingDate) {
-                    final formattedPendingDate =
-                        DateFormat('d MMMM').format(pendingDate);
-                    return formattedDate == formattedPendingDate;
-                  });
-
-                  // Check for cancelled status
-                  final isCancelled = events?.any((event) {
-                        if (event is Map<String, dynamic>) {
-                          if (event['status'] == 'cancelled') {
-                            print(
-                                'Yellow mark for date: $formattedDate'); // Debug print for yellow mark
-                            return true;
-                          }
-                        }
-                        return false;
-                      }) ??
-                      false;
-
-                  if (isPending) {
-                    return Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${date.day}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }
-                  // } else if (isCancelled) {
-                  //   print(
-                  //       'Cancelled date: $formattedDate'); // Debug print for cancelled date
-
-                  //   return Container(
-                  //     width: 24,
-                  //     height: 24,
-                  //     alignment: Alignment.center,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.yellow,
-                  //       shape: BoxShape.circle,
-                  //     ),
-                  //     child: Text(
-                  //       '${date.day}',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //   );
-                  // }
-
-                  // return null;
-                },
-              ),
             ),
+            // Your existing code for tabs and content goes here
             Expanded(
               child: TabBarView(
                 controller: _tabController,
@@ -312,8 +134,6 @@ class _DocDashboardState extends State<DocDashboard>
     );
   }
 
-//////////////////////////////////////////////////////////////
-/////    schedule
   // Function to build date cells with custom background color
   Widget buildDateCell(DateTime date, bool isSelected) {
     return Container(
@@ -330,77 +150,6 @@ class _DocDashboardState extends State<DocDashboard>
           color: isSelected ? Colors.white : Colors.black,
         ),
       ),
-    );
-  }
-
-  Future<void> _showRejectDialog(String currentUserUid) async {
-    return showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Incoming Call'),
-          content: Text(
-              'You have an incoming call from $currentUserUid. Do you want to answer it?'),
-          actions: <Widget>[
-            TextButton(
-              child: Text('Reject'),
-              onPressed: () async {
-                // Update the callStatus field to false when rejecting the call
-                await FirebaseFirestore.instance
-                    .collection('usersdata') // Update with your collection name
-                    .doc(widget.docId)
-                    .update({'callStatus': false});
-
-                // Close the dialog
-                Navigator.of(context).pop();
-
-                // You can add any additional logic here if needed
-              },
-            ),
-            TextButton(
-              child: Text('Answer'),
-              onPressed: () async {
-                // Fetch currentUserUid from Firestore
-                final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-                    await FirebaseFirestore.instance
-                        .collection(
-                            'usersdata') // Update with your collection name
-                        .doc(widget.docId)
-                        .get();
-
-                if (docSnapshot.exists) {
-                  final String currentUserUid =
-                      docSnapshot.data()?['currentUserUid'] ?? '';
-
-                  // Update callStatus to false
-                  await FirebaseFirestore.instance
-                      .collection('usersdata')
-                      .doc(widget.docId)
-                      .update({'callStatus': false});
-
-                  Navigator.of(context).pop();
-
-                  // Navigate to CallDoctor with currentUserUid
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CallDoctor(
-                        currentUserUid: currentUserUid,
-                        currentUserName:
-                            currentUserUid, // You might want to fetch the user's name from Firestore if available
-                        docId: widget.docId,
-                        currentemailId: currentUserUid,
-                      ),
-                    ),
-                  );
-                } else {
-                  // Handle the case where the document does not exist
-                }
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
