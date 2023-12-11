@@ -234,7 +234,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 onPressed: _updateUserData,
                 child: Text(
                   'Save',
-                  style: buttonTextStyle,
+                  style: buttonTextStyle1,
                 ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: secondaryColor, // Use the specified color

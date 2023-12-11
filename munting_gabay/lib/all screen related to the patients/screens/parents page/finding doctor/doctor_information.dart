@@ -74,9 +74,9 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
+            Text(
               'DOCTORS INFORMATION',
-              style: buttonTextStyle,
+              style: buttonTextStyle1,
             ),
             Container(
               width: double.infinity,

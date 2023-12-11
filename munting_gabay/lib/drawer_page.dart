@@ -148,7 +148,7 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.color_lens),
             title: Text(
-              'Settings',
+              'Themes',
               style: TextStyle(color: drawertext),
             ),
             onTap: () {
