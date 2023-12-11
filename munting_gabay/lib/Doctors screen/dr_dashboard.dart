@@ -504,7 +504,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
     DocumentReference dayRef =
         firestore.collection('schedule').doc(widget.docId);
 
-    // Get the existing day data
+    //sting day data
     dayRef.get().then((daySnapshot) {
       if (daySnapshot.exists) {
         Map<String, dynamic> dayData =
