@@ -171,13 +171,8 @@ class LoginScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 75),
           child: Column(
             children: [
-              Container(
-                height: MediaQuery.of(context).size.height / 4,
-                decoration: const BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage("assets/images/world.png",)
-                    )
-                ),
+              Center(
+                child: SpinningContainer(),
               ),
 
               Text('Munting Gabay',
@@ -359,5 +354,45 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class SpinningContainer extends StatefulWidget {
+  @override
+  _SpinningContainerState createState() => _SpinningContainerState();
+}
+
+class _SpinningContainerState extends State<SpinningContainer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(minutes: 1), // Set the duration for one complete rotation
+    )..repeat(); // Repeat the animation infinitely
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RotationTransition(
+      turns: _controller,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 4,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/world.png",)
+            )
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

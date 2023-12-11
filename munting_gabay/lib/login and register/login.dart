@@ -102,66 +102,64 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor:const Color(0xFFF4F9EC),
+      leading: IconButton(onPressed: (){
+        Navigator.pop(context);
+      }, icon: const Icon(
+        Icons.arrow_back_rounded,
+        color: Colors.black,
+      ),
+      )
+      ),
       body: Container(
+        padding: const EdgeInsets.all(34),
         decoration: mainBackgroundTheme,
         child: SingleChildScrollView(
-          child: Stack(
-            alignment: Alignment.topCenter,
+          child: Column(
             children: [
               Column(
                 children: [
-                  Container(
-                    padding: EdgeInsets.only(top: 24),
-                    height: MediaQuery.of(context).size.height / 4,
-                    decoration: const BoxDecoration(
-                        image: DecorationImage(
-                            image: AssetImage("assets/images/world.png",)
-                        )
-                    ),
+                  Center(
+                    child: SpinningContainer(),
                   ),
-                  Text('Munting Gabay',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.poppins(
-                        letterSpacing: 2,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 40,
-                          color: Color(0xFF95C440),
-                        )
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 12,
-                  ),
+
+
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 140),
-                    child: Text('An Autism Aid and Awareness App',
-                        style: smallTextStyle1
+                    padding: const EdgeInsets.all(21.0),
+                    child: Text('Sign in',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.poppins(
+                          letterSpacing: 2,
+                          textStyle: GoogleFonts.poppins(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 27,
+                                color: Color(0xFF333333)
+                          )
+                      ),
                     ),
                   ),
+
                 ],
-              ),
-              SizedBox(
-                height: BtnSpacing,
               ),
               Column(
                 children: [
-                  SizedBox(
-                    height: 300,
-                  ),
                   Container(
+                    height:MediaQuery.of(context).size.height ,
                     child: Column(
                       children: [
                         TextField(
+
                           controller: _emailController,
                           decoration: InputDecoration(
                             labelText: 'Email',
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  10.0), // Adjust the border radius
+                              borderRadius: BorderRadius.circular(50.0),
                               borderSide: BorderSide(
-                                  color: Colors
-                                      .black), // Adjust the border color
+                                color: Colors
+                                    .blue, // You can adjust the border color
+                              ),
                             ),
                           ),
                         ),
@@ -169,11 +167,13 @@ class _LoginPageState extends State<LoginPage> {
                           height: BtnSpacing,
                         ),
                         TextField(
+
                           controller: _passwordController,
                           decoration: InputDecoration(
+
                             labelText: 'Password',
                             border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(50),
                               borderSide: BorderSide(
                                 color: Colors
                                     .blue, // You can adjust the border color
@@ -295,13 +295,55 @@ class _LoginPageState extends State<LoginPage> {
                       'Forgot Password',
                       style: TextStyle(color: Colors.white),
                     ),
-                  )
+                  ),
+
                 ],
-              )
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+}
+
+class SpinningContainer extends StatefulWidget {
+  @override
+  _SpinningContainerState createState() => _SpinningContainerState();
+}
+
+class _SpinningContainerState extends State<SpinningContainer>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(minutes: 1), // Set the duration for one complete rotation
+    )..repeat(); // Repeat the animation infinitely
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RotationTransition(
+      turns: _controller,
+      child: Container(
+        padding: EdgeInsets.all(50),
+        height: MediaQuery.of(context).size.height / 4,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/world.png",)
+            )
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

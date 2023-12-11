@@ -72,10 +72,7 @@ const TextStyle ParentbuttonTextStyle = TextStyle(
 // Main BG Theme
 final BoxDecoration mainBackgroundTheme = BoxDecoration(
   color: const Color(0xFFF4F9EC),
-  border: Border.all(
-    color: const Color(0xFF19360A),
-    width: 7.0,
-  ),
+
 );
 // Logo width and height
 final double LOGOSIZE = 65;
