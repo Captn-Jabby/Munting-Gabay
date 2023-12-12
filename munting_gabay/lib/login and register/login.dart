@@ -103,16 +103,17 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
-        backgroundColor:const Color(0xFFF4F9EC),
-      leading: IconButton(onPressed: (){
-        Navigator.pop(context);
-      }, icon: const Icon(
-        Icons.arrow_back_rounded,
-        color: Colors.black,
-      ),
-      )
-      ),
+          elevation: 0,
+          backgroundColor: const Color(0xFFF4F9EC),
+          leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_rounded,
+              color: Colors.black,
+            ),
+          )),
       body: Container(
         padding: const EdgeInsets.all(34),
         decoration: mainBackgroundTheme,
@@ -124,33 +125,28 @@ class _LoginPageState extends State<LoginPage> {
                   Center(
                     child: SpinningContainer(),
                   ),
-
-
                   Padding(
                     padding: const EdgeInsets.all(21.0),
-                    child: Text('Sign in',
+                    child: Text(
+                      'Sign in',
                       textAlign: TextAlign.center,
                       style: GoogleFonts.poppins(
                           letterSpacing: 2,
                           textStyle: GoogleFonts.poppins(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 27,
-                                color: Color(0xFF333333)
-                          )
-                      ),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 27,
+                              color: Color(0xFF333333))),
                     ),
                   ),
-
                 ],
               ),
               Column(
                 children: [
                   Container(
-                    height:MediaQuery.of(context).size.height ,
+                    height: MediaQuery.of(context).size.height,
                     child: Column(
                       children: [
                         TextField(
-
                           controller: _emailController,
                           decoration: InputDecoration(
                             labelText: 'Email',
@@ -167,10 +163,8 @@ class _LoginPageState extends State<LoginPage> {
                           height: BtnSpacing,
                         ),
                         TextField(
-
                           controller: _passwordController,
                           decoration: InputDecoration(
-
                             labelText: 'Password',
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(50),
@@ -248,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: const Text(
                             'CREATE AN ACCOUNT',
-                            style: TextStyle(color: Colors.white),
+                            style: TextStyle(color: drawertext),
                           ),
                         ),
                       ],
@@ -296,7 +290,6 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-
                 ],
               ),
             ],
@@ -321,7 +314,8 @@ class _SpinningContainerState extends State<SpinningContainer>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(minutes: 1), // Set the duration for one complete rotation
+      duration:
+          Duration(minutes: 1), // Set the duration for one complete rotation
     )..repeat(); // Repeat the animation infinitely
   }
 
@@ -334,9 +328,9 @@ class _SpinningContainerState extends State<SpinningContainer>
         height: MediaQuery.of(context).size.height / 4,
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/world.png",)
-            )
-        ),
+                image: AssetImage(
+          "assets/images/world.png",
+        ))),
       ),
     );
   }

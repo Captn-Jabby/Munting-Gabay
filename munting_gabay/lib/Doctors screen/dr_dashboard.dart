@@ -2,9 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import the intl package
+import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
 import 'package:munting_gabay/Doctors%20screen/newsched.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
-import 'package:munting_gabay/doctor_call.dart';
+import 'package:munting_gabay/Doctors%20screen/doctor_call.dart';
 import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -203,6 +204,7 @@ class _DocDashboardState extends State<DocDashboard>
           ),
         ],
       ),
+      drawer: DrDrawer(),
       body: DefaultTabController(
         length: 4,
         child: Column(

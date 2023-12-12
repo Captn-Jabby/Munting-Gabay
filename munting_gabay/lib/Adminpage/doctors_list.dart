@@ -59,18 +59,18 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/A.png', // Replace with the path to your first image
-                  width: 130,
-                  height: 150,
-                ),
-                SizedBox(width: 60), // Add spacing between images
-                Image.asset(
-                  'assets/LOGO.png',
-                  height: 150,
-                  width: 130,
-                ),
-                SizedBox(width: 40),
+                // Image.asset(
+                //   'assets/A.png', // Replace with the path to your first image
+                //   width: 130,
+                //   height: 150,
+                // ),
+                // SizedBox(width: 60), // Add spacing between images
+                // Image.asset(
+                //   'assets/LOGO.png',
+                //   height: 150,
+                //   width: 130,
+                // ),
+                // SizedBox(width: 40),
               ],
             ),
           ),

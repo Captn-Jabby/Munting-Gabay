@@ -18,27 +18,27 @@ class Movie {
 List<Movie> movies = [
   Movie(
     title: '''There's all kinds of autism''',
-    imageAsset: 'assets/kid1.jpg',
+    imageAsset: 'assets/images/kid1.jpg',
     trailerUrl: 'https://www.youtube.com/watch?v=MecSNTf4Rw0',
   ),
   Movie(
     title: 'Autism Spectrum',
-    imageAsset: 'assets/kid2.jpg',
+    imageAsset: 'assets/images/kid2.jpg',
     trailerUrl: 'https://www.youtube.com/watch?v=j3PrAqJ-H9k',
   ),
   Movie(
     title: 'Fast Facts About Autism For Kids',
-    imageAsset: 'assets/wan1.png',
+    imageAsset: 'assets/images/wan1.png',
     trailerUrl: 'https://www.youtube.com/watch?v=dUbsyd8Fnyw',
   ),
   Movie(
     title: '''What is Autism?''',
-    imageAsset: 'assets/2.png',
+    imageAsset: 'assets/images/2.png',
     trailerUrl: 'https://www.youtube.com/watch?v=hwaaphuStxY',
   ),
   Movie(
     title: 'Autism Spectrum Disorder Mnemonics',
-    imageAsset: 'assets/3.png',
+    imageAsset: 'assets/images/3.png',
     trailerUrl: 'https://www.youtube.com/watch?v=0idZghw97dc',
   ),
 ];

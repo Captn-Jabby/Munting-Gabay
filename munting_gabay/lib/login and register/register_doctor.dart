@@ -269,8 +269,8 @@ class _PersonalIdentificationScreenState
                     child: AbsorbPointer(
                       child: TextFormField(
                         controller: TextEditingController(
-                            text: "${selectedDate.toLocal()}".split(
-                                ' ')[0]), // Format to show only the date part
+                          text: "${selectedDate.toLocal()}".split(' ')[0],
+                        ),
                         decoration: InputDecoration(
                           labelText: 'Birthdate',
                           border: OutlineInputBorder(
@@ -278,6 +278,26 @@ class _PersonalIdentificationScreenState
                             borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please select a birthdate';
+                          }
+                          // Calculate age based on selectedDate
+                          DateTime today = DateTime.now();
+                          DateTime parsedDate =
+                              DateTime.parse(value.split(' ')[0]);
+                          int age = today.year - parsedDate.year;
+                          if (today.month < parsedDate.month ||
+                              (today.month == parsedDate.month &&
+                                  today.day < parsedDate.day)) {
+                            age--;
+                          }
+                          // Check if the user is at least 21 years old
+                          if (age < 21) {
+                            return 'You must be at least 21 years old.';
+                          }
+                          return null; // Return null if validation succeeds
+                        },
                       ),
                     ),
                   ),

@@ -21,44 +21,45 @@ class webinarsScreen extends StatelessWidget {
     EducationalVdieos(
       title: 'Autism / Autism spectrum disorder',
 
-      coverImage: 'assets/wan1.png', // Replace with actual asset path
+      coverImage: 'assets/images/wan1.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=QnDroP36EuI',
     ),
     EducationalVdieos(
       title: '''Sentis Ky's Story Autism Animation''',
 
-      coverImage: 'assets/2.png', // Replace with actual asset path
+      coverImage: 'assets/images/2.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=qGUhjeZr27g',
     ),
     EducationalVdieos(
       title: 'Fast Facts About Autism (World Autism Awareness Day)',
 
-      coverImage: 'assets/3.png', // Replace with actual asset path
+      coverImage: 'assets/images/3.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=CaRdPYvWt48',
     ),
     EducationalVdieos(
       title: 'Autism Spectrum: Atypical Minds in a Stereotypical World',
 
-      coverImage: 'assets/web4.png', // Replace with actual asset path
+      coverImage: 'assets/images/web4.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=j3PrAqJ-H9k',
     ),
     EducationalVdieos(
       title: '2-Minute Neuroscience: Autism',
 
-      coverImage: 'assets/5.png', // Replace with actual asset path
+      coverImage: 'assets/images/5.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=tEBsTX2OVgI',
     ),
     EducationalVdieos(
       title:
           'Autism Spectrum Disorder Mnemonics (Memorable Psychiatry Lecture)',
 
-      coverImage: 'assets/6.png', // Replace with actual asset path
+      coverImage: 'assets/images/6.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=wlUNlaqgs3A',
     ),
     EducationalVdieos(
       title: '''What is Autism? | Cincinnati Children's''',
 
-      coverImage: 'assets/7.png', // Replace with actual asset path
+      coverImage:
+          'assets/images/images/7.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=hwaaphuStxY',
     ),
   ];

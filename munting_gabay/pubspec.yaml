@@ -31,7 +31,6 @@ dependencies:
   agora_rtc_engine: ^6.2.6
   agora_rtm: ^1.5.5
   audioplayers: ^5.2.1
-  calendar_strip: ^1.0.7
   cloud_firestore: ^4.9.0
   cupertino_icons: ^1.0.2
   event_bus: ^2.0.0
@@ -83,17 +82,22 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/images/ringtone1.mp3
-    - assets/images/avatar1.png
-    - assets/images/avatar2.png
-    - assets/images/avatar3.png
-    - assets/images/avatar4.png
-    - assets/images/avatar5.png
-    - assets/images/hands.png
-    - assets/images/MenuLogo.png
-    - assets/images/playtime.png
-    - assets/images/register.png
-    - assets/images/world.png
+    - assets/Alphabet/
+    - assets/Animal/
+    - assets/Categories/
+    - assets/Colors/
+ 
+    # - assets/images/ringtone1.mp3
+    # - assets/images/avatar1.png
+    # - assets/images/avatar2.png
+    # - assets/images/avatar3.png
+    # - assets/images/avatar4.png
+    # - assets/images/avatar5.png
+    # - assets/images/hands.png
+    # - assets/images/MenuLogo.png
+    # - assets/images/playtime.png
+    # - assets/images/register.png
+    # - assets/images/world.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

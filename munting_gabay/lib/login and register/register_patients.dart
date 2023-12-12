@@ -20,11 +20,12 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _pinController = TextEditingController();
+
   DateTime selectedDate = DateTime.now();
   bool _isPasswordVisible = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  bool pinStatus = false;
-
+  bool pinStatus = true;
+  final _formKey = GlobalKey<FormState>();
   void _registerUser() async {
     String username = _usernameController.text;
     String name = _nameController.text;
@@ -155,231 +156,262 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
               ),
               Container(
                 width: 300,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 270,
-                    ),
-                    TextFormField(
-                      controller: _usernameController,
-                      decoration: InputDecoration(
-                        labelText: 'Username',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.blue), // Adjust the border color
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 270,
+                      ),
+                      TextFormField(
+                        controller: _usernameController,
+                        decoration: InputDecoration(
+                          labelText: 'Username',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the border radius
+                            borderSide: BorderSide(
+                                color: Colors.blue), // Adjust the border color
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Username ';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          labelText: 'Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the border radius
+                            borderSide: BorderSide(
+                                color: Colors.blue), // Adjust the border color
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a  name';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: _addressController,
+                        decoration: InputDecoration(
+                          labelText: 'Address',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the border radius
+                            borderSide: BorderSide(
+                                color: Colors.blue), // Adjust the border color
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the address';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                        ],
+                        controller: _pinController,
+                        maxLength: 4, // Set the maximum length to 4 digits
+                        keyboardType:
+                            TextInputType.number, // Set keyboard type to number
+                        onChanged: (value) {
+                          // Check if the pin field is empty and update pinStatus accordingly
+                          setState(() {
+                            pinStatus = (value.isNotEmpty && value.length == 4);
+                          });
+                        },
+                        decoration: InputDecoration(
+                          labelText:
+                              '''Pincode for Parent's Pages   (OPTIONAL)''',
+                          counterText: '', // Hide the character counter
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a Username ';
-                        }
-                        return null; // Return null if the validation succeeds
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.blue), // Adjust the border color
+                      SizedBox(
+                        height: 15,
+                      ),
+                      GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: AbsorbPointer(
+                          child: TextFormField(
+                            controller: TextEditingController(
+                              text: "${selectedDate.toLocal()}".split(' ')[0],
+                            ),
+                            decoration: InputDecoration(
+                              labelText: 'Birthdate',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                                borderSide: BorderSide(color: Colors.blue),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please select a birthdate';
+                              }
+                              // Calculate age based on selectedDate
+                              DateTime today = DateTime.now();
+                              DateTime parsedDate =
+                                  DateTime.parse(value.split(' ')[0]);
+                              int age = today.year - parsedDate.year;
+                              if (today.month < parsedDate.month ||
+                                  (today.month == parsedDate.month &&
+                                      today.day < parsedDate.day)) {
+                                age--;
+                              }
+                              // Check if the user is at least 18 years old
+                              if (age < 18) {
+                                return 'You must be at least 18 years old.';
+                              }
+                              return null; // Return null if validation succeeds
+                            },
+                          ),
                         ),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a  name';
-                        }
-                        return null; // Return null if the validation succeeds
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      controller: _addressController,
-                      decoration: InputDecoration(
-                        labelText: 'Address',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.blue), // Adjust the border color
-                        ),
+                      SizedBox(
+                        height: 15,
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the address';
-                        }
-                        return null; // Return null if the validation succeeds
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextField(
-                      inputFormatters: [
-                        FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
-                      ],
-                      controller: _pinController,
-                      maxLength: 4, // Set the maximum length to 4 digits
-                      keyboardType:
-                          TextInputType.number, // Set keyboard type to number
-                      onChanged: (value) {
-                        // Check if the pin field is empty and update pinStatus accordingly
-                        setState(() {
-                          pinStatus = (value.isNotEmpty && value.length == 4);
-                        });
-                      },
-                      decoration: InputDecoration(
-                        labelText:
-                            '''Pincode for Parent's Pages   (OPTIONAL)''',
-                        counterText: '', // Hide the character counter
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                          borderSide: BorderSide(color: Colors.blue),
+                      TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the border radius
+                            borderSide: BorderSide(
+                                color: Colors.blue), // Adjust the border color
+                          ),
                         ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Email';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    GestureDetector(
-                      onTap: () => _selectDate(context),
-                      child: AbsorbPointer(
-                        child: TextFormField(
-                          controller: TextEditingController(
-                              text: "${selectedDate.toLocal()}".split(
-                                  ' ')[0]), // Format to show only the date part
-                          decoration: InputDecoration(
-                            labelText: 'Birthdate',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10.0),
-                              borderSide: BorderSide(color: Colors.blue),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the border radius
+                            borderSide: BorderSide(
+                                color: Colors.blue), // Adjust the border color
+                          ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            child: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
                           ),
                         ),
+                        obscureText: !_isPasswordVisible,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Password';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
                       ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.blue), // Adjust the border color
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a Email';
-                        }
-                        return null; // Return null if the validation succeeds
-                      },
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    TextFormField(
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: 'Password',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(
-                              10.0), // Adjust the border radius
-                          borderSide: BorderSide(
-                              color: Colors.blue), // Adjust the border color
-                        ),
-                        suffixIcon: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              _isPasswordVisible = !_isPasswordVisible;
-                            });
+                      SizedBox(height: 20),
+                      Container(
+                        width: BtnWidth,
+                        height: BtnHeight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              // Only proceed if the form is valid
+                              _registerUser();
+                            }
                           },
-                          child: Icon(
-                            _isPasswordVisible
-                                ? Icons.visibility
-                                : Icons.visibility_off,
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: secondaryColor,
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      BtnCircularRadius))),
+                          child: Text(
+                            'Register',
+                            style: buttonTextStyle1,
                           ),
                         ),
                       ),
-                      obscureText: !_isPasswordVisible,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a Password';
-                        }
-                        return null; // Return null if the validation succeeds
-                      },
-                    ),
-                    SizedBox(height: 20),
-                    Container(
-                      width: BtnWidth,
-                      height: BtnHeight,
-                      child: ElevatedButton(
-                        onPressed: _registerUser,
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: scaffoldBgColor,
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(BtnCircularRadius))),
-                        child: Text(
-                          'Register',
-                          style: buttonTextStyle1,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Confirmation'),
-                              content: Text('Are you sure you want to LOGIN?'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
-                                  },
-                                  child: Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.pop(context); // Close the dialog
-                                    Navigator.pushReplacement(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => LoginPage(),
-                                      ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Confirm',
-                                    style: TextStyle(color: Colors.red),
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Confirmation'),
+                                content:
+                                    Text('Are you sure you want to LOGIN?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context); // Close the dialog
+                                    },
+                                    child: Text('Cancel'),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                      child: Text(
-                        'CLICK HERE TO LOGIN',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    )
-                  ],
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context); // Close the dialog
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => LoginPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Confirm',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: Text(
+                          'CLICK HERE TO LOGIN',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ]),

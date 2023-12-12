@@ -7,7 +7,7 @@ const Color text = Colors.white;
 const Color drawertext = Colors.black;
 //
 Color secondaryColor = Colors.pink;
-Color secondaryColors = Color(0xFFFA893D);
+// Color secondaryColors = Color(0xFFFA893D);
 Color scaffoldBgColor = Color(0xFF3BD2A5);
 
 // const Color secondaryColors = Color(0xFF8FCC62);
@@ -16,17 +16,15 @@ const Color bgloadingColor = Colors.grey;
 //MediaQuery.of(context).size.height * 0.8,
 // Button Settings
 final double BtnHeight = 50;
+final double minus = 100;
 final double BtnWidth = 350;
 final double BtnSpacing = 25;
 final double BtnCircularRadius = 20;
 // const Color scaffoldBgColor = const Color(0xBA18B091); //drawer button color
 
 final ButtonStyle buttonStyle1 = ElevatedButton.styleFrom(
-  backgroundColor: const Color(0xFF95C440),
-  shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(50)
-  )
-);
+    backgroundColor: const Color(0xFF95C440),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(50)));
 
 final TextStyle buttonTextStyle1 = GoogleFonts.poppins(
   textStyle: const TextStyle(
@@ -72,7 +70,6 @@ const TextStyle ParentbuttonTextStyle = TextStyle(
 // Main BG Theme
 final BoxDecoration mainBackgroundTheme = BoxDecoration(
   color: const Color(0xFFF4F9EC),
-
 );
 // Logo width and height
 final double LOGOSIZE = 65;

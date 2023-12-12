@@ -41,7 +41,7 @@ class KidsPage extends StatelessWidget {
                         width: pageButton,
                       ),
                       Image.asset(
-                        'assets/alphabetical.png',
+                        'assets/images/alphabetical.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -49,7 +49,7 @@ class KidsPage extends StatelessWidget {
                         width: lOGOSpacing,
                       ),
                       Container(
-                        width: BtnWidth,
+                        width: BtnWidth - minus,
                         height: BtnHeight,
                         decoration: BoxDecoration(
                           borderRadius:
@@ -80,7 +80,7 @@ class KidsPage extends StatelessWidget {
                         width: pageButton,
                       ),
                       Image.asset(
-                        'assets/music.png',
+                        'assets/images/music.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -88,7 +88,7 @@ class KidsPage extends StatelessWidget {
                         width: lOGOSpacing,
                       ),
                       Container(
-                        width: BtnWidth,
+                        width: BtnWidth - minus,
                         height: BtnHeight,
                         decoration: BoxDecoration(
                           borderRadius:
@@ -115,7 +115,7 @@ class KidsPage extends StatelessWidget {
                         width: pageButton,
                       ),
                       Image.asset(
-                        'assets/movies.png',
+                        'assets/images/movies.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -123,7 +123,7 @@ class KidsPage extends StatelessWidget {
                         width: lOGOSpacing,
                       ),
                       Container(
-                        width: BtnWidth,
+                        width: BtnWidth - minus,
                         height: BtnHeight,
                         decoration: BoxDecoration(
                           borderRadius:
@@ -154,7 +154,7 @@ class KidsPage extends StatelessWidget {
                         width: pageButton,
                       ),
                       Image.asset(
-                        'assets/videos.png',
+                        'assets/images/videos.png',
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
@@ -162,7 +162,7 @@ class KidsPage extends StatelessWidget {
                         width: lOGOSpacing,
                       ),
                       Container(
-                        width: BtnWidth,
+                        width: BtnWidth - minus,
                         height: BtnHeight,
                         decoration: BoxDecoration(
                           borderRadius:

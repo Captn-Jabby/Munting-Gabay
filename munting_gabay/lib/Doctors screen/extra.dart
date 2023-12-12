@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/doctor_call.dart';
+import 'package:munting_gabay/Doctors%20screen/doctor_call.dart';
 import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';

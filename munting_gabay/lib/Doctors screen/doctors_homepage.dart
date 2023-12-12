@@ -19,18 +19,18 @@ class DoctorsHM extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/A.png', // Replace with the path to your first image
-                  width: 130,
-                  height: 150,
-                ),
-                SizedBox(width: 60), // Add spacing between images
-                Image.asset(
-                  'assets/LOGO.png',
-                  height: 150,
-                  width: 130,
-                ),
-                SizedBox(width: 40),
+                // Image.asset(
+                //   'assets/images/A.png', // Replace with the path to your first image
+                //   width: 130,
+                //   height: 150,
+                // ),
+                // SizedBox(width: 60), // Add spacing between images
+                // Image.asset(
+                //   'assets/images/LOGO.png',
+                //   height: 150,
+                //   width: 130,
+                // ),
+                // SizedBox(width: 40),
               ],
             ),
           ),
@@ -69,7 +69,7 @@ class DoctorsHM extends StatelessWidget {
                           width: BtnHeight,
                         ),
                         Image.asset(
-                          'assets/LOGO.png',
+                          'assets/images/LOGO.png',
                           width: LOGOSIZE,
                           height: LOGOSIZE,
                         ),
@@ -128,7 +128,7 @@ class DoctorsHM extends StatelessWidget {
                           ),
                         ),
                         Image.asset(
-                          'assets/LOGO.png',
+                          'assets/images/LOGO.png',
                           width: LOGOSIZE,
                           height: LOGOSIZE,
                         ),
@@ -140,7 +140,7 @@ class DoctorsHM extends StatelessWidget {
                           width: BtnHeight,
                         ),
                         Image.asset(
-                          'assets/LOGO.png',
+                          'assets/images/LOGO.png',
                           width: LOGOSIZE,
                           height: LOGOSIZE,
                         ),
@@ -196,7 +196,7 @@ class DoctorsHM extends StatelessWidget {
                           ),
                         ),
                         Image.asset(
-                          'assets/LOGO.png',
+                          'assets/images/LOGO.png',
                           width: LOGOSIZE,
                           height: LOGOSIZE,
                         ),
@@ -211,7 +211,7 @@ class DoctorsHM extends StatelessWidget {
                           width: BtnHeight,
                         ),
                         Image.asset(
-                          'assets/LOGO.png',
+                          'assets/images/LOGO.png',
                           width: LOGOSIZE,
                           height: LOGOSIZE,
                         ),

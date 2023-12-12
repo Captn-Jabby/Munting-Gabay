@@ -133,7 +133,7 @@ class _HomepagePTState extends State<HomepagePT> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/hands.png',
+                    'assets/images/hands.png',
                     width: LOGOSIZE,
                     height: LOGOSIZE,
                   ),
@@ -141,7 +141,7 @@ class _HomepagePTState extends State<HomepagePT> {
                     width: lOGOSpacing,
                   ),
                   SizedBox(
-                    width: BtnWidth,
+                    width: BtnWidth - minus,
                     height: BtnHeight,
                     child: ElevatedButton(
                       onPressed: () {
@@ -167,7 +167,7 @@ class _HomepagePTState extends State<HomepagePT> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(
-                    'assets/playtime.png',
+                    'assets/images/playtime.png',
                     width: LOGOSIZE,
                     height: LOGOSIZE,
                   ),
@@ -175,7 +175,7 @@ class _HomepagePTState extends State<HomepagePT> {
                     width: lOGOSpacing,
                   ),
                   Container(
-                    width: BtnWidth,
+                    width: BtnWidth - minus,
                     height: BtnHeight,
                     decoration: BoxDecoration(
                       color: secondaryColor,

@@ -35,7 +35,7 @@ class AppDrawer extends StatelessWidget {
             .get();
 
         if (snapshot.exists) {
-          avatarPath = snapshot['avatarPath'] ?? 'assets/avatar1.png';
+          avatarPath = snapshot['avatarPath'] ?? 'assets/images/avatar1.png';
         }
       } catch (e) {
         print('Error getting data from Firebase: $e');
@@ -45,177 +45,191 @@ class AppDrawer extends StatelessWidget {
     // Call the function to get data from Firebase
 
     return Drawer(
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          UserAccountsDrawerHeader(
-            accountName: FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('usersdata')
-                  .doc(user?.email)
-                  .get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text(
-                    'Loading...',
+      child: Container(
+        color: scaffoldBgColor,
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            Container(
+              color: scaffoldBgColor,
+              child: UserAccountsDrawerHeader(
+                accountName: FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('usersdata')
+                      .doc(user?.email)
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Text(
+                        'Loading...',
+                        style: TextStyle(color: drawertext),
+                      );
+                    }
+                    if (snapshot.hasError) {
+                      return Text(
+                        'Error: ${snapshot.error}',
+                        style: TextStyle(color: drawertext),
+                      );
+                    }
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return Text(
+                        'User not found',
+                        style: TextStyle(color: drawertext),
+                      );
+                    }
+                    String username = snapshot.data!['username'];
+                    return Text(username);
+                  },
+                ),
+                accountEmail: Text(user?.email ?? ""),
+                currentAccountPicture: FutureBuilder<DocumentSnapshot>(
+                  future: FirebaseFirestore.instance
+                      .collection('usersdata')
+                      .doc(user?.email)
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return CircularProgressIndicator(); // Show a loading indicator
+                    }
+                    if (snapshot.hasError) {
+                      return Text(
+                        'Error: ${snapshot.error}',
+                        style: TextStyle(color: drawertext),
+                      );
+                    }
+                    if (!snapshot.hasData || !snapshot.data!.exists) {
+                      return CircleAvatar(
+                        backgroundImage: AssetImage('assets/avatar1.png'),
+                      );
+                    }
+                    String profileImageUrl = snapshot.data!['avatarPath'];
+                    return CircleAvatar(
+                        backgroundImage: NetworkImage(profileImageUrl));
+                  },
+                ),
+              ),
+            ),
+
+            Column(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.person),
+                  title: Text(
+                    'Profile',
                     style: TextStyle(color: drawertext),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text(
-                    'Error: ${snapshot.error}',
+                  ),
+                  onTap: () {
+                    // Handle navigation to profile
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => UserProfilePage()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.home_filled),
+                  title: Text(
+                    'Home',
                     style: TextStyle(color: drawertext),
-                  );
-                }
-                if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return Text(
-                    'User not found',
+                  ),
+                  onTap: () {
+                    // Handle navigation to profile
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomepagePT()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.settings),
+                  title: Text(
+                    'Settings',
                     style: TextStyle(color: drawertext),
-                  );
-                }
-                String username = snapshot.data!['username'];
-                return Text(username);
-              },
-            ),
-            accountEmail: Text(user?.email ?? ""),
-            currentAccountPicture: FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('usersdata')
-                  .doc(user?.email)
-                  .get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator(); // Show a loading indicator
-                }
-                if (snapshot.hasError) {
-                  return Text(
-                    'Error: ${snapshot.error}',
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => ChangePin()),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.color_lens),
+                  title: Text(
+                    'Themes',
                     style: TextStyle(color: drawertext),
-                  );
-                }
-                if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return CircleAvatar(
-                    backgroundImage: AssetImage('assets/avatar1.png'),
-                  );
-                }
-                String profileImageUrl = snapshot.data!['avatarPath'];
-                return CircleAvatar(
-                    backgroundImage: NetworkImage(profileImageUrl));
-              },
+                  ),
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ColorChangerScreen()),
+                    );
+                  },
+                ),
+                Divider(
+                  color: Colors.black,
+                ), // Adds a visual divider
+                ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text(
+                    'Logout',
+                    style: TextStyle(color: drawertext),
+                  ),
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            'Confirm Logout',
+                            style: TextStyle(color: drawertext),
+                          ),
+                          content: Text(
+                            'Are you sure you want to log out?',
+                            style: TextStyle(color: drawertext),
+                          ),
+                          actions: <Widget>[
+                            TextButton(
+                              child: Text(
+                                'Cancel',
+                                style: TextStyle(color: drawertext),
+                              ),
+                              onPressed: () {
+                                Navigator.of(context).pop(); // Close the dialog
+                              },
+                            ),
+                            TextButton(
+                              child: Text(
+                                'Logout',
+                                style: TextStyle(color: Colors.red),
+                              ),
+                              onPressed: () async {
+                                try {
+                                  await FirebaseAuth.instance.signOut();
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginScreen()),
+                                  );
+                                } catch (e) {
+                                  print('Error logging out: $e');
+                                }
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             ),
-          ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text(
-              'Profile',
-              style: TextStyle(color: drawertext),
-            ),
-            onTap: () {
-              // Handle navigation to profile
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => UserProfilePage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.home_filled),
-            title: Text(
-              'Home',
-              style: TextStyle(color: drawertext),
-            ),
-            onTap: () {
-              // Handle navigation to profile
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomepagePT()),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.settings),
-            title: Text(
-              'Settings',
-              style: TextStyle(color: drawertext),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ChangePin()),
-              );
-            },
-          ),
-          ListTile(
-            leading: Icon(Icons.color_lens),
-            title: Text(
-              'Themes',
-              style: TextStyle(color: drawertext),
-            ),
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => ColorChangerScreen()),
-              );
-            },
-          ),
-          Divider(
-            color: Colors.black,
-          ), // Adds a visual divider
-          ListTile(
-            leading: Icon(Icons.logout),
-            title: Text(
-              'Logout',
-              style: TextStyle(color: drawertext),
-            ),
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: Text(
-                      'Confirm Logout',
-                      style: TextStyle(color: drawertext),
-                    ),
-                    content: Text(
-                      'Are you sure you want to log out?',
-                      style: TextStyle(color: drawertext),
-                    ),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(
-                          'Cancel',
-                          style: TextStyle(color: drawertext),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop(); // Close the dialog
-                        },
-                      ),
-                      TextButton(
-                        child: Text(
-                          'Logout',
-                          style: TextStyle(color: Colors.red),
-                        ),
-                        onPressed: () async {
-                          try {
-                            await FirebaseAuth.instance.signOut();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
-                            );
-                          } catch (e) {
-                            print('Error logging out: $e');
-                          }
-                        },
-                      ),
-                    ],
-                  );
-                },
-              );
-            },
-          ),
-          // Add more ListTiles for other menu items
-        ],
+
+            // Add more ListTiles for other menu items
+          ],
+        ),
       ),
     );
   }

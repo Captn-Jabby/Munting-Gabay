@@ -7,7 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:munting_gabay/variable.dart';
 
-import '../../../../doctor_call.dart';
+import '../../../../Doctors screen/doctor_call.dart';
 
 class ChatPage extends StatefulWidget {
   final String currentUserUid; // User's UID

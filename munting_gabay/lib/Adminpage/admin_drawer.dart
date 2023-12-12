@@ -36,7 +36,8 @@ class AdminDrawer extends StatelessWidget {
             .get();
 
         if (snapshot.exists) {
-          avatarPath = snapshot['avatarPath'] ?? 'assets/avatar1.png';
+          avatarPath =
+              snapshot['avatarPath'] ?? 'assets/images/images/avatar1.png';
         }
       } catch (e) {
         print('Error getting data from Firebase: $e');

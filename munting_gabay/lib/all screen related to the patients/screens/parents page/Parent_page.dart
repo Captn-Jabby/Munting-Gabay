@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/finding_doctors.dart';
 import 'package:munting_gabay/webinars.dart';
-import 'package:munting_gabay/resources.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/forum/resources.dart';
 import 'package:munting_gabay/variable.dart';
-import 'package:munting_gabay/educational.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/forum/educational.dart';
 
 import '../../../drawer_page.dart';
 import 'forum/forum.dart';
@@ -23,7 +23,7 @@ class ParentPage extends StatelessWidget {
             child: Center(
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-             Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(

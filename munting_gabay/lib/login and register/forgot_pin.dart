@@ -19,7 +19,9 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
 
       if (user != null) {
         final AuthCredential credential = EmailAuthProvider.credential(
-            email: user.email!, password: password);
+          email: user.email!,
+          password: password,
+        );
 
         await user.reauthenticateWithCredential(credential);
 
@@ -43,6 +45,24 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
     } catch (e) {
       // Handle authentication errors (e.g., incorrect password)
       print("Authentication error: $e");
+      // Show error dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Authentication Failed'),
+            content: Text('Incorrect password. Please try again.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
     }
   }
 

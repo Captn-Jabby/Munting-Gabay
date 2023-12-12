@@ -139,10 +139,10 @@ class _pscyhState extends State<pscyh> {
                                                             'addressHospital') ??
                                                         'Unknown',
                                                     IMAGE: doc['avatarPath'] ??
-                                                        'assets/avatar1.png',
+                                                        'assets/images/avatar1.png',
                                                     avatarPath: doc[
                                                             'avatarPath'] ??
-                                                        'assets/avatar1.png',
+                                                        'assets/images/avatar1.png',
                                                     birthdate: doc['birthdate']
                                                         .toDate(),
                                                     currentUserUid:

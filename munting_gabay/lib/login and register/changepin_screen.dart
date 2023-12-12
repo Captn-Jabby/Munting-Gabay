@@ -16,6 +16,43 @@ class _ChangePinState extends State<ChangePin> {
   String currentPin = '';
   String newPin = '';
   bool pinEnabled = true;
+  @override
+  void initState() {
+    super.initState();
+    fetchPinStatus(); // Fetch PIN status when the widget initializes
+  }
+
+  Future<void> fetchPinStatus() async {
+    try {
+      final User? user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        final CollectionReference usersDataCollection =
+            FirebaseFirestore.instance.collection('usersdata');
+
+        final String? currentUserEmail = user.email;
+
+        final DocumentSnapshot userData =
+            await usersDataCollection.doc(currentUserEmail).get();
+
+        if (userData.exists) {
+          final Map<String, dynamic> userDataMap =
+              userData.data() as Map<String, dynamic>;
+          final bool savedPinStatus = userDataMap['pinStatus'];
+
+          setState(() {
+            pinEnabled = savedPinStatus; // Update the pinEnabled state
+          });
+        } else {
+          print('User data not found in Firestore.');
+        }
+      } else {
+        print('User not authenticated.');
+      }
+    } catch (e) {
+      print('Error fetching PIN status: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,16 +105,45 @@ class _ChangePinState extends State<ChangePin> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('PIN Enabled'),
-                Switch(
-                  value: pinEnabled,
-                  onChanged: (value) {
-                    // Update the PIN status in Firestore when the switch is toggled
-                    updatePinStatusInFirestore(value);
+                GestureDetector(
+                  onTap: () {
                     setState(() {
-                      pinEnabled = value;
+                      pinEnabled = !pinEnabled;
+                      updatePinStatusInFirestore(pinEnabled);
                     });
                   },
+                  child: Text(pinEnabled ? 'PIN Disabled' : 'PIN Enabled'),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      pinEnabled = !pinEnabled;
+                      updatePinStatusInFirestore(pinEnabled);
+                    });
+                  },
+                  child: Container(
+                    width: 50, // Adjust width as needed
+                    height: 30, // Adjust height as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(
+                          15), // Adjust border radius as needed
+                      color: pinEnabled
+                          ? Colors.grey
+                          : Colors.green, // Adjust colors as needed
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          pinEnabled ? 'OFF' : 'ON',
+                          style: TextStyle(
+                            color: Colors.white, // Adjust text color as needed
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -182,7 +248,7 @@ class _ChangePinState extends State<ChangePin> {
               userData.data() as Map<String, dynamic>;
           final String savedPin = userDataMap['pin'];
 
-          if (currentPin == savedPin) {
+          if (currentPin.isEmpty || currentPin == savedPin) {
             await setPinInFirestore(newPin);
 
             Navigator.pop(context);

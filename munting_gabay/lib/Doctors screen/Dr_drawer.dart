@@ -35,7 +35,7 @@ class DrDrawer extends StatelessWidget {
             .get();
 
         if (snapshot.exists) {
-          avatarPath = snapshot['avatarPath'] ?? 'assets/avatar1.png';
+          avatarPath = snapshot['avatarPath'] ?? 'assets/images/avatar1.png';
         }
       } catch (e) {
         print('Error getting data from Firebase: $e');
@@ -94,7 +94,7 @@ class DrDrawer extends StatelessWidget {
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
                   return CircleAvatar(
-                    backgroundImage: AssetImage('assets/avatar1.png'),
+                    backgroundImage: AssetImage('assets/images/avatar1.png'),
                   );
                 }
                 String profileImageUrl = snapshot.data!['avatarPath'];
