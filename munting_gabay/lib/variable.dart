@@ -84,15 +84,16 @@ class UserData {
   final DateTime birthdate;
   final String email;
   final String password;
+  final String confirmPassword;
 
-  UserData({
-    required this.username,
-    required this.name,
-    required this.address,
-    required this.birthdate,
-    required this.email,
-    required this.password,
-  });
+  UserData(
+      {required this.username,
+      required this.name,
+      required this.address,
+      required this.birthdate,
+      required this.email,
+      required this.password,
+      required this.confirmPassword});
 }
 
 class ColorAdapter extends TypeAdapter<Color> {

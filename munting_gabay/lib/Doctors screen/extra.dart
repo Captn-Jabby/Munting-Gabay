@@ -1,7 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/Doctors%20screen/doctor_call.dart';
+import 'package:intl/intl.dart'; // Import the intl package
+import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
+import 'package:munting_gabay/Doctors%20screen/newsched.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
+
 import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -32,59 +36,143 @@ class _DocDashboardState extends State<DocDashboard>
   void initState() {
     super.initState();
     _tabController = TabController(length: 4, vsync: this);
-    _fetchPendingDates();
+    _fetchPendingAndCancelledDates();
     _calendarFormat = CalendarFormat.month;
   }
 
-  // Method to fetch pending dates from Firebase and update events
-  void _fetchPendingDates() {
+  Map<String, dynamic> _getEventMarker(DateTime date) {
+    final formattedDate =
+        DateFormat('dd MMMM').format(date); // Use the appropriate format
+
+    return {
+      'date': formattedDate,
+      'status': 'pending',
+      // You can add more information to the event marker if needed
+    };
+  }
+
+  // Method to update events with pending dates
+// Add this field in _DocDashboardState
+  Set<DateTime> pendingDateTimeSet = Set();
+
+  void _updateEvents(List<String> pendingDates) {
+    setState(() {
+      _events = {}; // Clear existing events
+      pendingDateTimeSet = pendingDates.map((date) {
+        // Format the date from the pendingDates list to match the calendar format
+        final formattedDate = DateFormat('d MMMM')
+            .parse(date + ' 2023'); // Assuming the year is 2023
+        return formattedDate;
+      }).toSet();
+
+      for (DateTime date in pendingDateTimeSet) {
+        _events[date] = [_getEventMarker(date)];
+      }
+    });
+  }
+
+  String _getMonthName(int month) {
+    switch (month) {
+      case 1:
+        return 'January';
+      case 2:
+        return 'February';
+      case 3:
+        return 'March';
+      case 4:
+        return 'April';
+      case 5:
+        return 'May';
+      case 6:
+        return 'June';
+      case 7:
+        return 'July';
+      case 8:
+        return 'August';
+      case 9:
+        return 'September';
+      case 10:
+        return 'October';
+      case 11:
+        return 'November';
+      case 12:
+        return 'December';
+      default:
+        throw FormatException('Invalid month number: $month');
+    }
+  }
+
+  void _fetchPendingAndCancelledDates() {
     FirebaseFirestore.instance
-        .collection('pending_dates') // Replace with your collection name
-        .doc(widget.docId)
+        .collection('schedule')
+        .doc(widget.user?.email)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.exists) {
         final Map<String, dynamic> data = snapshot.data()!;
-        List<String> pendingDates = List<String>.from(data['dates'] ?? []);
+        final List<dynamic> availableDays = data['available_days'] ?? [];
 
-        // Update events with pending dates
-        _updateEvents(pendingDates);
+        final List<String> pendingDates = [];
+        final List<String> cancelledDates = [];
+
+        for (var day in availableDays) {
+          final slots = day['slots'] as List<dynamic>;
+          final pendingSlots = slots.where((slot) {
+            final status = slot['status'] as String;
+            return status.toLowerCase() == 'pending';
+          }).toList();
+
+          final cancelledSlots = slots.where((slot) {
+            final status = slot['status'] as String;
+            return status.toLowerCase() == 'cancelled';
+          }).toList();
+
+          if (pendingSlots.isNotEmpty) {
+            pendingDates.add(day['date'] as String);
+          }
+
+          if (cancelledSlots.isNotEmpty) {
+            cancelledDates.add(day['date'] as String);
+          }
+        }
+
+        print('Pending Dates: $pendingDates');
+        print('Cancelled Dates: $cancelledDates');
+
+        _updatePendingAndCancelledEvents(pendingDates, cancelledDates);
+      } else {
+        print('Document does not exist for user: ${widget.user?.email}');
       }
     }).catchError((error) {
-      print('Error fetching pending dates: $error');
+      print('Error fetching dates: $error');
     });
   }
 
-  // Method to update events with pending dates
-  void _updateEvents(List<String> pendingDates) {
+  void _updatePendingAndCancelledEvents(
+      List<String> pendingDates, List<String> cancelledDates) {
     setState(() {
       _events = {}; // Clear existing events
 
-      // Map pending dates to DateTime objects
-      List<DateTime> pendingDateTimeDates = pendingDates.map((date) {
-        return DateTime.parse(date);
+      final List<DateTime> pendingDateTimeSet = pendingDates.map((date) {
+        final formattedDate =
+            DateFormat('d MMMM').parse(date + ' 2023'); // Adjust year if needed
+        return formattedDate;
       }).toList();
 
-      // Update events map
-      for (DateTime date in pendingDateTimeDates) {
-        _events[date] = [
-          _getEventMarker(date)
-        ]; // You can add more information to the event marker if needed
+      final List<DateTime> cancelledDateTimeSet = cancelledDates.map((date) {
+        final formattedDate =
+            DateFormat('d MMMM').parse(date + ' 2023'); // Adjust year if needed
+        return formattedDate;
+      }).toList();
+
+      for (DateTime date in pendingDateTimeSet) {
+        _events[date] = [_getEventMarker(date)];
+      }
+
+      for (DateTime date in cancelledDateTimeSet) {
+        _events[date] = [_getEventMarker(date)];
       }
     });
-  }
-
-  // Method to get an event marker for a date
-  Map<String, dynamic> _getEventMarker(DateTime date) {
-    return {
-      'date': date,
-      'status':
-          'pending', // You can add more information to the event marker if needed
-    };
-  }
-
-  List<dynamic> _getEventsForDay(DateTime day) {
-    return _events[day] ?? [];
   }
 
   @override
@@ -102,7 +190,6 @@ class _DocDashboardState extends State<DocDashboard>
               lastDay: DateTime.utc(2023, 12, 31),
               focusedDay: _focusedDay,
               calendarFormat: _calendarFormat,
-              eventLoader: _getEventsForDay,
               onFormatChanged: (format) {
                 setState(() {
                   _calendarFormat = format;
@@ -115,17 +202,70 @@ class _DocDashboardState extends State<DocDashboard>
                 });
                 // Handle day selection as needed
               },
-            ),
-            // Your existing code for tabs and content goes here
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildDayList('Available'),
-                  _buildDayList('Pending'),
-                  _buildDayList('Canceled'),
-                  _buildDayList('Accepted'),
-                ],
+              eventLoader: (day) {
+                return _events[day] ?? [];
+              },
+              calendarStyle: const CalendarStyle(
+                markersAlignment: Alignment.bottomRight,
+              ),
+              calendarBuilders: CalendarBuilders(
+                markerBuilder: (context, date, events) {
+                  final formattedDate = DateFormat('d MMMM').format(date);
+
+                  final isPending = pendingDateTimeSet.any((pendingDate) {
+                    final formattedPendingDate =
+                        DateFormat('d MMMM').format(pendingDate);
+                    return formattedDate == formattedPendingDate;
+                  });
+
+                  // Check for cancelled status
+                  final isCancelled = events?.any((event) {
+                        if (event is Map<String, dynamic>) {
+                          if (event['status'] == 'cancelled') {
+                            print(
+                                'Yellow mark for date: $formattedDate'); // Debug print for yellow mark
+                            return true;
+                          }
+                        }
+                        return false;
+                      }) ??
+                      false;
+
+                  if (isPending) {
+                    return Container(
+                      width: 24,
+                      height: 24,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${date.day}',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  } else if (isCancelled) {
+                    print(
+                        'Cancelled date: $formattedDate'); // Debug print for cancelled date
+
+                    return Container(
+                      width: 24,
+                      height: 24,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.yellow,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${date.day}',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    );
+                  }
+
+                  return null;
+                },
               ),
             ),
           ],
@@ -133,368 +273,45 @@ class _DocDashboardState extends State<DocDashboard>
       ),
     );
   }
-
-  // Function to build date cells with custom background color
-  Widget buildDateCell(DateTime date, bool isSelected) {
-    return Container(
-      margin: const EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        color:
-            isSelected ? Colors.blue : null, // Change the selected date color
-        borderRadius: BorderRadius.circular(8),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        '${date.day}',
-        style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDayList(String statusFilter) {
-    return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('schedule')
-          .doc(widget.docId)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        } else if (snapshot.hasError) {
-          return Center(
-            child: Text('Error: ${snapshot.error}'),
-          );
-        } else if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Center(
-            child: Text('No data found for this doctor.'),
-          );
-        } else {
-          var data = snapshot.data!.data() as Map<String, dynamic>;
-          var availableDays = data['available_days'] as List<dynamic>;
-
-          var filteredDays = availableDays.where((day) {
-            var dayData = day as Map<String, dynamic>;
-            var slots = dayData['slots'] as List<dynamic>;
-            return slots.any((slot) {
-              var slotData = slot as Map<String, dynamic>;
-              return slotData['status'] == statusFilter;
-            });
-          }).toList();
-
-          return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Text('Doctor Name: ${widget.docId}'),
-                Text('Available Days:'),
-                filteredDays.isEmpty
-                    ? Center(
-                        child: Text('No $statusFilter slots available.'),
-                      )
-                    : Column(
-                        children: filteredDays.map<Widget>((day) {
-                          var dayData = day as Map<String, dynamic>;
-                          return DayCardDOC(
-                            dayData: dayData,
-                            docId: widget.docId,
-                            selectedStatusFilter: statusFilter,
-                          );
-                        }).toList(),
-                      ),
-              ],
-            ),
-          );
-        }
-      },
-    );
-  }
 }
 
-class DayCardDOC extends StatefulWidget {
-  final Map<String, dynamic> dayData;
-  final String docId;
-  final String selectedStatusFilter; // Add the selected status filter
+  // void _handleDateClick(List<dynamic>? events) {
+  //   if (events != null && events.isNotEmpty) {
+  //     final eventData = events.first as Map<String, dynamic>;
+  //     // Extract the necessary information from eventData
+  //     final date = eventData['date'];
+  //     final status = eventData['status'];
+  //     final additionalInfo = eventData['additionalInfo'];
 
-  DayCardDOC(
-      {required this.dayData,
-      required this.docId,
-      required this.selectedStatusFilter});
-
-  @override
-  _DayCardDOCState createState() => _DayCardDOCState();
-}
-
-class _DayCardDOCState extends State<DayCardDOC> {
-  bool slotsVisible = false;
-
-  @override
-  Widget build(BuildContext context) {
-    // Check if there are slots with the selected status
-    bool hasFilteredSlots =
-        (widget.dayData['slots'] as List<dynamic>).any((slot) {
-      return (slot as Map<String, dynamic>)['status'] ==
-          widget.selectedStatusFilter;
-    });
-
-    if (!hasFilteredSlots) {
-      return SizedBox.shrink();
-    }
-
-    return Card(
-      margin: const EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          ListTile(
-            title: Text('Day: ${widget.dayData['day']}'),
-            subtitle: Text('Date: ${widget.dayData['date']}'),
-            trailing: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary:
-                    scaffoldBgColor, // Change this color to the desired background color
-              ),
-              onPressed: () {
-                setState(() {
-                  slotsVisible = !slotsVisible;
-                });
-              },
-              child: Text(slotsVisible ? 'Hide Slots' : 'Show Slots'),
-            ),
-          ),
-          if (slotsVisible)
-            Column(
-              children:
-                  (widget.dayData['slots'] as List<dynamic>).where((slot) {
-                return (slot as Map<String, dynamic>)['status'] ==
-                    widget.selectedStatusFilter;
-              }).map<Widget>((slot) {
-                return SlotTileDOC(
-                  slotData: slot as Map<String, dynamic>,
-                  docId: widget.docId,
-                  day: widget.dayData['day'] as String,
-                  selectedStatusFilter: widget
-                      .selectedStatusFilter, // Pass the selected status filter to SlotTileDOC
-                );
-              }).toList(),
-            ),
-        ],
-      ),
-    );
-  }
-}
-
-class SlotTileDOC extends StatefulWidget {
-  final Map<String, dynamic> slotData;
-  final String docId;
-  final String day;
-  final String selectedStatusFilter; // Add the selected status filter
-
-  SlotTileDOC({
-    required this.slotData,
-    required this.docId,
-    required this.day,
-    required this.selectedStatusFilter, // Add the selected status filter
-  });
-
-  @override
-  _SlotTileDOCState createState() => _SlotTileDOCState();
-}
-
-class _SlotTileDOCState extends State<SlotTileDOC> {
-  bool Accepting = false;
-
-  @override
-  Widget build(BuildContext context) {
-    final String status = widget.slotData['status'];
-    final String patientName = widget.slotData['patients'] as String;
-
-    if (status == widget.selectedStatusFilter) {
-      return ListTile(
-        title: Text(' ${widget.slotData['slot']} \n Status: $status'),
-        subtitle: Text('Patient: $patientName'),
-        trailing: Visibility(
-          visible: status !=
-              'Available', // Hide the button if the status is 'Available'
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary:
-                  scaffoldBgColor, // Change this color to the desired background color
-            ),
-            onPressed: () {
-              if (widget.slotData['status'] == 'Canceled') {
-                // Clear the 'patients' field and set the status to 'Available'
-                _cancelAppointment(
-                    widget.day, widget.slotData['slot'] as String);
-              } else {
-                setState(() {
-                  Accepting = true;
-                });
-                _requestAppointment(
-                    widget.day, widget.slotData['slot'] as String);
-              }
-            },
-            child: Text(
-              widget.slotData['status'] == 'Canceled'
-                  ? 'Set Available'
-                  : Accepting
-                      ? 'Accepting...'
-                      : 'Accept',
-            ),
-          ),
-        ),
-      );
-    } else {
-      return Container(); // Do not display slots with different statuses
-    }
-  }
-
-  void _cancelAppointment(String day, String timeSlot) {
-    User? user = FirebaseAuth.instance.currentUser;
-    print('Canceling appointment for: $day at $timeSlot');
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Create a reference to the day within the document
-    DocumentReference dayRef =
-        firestore.collection('schedule').doc(widget.docId);
-
-    // Get the existing day data
-    dayRef.get().then((daySnapshot) {
-      if (mounted) {
-        // Check if the widget is still mounted
-        if (daySnapshot.exists) {
-          Map<String, dynamic> dayData =
-              daySnapshot.data() as Map<String, dynamic>;
-
-          // Find the day with the matching 'day' field
-          var selectedDay = dayData['available_days'].firstWhere(
-            (dayEntry) => dayEntry['day'] == day,
-            orElse: () => null,
-          );
-
-          if (selectedDay != null) {
-            // Remove the 'patients' field and set the status to 'Available'
-            List<dynamic> slots = List.from(selectedDay['slots']);
-            int slotIndex =
-                slots.indexWhere((slotEntry) => slotEntry['slot'] == timeSlot);
-
-            if (slotIndex != -1) {
-              // Clear the 'patients' field and set the status to 'Available'
-              slots[slotIndex]['patients'] = '';
-              slots[slotIndex]['status'] = 'Available';
-
-              // Update the slot in the list
-              dayData['available_days']
-                      [dayData['available_days'].indexOf(selectedDay)]
-                  ['slots'] = slots;
-
-              // Update the Firestore document with the modified day data
-              dayRef.update({
-                'available_days': dayData['available_days'],
-              }).then((_) {
-                if (mounted) {
-                  // Check if the widget is still mounted
-                  print('Appointment canceled.');
-                  setState(() {
-                    Accepting = false;
-                  });
-
-                  // Handle success, e.g., show a confirmation message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Appointment canceled.')),
-                  );
-                }
-              }).catchError((error) {
-                if (mounted) {
-                  // Check if the widget is still mounted
-                  print('Error canceling appointment: $error');
-                  setState(() {
-                    Accepting = false;
-                  });
-
-                  // Handle errors, e.g., show an error message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Error canceling appointment.'),
-                    ),
-                  );
-                }
-              });
-            }
-          }
-        }
-      }
-    });
-  }
-
-  void _requestAppointment(String day, String timeSlot) {
-    User? user = FirebaseAuth.instance.currentUser;
-    print('Accepting appointment for: $day at $timeSlot');
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Create a reference to the day within the document
-    DocumentReference dayRef =
-        firestore.collection('schedule').doc(widget.docId);
-
-    //sting day data
-    dayRef.get().then((daySnapshot) {
-      if (daySnapshot.exists) {
-        Map<String, dynamic> dayData =
-            daySnapshot.data() as Map<String, dynamic>;
-
-        // Find the day with the matching 'day' field
-        var selectedDay = dayData['available_days'].firstWhere(
-          (dayEntry) => dayEntry['day'] == day,
-          orElse: () => null,
-        );
-
-        if (selectedDay != null) {
-          // Update the Firestore document directly by removing the old slot and adding the updated slot
-          List<dynamic> slots = List.from(selectedDay['slots']);
-          int slotIndex =
-              slots.indexWhere((slotEntry) => slotEntry['slot'] == timeSlot);
-
-          if (slotIndex != -1) {
-            // Update the status and add the user's email
-            slots[slotIndex]['status'] = 'Accepted';
-
-            // Update the slot in the list
-            dayData['available_days']
-                    [dayData['available_days'].indexOf(selectedDay)]['slots'] =
-                slots;
-
-            // Update the Firestore document with the modified day data
-            dayRef.update({
-              'available_days': dayData['available_days'],
-            }).then((_) {
-              print('Appointment request submitted.');
-              setState(() {
-                Accepting = false;
-              });
-
-              // Handle success, e.g., show a confirmation message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Appointment request submitted.')),
-              );
-            }).catchError((error) {
-              print('Error submitting appointment request: $error');
-              setState(() {
-                Accepting = false;
-              });
-
-              // Handle errors, e.g., show an error message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Error submitting appointment request.'),
-                ),
-              );
-            });
-          }
-        }
-      }
-    });
-  }
-}
+  //     // Show a dialog or navigate to another page with the extracted information
+  //     showDialog(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return AlertDialog(
+  //           title: Text('Date: $date'),
+  //           content: SingleChildScrollView(
+  //             child: Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               children: <Widget>[
+  //                 Text('Status: $status'),
+  //                 Text('Additional Information: $additionalInfo'),
+  //                 // Add more information widgets if needed
+  //               ],
+  //             ),
+  //           ),
+  //           actions: <Widget>[
+  //             TextButton(
+  //               onPressed: () {
+  //                 Navigator.of(context).pop();
+  //               },
+  //               child: Text('Close'),
+  //             ),
+  //           ],
+  //         );
+  //       },
+  //     );
+  //   } else {
+  //     // If no events found for the selected date
+  //     print('No events found for this date.');
+  //   }
+  // }

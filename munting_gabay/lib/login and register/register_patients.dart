@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'login.dart';
@@ -16,9 +17,9 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   TextEditingController _usernameController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
   TextEditingController _addressController = TextEditingController();
-  TextEditingController _ageController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
   TextEditingController _pinController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
@@ -26,14 +27,23 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   bool pinStatus = true;
   final _formKey = GlobalKey<FormState>();
+
   void _registerUser() async {
     String username = _usernameController.text;
     String name = _nameController.text;
     String address = _addressController.text;
-    // String age = _ageController.text;
     String email = _emailController.text;
     String password = _passwordController.text;
+    String confirmPassword =
+        _confirmPasswordController.text; // New variable for confirm password
     String pin = _pinController.text;
+
+    if (password != confirmPassword) {
+      // Password and confirm password don't match
+      EasyLoading.show(status: 'Password and Confirm Password do not match.');
+
+      return;
+    }
 
     try {
       UserCredential userCredential =
@@ -42,6 +52,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         password: password,
       );
 
+      await userCredential.user!.sendEmailVerification();
       // User registration successful
       print(
           'User registration successful! User ID: ${userCredential.user?.uid}');
@@ -61,8 +72,11 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
       });
 
       // Perform further actions like saving additional user data to Firestore
-    } catch (e) {
+    } catch (e, stackTrace) {
+      EasyLoading.show(status: 'Error during user registration: $e');
       print('Error during user registration: $e');
+      print('Stack trace: $stackTrace');
+
       // Handle registration errors here
     }
 
@@ -92,6 +106,10 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
 
   // Selection of date
   Future<void> _selectDate(BuildContext context) async {
+    if (context == null) {
+      return;
+    }
+
     DateTime currentDate = DateTime.now();
     DateTime firstDate = DateTime(1900);
     DateTime lastDate = DateTime(2101);
@@ -231,19 +249,17 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                           FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
                         ],
                         controller: _pinController,
-                        maxLength: 4, // Set the maximum length to 4 digits
-                        keyboardType:
-                            TextInputType.number, // Set keyboard type to number
+                        maxLength: 4,
+                        keyboardType: TextInputType.number,
                         onChanged: (value) {
-                          // Check if the pin field is empty and update pinStatus accordingly
                           setState(() {
                             pinStatus = (value.isNotEmpty && value.length == 4);
                           });
                         },
                         decoration: InputDecoration(
                           labelText:
-                              '''Pincode for Parent's Pages   (OPTIONAL)''',
-                          counterText: '', // Hide the character counter
+                              '''Pincode for Parent's Pages (OPTIONAL)''',
+                          counterText: '',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
                             borderSide: BorderSide(color: Colors.blue),
@@ -271,7 +287,6 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               if (value == null || value.isEmpty) {
                                 return 'Please select a birthdate';
                               }
-                              // Calculate age based on selectedDate
                               DateTime today = DateTime.now();
                               DateTime parsedDate =
                                   DateTime.parse(value.split(' ')[0]);
@@ -281,11 +296,10 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                                       today.day < parsedDate.day)) {
                                 age--;
                               }
-                              // Check if the user is at least 18 years old
                               if (age < 18) {
                                 return 'You must be at least 18 years old.';
                               }
-                              return null; // Return null if validation succeeds
+                              return null;
                             },
                           ),
                         ),
@@ -306,7 +320,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter a Email';
+                            return 'Please enter an Email';
                           }
                           return null; // Return null if the validation succeeds
                         },
@@ -345,6 +359,42 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                           return null; // Return null if the validation succeeds
                         },
                       ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      TextFormField(
+                        controller: _confirmPasswordController,
+                        decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                                10.0), // Adjust the border radius
+                            borderSide: BorderSide(
+                                color: Colors.blue), // Adjust the border color
+                          ),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                            child: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ),
+                        ),
+                        obscureText: !_isPasswordVisible,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please confirm your Password';
+                          } else if (value != _passwordController.text) {
+                            return 'Passwords do not match';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
                       SizedBox(height: 20),
                       Container(
                         width: BtnWidth,
@@ -352,7 +402,6 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         child: ElevatedButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              // Only proceed if the form is valid
                               _registerUser();
                             }
                           },
@@ -367,49 +416,6 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                           ),
                         ),
                       ),
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: Text('Confirmation'),
-                                content:
-                                    Text('Are you sure you want to LOGIN?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(
-                                          context); // Close the dialog
-                                    },
-                                    child: Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(
-                                          context); // Close the dialog
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => LoginPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      'Confirm',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        child: Text(
-                          'CLICK HERE TO LOGIN',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      )
                     ],
                   ),
                 ),

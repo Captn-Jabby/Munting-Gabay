@@ -356,6 +356,39 @@ class _PersonalIdentificationScreenState
                       return null; // Return null if the validation succeeds
                     },
                   ),
+                  TextFormField(
+                    controller: _confirmPasswordController,
+                    decoration: InputDecoration(
+                      labelText: 'Confirm Password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(
+                            10.0), // Adjust the border radius
+                        borderSide: BorderSide(
+                            color: Colors.blue), // Adjust the border color
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                    ),
+                    obscureText: !_isPasswordVisible,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please confirm your Password';
+                      } else if (value != _passwordController.text) {
+                        return 'Passwords do not match';
+                      }
+                      return null; // Return null if the validation succeeds
+                    },
+                  ),
                   const SizedBox(height: 20),
                   Row(
                     children: [
@@ -395,6 +428,8 @@ class _PersonalIdentificationScreenState
                                     birthdate: selectedDate,
                                     email: _emailController.text,
                                     password: _passwordController.text,
+                                    confirmPassword:
+                                        _confirmPasswordController.text,
                                   ),
                                 ),
                               ),
@@ -462,6 +497,8 @@ class _DoctorsIdentificationScreenState
   }
 
   void _registerUser() async {
+    String password = _passwordController.text;
+    String confirmPassword = _confirmPasswordController.text;
     EasyLoading.show(status: 'PlEASE WAIT');
 
     // Sign out the user (if already authenticated) to clear the session
@@ -472,19 +509,25 @@ class _DoctorsIdentificationScreenState
     final imageUrl2 = await uploadImageToStorage2("LICENSURE");
     final ProfilePicture = await uploadImage("ProfilePicture");
     UserData userData = widget.userData;
+
+    if (password != confirmPassword) {
+      // Password and confirm password don't match
+      EasyLoading.show(status: 'Password and Confirm Password do not match.');
+
+      return;
+    }
+
     try {
       UserCredential userCredential =
           await _auth.createUserWithEmailAndPassword(
         email: userData.email,
         password: userData.password,
       );
-
+      await userCredential.user!.sendEmailVerification();
       // User registration successful
       print(
           'User registration successful! User ID: ${userCredential.user?.uid}');
-      _clinicController.clear();
-      _addressHospital.clear();
-      _phoneNumber.clear();
+
       _usernameController.clear();
       _nameController.clear();
       _addressController.clear();
@@ -494,6 +537,7 @@ class _DoctorsIdentificationScreenState
       _clinicController.clear();
       _addressHospital.clear();
       _phoneNumber.clear();
+      _confirmPasswordController.clear();
       EasyLoading.dismiss();
       // Save additional user data to Firestore
       await FirebaseFirestore.instance
@@ -513,12 +557,15 @@ class _DoctorsIdentificationScreenState
         'clinic': _clinicController.text,
         'addressHospital': _addressHospital.text,
         'phoneNumber': _phoneNumber.text,
+        'DoctorStatus': 'Not Available'
       });
 
       // Perform further actions like saving additional user data to Firestore
-    } catch (e) {
+    } catch (e, stackTrace) {
+      EasyLoading.show(status: 'Error during user registration: $e');
       print('Error during user registration: $e');
-      // Handle registration errors here
+      print('Stack trace: $stackTrace');
+      EasyLoading.dismiss();
     }
 
     // Show a success message and navigate to the LoginScreen
@@ -856,7 +903,7 @@ class _DoctorsIdentificationScreenState
                       secondaryColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
+                  if (__formKey.currentState?.validate() ?? false) {
                     if (_imageFile != null && _imageFile2 != null) {
                       // Both images are selected, you can call the registration process here
                       _registerUser(); // Call the registration process
@@ -915,3 +962,5 @@ TextEditingController _pinController = TextEditingController();
 TextEditingController _clinicController = TextEditingController();
 TextEditingController _addressHospital = TextEditingController();
 TextEditingController _phoneNumber = TextEditingController();
+TextEditingController _confirmPasswordController =
+    TextEditingController(); // New controller for confirm password

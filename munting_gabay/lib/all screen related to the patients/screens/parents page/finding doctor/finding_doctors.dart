@@ -15,11 +15,27 @@ class _pscyhState extends State<pscyh> {
   User? user;
   String? currentEmail;
   String? currentUserName;
+  TextEditingController _searchController = TextEditingController();
+  late String _searchTerm = '';
 
   @override
   void initState() {
     super.initState();
+    _searchController.addListener(_onSearchChanged);
     fetchCurrentUser();
+  }
+
+  @override
+  void dispose() {
+    _searchController.removeListener(_onSearchChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onSearchChanged() {
+    setState(() {
+      _searchTerm = _searchController.text.toLowerCase();
+    });
   }
 
   Future<void> fetchCurrentUser() async {
@@ -50,6 +66,7 @@ class _pscyhState extends State<pscyh> {
           backgroundColor: secondaryColor,
           elevation: 0,
           iconTheme: IconThemeData(color: scaffoldBgColor),
+          title: Text('Pyschology search'),
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -57,6 +74,16 @@ class _pscyhState extends State<pscyh> {
                 child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    labelText: 'Search by Doctor\'s Name',
+                    border: OutlineInputBorder(),
+                  ),
+                ),
+              ),
               Container(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
@@ -85,7 +112,18 @@ class _pscyhState extends State<pscyh> {
                       return Text('No psychologists available.');
                     }
 
-                    final psychologistDocs = snapshot.data!.docs;
+                    // final psychologistDocs = snapshot.data!.docs;
+                    final psychologistDocs = snapshot.data!.docs.where((doc) {
+                      final psychologistName = (doc.get('name') ?? 'Unknown')
+                          .toString()
+                          .toLowerCase();
+                      return psychologistName.contains(_searchTerm);
+                    }).toList();
+
+                    if (psychologistDocs.isEmpty) {
+                      return Text(
+                          'No psychologists found with the given name.');
+                    }
                     return Column(
                       children: psychologistDocs.map((doc) {
                         try {
@@ -154,6 +192,9 @@ class _pscyhState extends State<pscyh> {
                                                     phoneNumber:
                                                         doc['phoneNumber'] ??
                                                             'Unknown',
+                                                    DoctorStatus:
+                                                        doc['DoctorStatus'] ??
+                                                            '',
                                                   ),
                                                 ),
                                               );

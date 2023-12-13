@@ -32,7 +32,6 @@ class _LoginPageState extends State<LoginPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(title),
-          content: Text(title),
           actions: [
             ElevatedButton(
                 onPressed: () {
@@ -49,13 +48,13 @@ class _LoginPageState extends State<LoginPage> {
   void _signInUser(BuildContext context) async {
     EasyLoading.show(status: 'Logging in...');
 
-    await Future.delayed(Duration(seconds: 2));
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
     setState(() {
       _ispasswordValid = _validatePassword(password);
     });
+
     if (_ispasswordValid) {
       try {
         UserCredential result = await _auth.signInWithEmailAndPassword(
@@ -63,31 +62,39 @@ class _LoginPageState extends State<LoginPage> {
           password: password,
         );
 
-        EasyLoading.showSuccess('You are successfully logged in.');
-
         final User? user = result.user;
 
         if (user != null) {
-          DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-              .collection('usersdata')
-              .doc(user.email)
-              .get();
-          String userType = userDataSnapshot['usertype'];
+          // Check if the user's email is verified
+          if (user.emailVerified) {
+            // Proceed to authenticated area
+            EasyLoading.showSuccess('You are successfully logged in.');
 
-          if (userType == 'PATIENTS') {
-            Navigator.pushReplacementNamed(context, '/homePT');
-          } else if (userType == 'DOCTORS') {
-            String status = userDataSnapshot['status'];
-            if (status == 'Accepted') {
-              Navigator.pushReplacementNamed(context, '/homeDoctor');
-            } else if (status == 'ADMIN') {
-              Navigator.pushReplacementNamed(context, '/homeAdmin');
+            DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
+                .collection('usersdata')
+                .doc(user.email)
+                .get();
+            String userType = userDataSnapshot['usertype'];
+
+            if (userType == 'PATIENTS') {
+              Navigator.pushReplacementNamed(context, '/homePT');
+            } else if (userType == 'DOCTORS') {
+              String status = userDataSnapshot['status'];
+              if (status == 'Accepted') {
+                Navigator.pushReplacementNamed(context, '/homeDoctor');
+              } else if (status == 'ADMIN') {
+                Navigator.pushReplacementNamed(context, '/homeAdmin');
+              } else {
+                _showError(
+                    'Your doctor account has not been accepted yet. Please wait for approval.');
+              }
             } else {
-              _showError(
-                  'Your doctor account has not been accepted yet. Please wait for approval.');
+              _showError('Invalid user type');
             }
           } else {
-            _showError('Invalid user type');
+            // Email not verified, prompt the user to verify their email
+            _showError('Email is not verified. Please verify your email.');
+            // Optionally, you can prompt the user to resend the verification email
           }
         } else {
           _showError('Login failed');
@@ -96,6 +103,7 @@ class _LoginPageState extends State<LoginPage> {
         _showError('Login error: $error');
       }
     }
+
     EasyLoading.dismiss();
   }
 

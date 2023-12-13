@@ -29,6 +29,7 @@ class DoctorInfoPage extends StatefulWidget {
   final String currentUserUid;
   final String currentUserName;
   final bool isDoctor;
+  final String DoctorStatus;
   final String phoneNumber;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   DoctorInfoPage({
@@ -43,6 +44,7 @@ class DoctorInfoPage extends StatefulWidget {
     required this.currentUserUid,
     required this.currentUserName,
     required this.isDoctor,
+    required this.DoctorStatus,
   });
 
   @override
@@ -50,12 +52,15 @@ class DoctorInfoPage extends StatefulWidget {
 }
 
 class _DoctorInfoPageState extends State<DoctorInfoPage> {
+  late Stream<DocumentSnapshot> doctorStream;
+
   @override
   void initState() {
     super.initState();
-    eventBus.on<RingtoneEvent>().listen((event) {
-      FlutterRingtonePlayer().playAlarm();
-    });
+    doctorStream = FirebaseFirestore.instance
+        .collection('usersdata')
+        .doc(widget.docId)
+        .snapshots();
   }
 
   @override
@@ -65,247 +70,299 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        elevation: 0,
-        iconTheme: IconThemeData(color: scaffoldBgColor),
+        title: Text('Doctor Information'),
       ),
-      drawer: AppDrawer(),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'DOCTORS INFORMATION',
-              style: buttonTextStyle1,
-            ),
-            Container(
-              width: double.infinity,
-              child: const Divider(
-                color: Colors.black,
-                thickness: 2.0,
-              ),
-            ),
-            Row(
-              mainAxisAlignment:
-                  MainAxisAlignment.spaceEvenly, // Adjust alignment as needed
+        child: StreamBuilder<DocumentSnapshot>(
+          stream: doctorStream,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            }
+
+            if (!snapshot.hasData || snapshot.data == null) {
+              return Center(child: Text('No data available'));
+            }
+
+            String doctorStatus =
+                snapshot.data!.get('DoctorStatus') ?? 'Not Available';
+
+            Color indicatorColor = _getStatusColor(doctorStatus);
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Card(
-                    elevation: 4,
-                    margin: const EdgeInsets.all(16),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            color: Colors.pink,
-                            icon: const Icon(Icons
-                                .calendar_month_rounded), // Scheduling icon
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => DoctorScheduleScreen(
-                                    docId: widget.docId,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            width: width,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.message), // Messaging icon
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => ChatPage(
-                                    currentUserUid: widget.currentUserUid,
-                                    currentUserName: widget.currentUserName,
-                                    // isDoctor: widget.isDoctor,
-                                    docId: widget.docId,
-                                    recipientName: widget.currentUserName,
-                                    senderIsDoctor: false,
-                                    recipientIsDoctor: true,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            width: width,
-                          ), // In DocDashboard.dart or equivalent
-                          IconButton(
-                            icon: const Icon(Icons
-                                .video_camera_front_rounded), // Calling icon
-                            onPressed: () async {
-                              final newCallStatus =
-                                  !callStatus; // Toggle call status
-
-                              // Update the callStatus field in Firebase
-                              await FirebaseFirestore.instance
-                                  .collection(
-                                      'usersdata') // Update with your collection name
-                                  .doc(widget.docId)
-                                  .update({'callStatus': newCallStatus});
-
-                              // Fire the event
-                              eventBus.fire(VideoCallEvent(
-                                  docId: widget.docId,
-                                  isCalling: newCallStatus));
-
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Call(
-                                    currentUserUid: widget.currentUserUid,
-                                    currentUserName: widget.currentUserName,
-                                    docId: widget.docId,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          SizedBox(
-                            width: width,
-                          ),
-                          IconButton(
-                            icon: const Icon(Icons.history), // Calling icon
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => RequestListScreen(
-                                    docId: widget.docId,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(
-                              Icons.phone,
-                              color: Colors.amber,
-                            ), // Icon for phone call
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => PhoneCallScreen(
-                                    phoneNumber: widget.phoneNumber,
-                                    docId: widget.docId,
-                                    currentUserName: widget.initialName,
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-
-                          SizedBox(
-                            width: width,
-                          ),
-                        ],
-                      ),
-                    ))
-              ],
-            ),
-            Card(
-              elevation: 4,
-              margin: const EdgeInsets.all(16),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                Text(
+                  'DOCTORS INFORMATION',
+                  style: buttonTextStyle1,
+                ),
+                Container(
+                  width: double.infinity,
+                  child: const Divider(
+                    color: Colors.black,
+                    thickness: 2.0,
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment
+                      .spaceEvenly, // Adjust alignment as needed
                   children: [
-                    SizedBox(
-                      height: BtnSpacing,
-                    ),
-                    Center(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Container(
-                                color: Colors.red,
-                                child: ZoomableImage(widget.avatarPath),
+                    Card(
+                        elevation: 4,
+                        margin: const EdgeInsets.all(16),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Row(
+                            children: [
+                              IconButton(
+                                color: Colors.pink,
+                                icon: const Icon(Icons
+                                    .calendar_month_rounded), // Scheduling icon
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          DoctorScheduleScreen(
+                                        docId: widget.docId,
+                                      ),
+                                    ),
+                                  );
+                                },
                               ),
-                            ),
-                          );
-                        },
-                        child: ClipOval(
-                          child: Container(
-                            width: 200,
-                            height: 200,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle, // Change to circle shape
-                              border: Border.all(
-                                color: Colors
-                                    .black, // Add a border color if needed
-                                width: 2, // Adjust the border width as desired
+                              SizedBox(
+                                width: width,
                               ),
-                              image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                  widget.avatarPath,
+                              IconButton(
+                                icon:
+                                    const Icon(Icons.message), // Messaging icon
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ChatPage(
+                                        currentUserUid: widget.currentUserUid,
+                                        currentUserName: widget.currentUserName,
+                                        // isDoctor: widget.isDoctor,
+                                        docId: widget.docId,
+                                        recipientName: widget.currentUserName,
+                                        senderIsDoctor: false,
+                                        recipientIsDoctor: true,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              SizedBox(
+                                width: width,
+                              ), // In DocDashboard.dart or equivalent
+                              IconButton(
+                                icon: const Icon(Icons
+                                    .video_camera_front_rounded), // Calling icon
+                                onPressed: () async {
+                                  final newCallStatus =
+                                      !callStatus; // Toggle call status
+
+                                  // Update the callStatus field in Firebase
+                                  await FirebaseFirestore.instance
+                                      .collection(
+                                          'usersdata') // Update with your collection name
+                                      .doc(widget.docId)
+                                      .update({'callStatus': newCallStatus});
+
+                                  // Fire the event
+                                  eventBus.fire(VideoCallEvent(
+                                      docId: widget.docId,
+                                      isCalling: newCallStatus));
+
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => Call(
+                                        currentUserUid: widget.currentUserUid,
+                                        currentUserName: widget.currentUserName,
+                                        docId: widget.docId,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              SizedBox(
+                                width: width,
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.history), // Calling icon
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => RequestListScreen(
+                                        docId: widget.docId,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              IconButton(
+                                icon: Icon(
+                                  Icons.phone,
+                                  color: Colors.amber,
+                                ), // Icon for phone call
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => PhoneCallScreen(
+                                        phoneNumber: widget.phoneNumber,
+                                        docId: widget.docId,
+                                        currentUserName: widget.initialName,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+
+                              SizedBox(
+                                width: width,
+                              ),
+                            ],
+                          ),
+                        ))
+                  ],
+                ),
+                Card(
+                  elevation: 4,
+                  margin: const EdgeInsets.all(16),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: BtnSpacing,
+                        ),
+                        Center(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Container(
+                                    color: Colors.red,
+                                    child: ZoomableImage(widget.avatarPath),
+                                  ),
                                 ),
-                              ),
-                            ),
-                            child: Hero(
-                              tag: widget.avatarPath,
-                              child: Image.network(
-                                widget.avatarPath,
-                                fit: BoxFit.cover,
+                              );
+                            },
+                            child: ClipOval(
+                              child: Container(
+                                width: 200,
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  shape:
+                                      BoxShape.circle, // Change to circle shape
+                                  border: Border.all(
+                                    color: Colors
+                                        .black, // Add a border color if needed
+                                    width:
+                                        2, // Adjust the border width as desired
+                                  ),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      widget.avatarPath,
+                                    ),
+                                  ),
+                                ),
+                                child: Hero(
+                                  tag: widget.avatarPath,
+                                  child: Image.network(
+                                    widget.avatarPath,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                        Row(
+                          children: [
+                            Container(
+                              width: 12,
+                              height: 12,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: indicatorColor,
+                              ),
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              doctorStatus,
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 20,
+                                color: indicatorColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Divider(
+                          color: Colors.black,
+                          thickness: 2.0,
+                        ),
+                        SizedBox(
+                          height: BtnSpacing,
+                        ),
+                        Text(
+                          'Doctor Email: ${widget.docId}',
+                          style: const TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text('Name: ${widget.initialName}',
+                            style: const TextStyle(fontSize: 16)),
+                        Text('Address: ${widget.initialAddress}',
+                            style: const TextStyle(fontSize: 16)),
+                        Text(
+                            'Birthdate: ${DateFormat('MMMM d, y').format(widget.birthdate)}',
+                            style: const TextStyle(fontSize: 16)),
+                        SizedBox(
+                          height: BtnSpacing,
+                        ),
+                        const Text(
+                          'CLINIC INFORMATION',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const Divider(
+                          color: Colors.black,
+                          thickness: 2.0,
+                        ),
+                        Text('Clinic Address: ${widget.NameOfHospital}',
+                            style: const TextStyle(fontSize: 16)),
+                        Text('Phone Number: ${widget.phoneNumber}',
+                            style: const TextStyle(fontSize: 16)),
+                      ],
                     ),
-                    const Divider(
-                      color: Colors.black,
-                      thickness: 2.0,
-                    ),
-                    SizedBox(
-                      height: BtnSpacing,
-                    ),
-                    Text(
-                      'Doctor Email: ${widget.docId}',
-                      style: const TextStyle(
-                          fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Text('Name: ${widget.initialName}',
-                        style: const TextStyle(fontSize: 16)),
-                    Text('Address: ${widget.initialAddress}',
-                        style: const TextStyle(fontSize: 16)),
-                    Text(
-                        'Birthdate: ${DateFormat('MMMM d, y').format(widget.birthdate)}',
-                        style: const TextStyle(fontSize: 16)),
-                    SizedBox(
-                      height: BtnSpacing,
-                    ),
-                    const Text(
-                      'CLINIC INFORMATION',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    const Divider(
-                      color: Colors.black,
-                      thickness: 2.0,
-                    ),
-                    Text('Clinic Address: ${widget.NameOfHospital}',
-                        style: const TextStyle(fontSize: 16)),
-                    Text('Phone Number: ${widget.phoneNumber}',
-                        style: const TextStyle(fontSize: 16)),
-                  ],
-                ),
-              ),
-            )
-          ],
+                  ),
+                )
+              ],
+            );
+          },
         ),
       ),
     );
+  }
+
+  Color _getStatusColor(String status) {
+    if (status == 'Available') {
+      return Colors.green;
+    } else if (status == 'Not Available') {
+      return Colors.red;
+    } else {
+      return Colors.grey;
+    }
   }
 }
 
