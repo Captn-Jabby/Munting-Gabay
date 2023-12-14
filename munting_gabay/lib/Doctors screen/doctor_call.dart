@@ -67,9 +67,9 @@ class _CallDoctorState extends State<CallDoctor> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: scaffoldBgColor,
+      backgroundColor: DoctorscaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: DoctorsecondaryColor,
         title: const Text('VIDEO DOCTOR SIDE CALL'),
         centerTitle: true,
       ),

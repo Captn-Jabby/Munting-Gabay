@@ -24,9 +24,12 @@ class KidsPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "KIDS PAGE",
-                  style: buttonTextStyle1,
+                SizedBox(
+                  height: 20,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 24),
+                  child: Text('KIDS PAGES', style: smallTextStyle11),
                 ),
               ],
             ),

@@ -4,9 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/Kids_page.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/drawer_page.dart';
+import 'package:munting_gabay/login%20and%20register/login.dart';
 import 'package:munting_gabay/login%20and%20register/pincode.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -33,7 +35,7 @@ class _HomepagePTState extends State<HomepagePT> {
 
       if (user != null) {
         final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('usersdata');
+            FirebaseFirestore.instance.collection('users');
 
         final String? currentUserEmail = user.email;
 
@@ -103,31 +105,26 @@ class _HomepagePTState extends State<HomepagePT> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Text('Munting\nGabay',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 5,
-                        shadows: [
-                          Shadow(
-                              color: const Color(0xBA205007).withOpacity(1.0),
-                              offset: const Offset(7, 2))
-                        ],
-                        fontSize: 75,
-                        color: Colors.white,
-                      )),
-                  const SizedBox(
-                    height: 12,
+                  Center(
+                    child: SpinningContainer(),
                   ),
-                  const Text(
-                    'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                  Text(
+                    'Munting Gabay',
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 17),
+                    style: GoogleFonts.poppins(
+                        letterSpacing: 2,
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          color: Color(0xFF95C440),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 100),
+                    child: Text('An Autism Aid and Awareness App',
+                        style: smallTextStyle1),
                   ),
                 ],
-              ),
-              const SizedBox(
-                height: 50,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

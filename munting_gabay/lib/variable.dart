@@ -3,14 +3,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 
 // scafold settings
-const Color text = Colors.white;
-const Color drawertext = Colors.black;
+const Color text = Colors.black;
+const Color drawertext = Colors.white;
 //
-Color secondaryColor = Colors.pink;
+Color secondaryColor = Color(0xFF95C440);
 // Color secondaryColors = Color(0xFFFA893D);
-Color scaffoldBgColor = Color(0xFF3BD2A5);
+Color scaffoldBgColor = Color(0xFFF4F9EC);
 
-// const Color secondaryColors = Color(0xFF8FCC62);
+////  doctor side
+Color DoctorsecondaryColor = Color(0xFF95C440);
+Color DoctorscaffoldBgColor =
+    Color(0xFFF4F9EC); // Dark mode versions of the colors
+
+// Even darker versions of the colors with your variable names
+Color darkSecond = Color(0xFF40620D); // Even more darker color for dark mode
+Color darkPrimary = Color(0xFF888888); // Even more darker color for dark mode
+
+bool darkmode = false;
+Color dynamicSecondaryColor = darkmode ? darkSecond : DoctorsecondaryColor;
+Color dynamicScaffoldBgColor = darkmode ? darkPrimary : DoctorscaffoldBgColor;
+/////
+
 const Color LoadingColor = Colors.blue;
 const Color bgloadingColor = Colors.grey;
 //MediaQuery.of(context).size.height * 0.8,
@@ -42,6 +55,12 @@ final TextStyle buttonTextStyle2 = GoogleFonts.poppins(
   ),
 );
 
+final TextStyle smallTextStyle11 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Colors.black,
+    fontSize: 30,
+  ),
+);
 final TextStyle smallTextStyle1 = GoogleFonts.poppins(
   textStyle: const TextStyle(
     color: Color(0xFF9C9C9C),

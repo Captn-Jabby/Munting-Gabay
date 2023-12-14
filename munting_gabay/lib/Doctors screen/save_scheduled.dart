@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:munting_gabay/variable.dart';
 
 class SavedDatesScreen extends StatefulWidget {
   @override
@@ -87,7 +88,9 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: DoctorscaffoldBgColor,
       appBar: AppBar(
+        backgroundColor: DoctorsecondaryColor,
         title: Text('Saved Dates and Slots'),
       ),
       body: savedDatesAndSlots.isEmpty

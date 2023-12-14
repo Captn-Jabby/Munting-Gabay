@@ -243,7 +243,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               onPressed: () {
                 // Update the status in Firestore
                 FirebaseFirestore.instance
-                    .collection('usersdata')
+                    .collection('users')
                     .doc(widget.docId)
                     .update({
                   'status': selectedStatus,

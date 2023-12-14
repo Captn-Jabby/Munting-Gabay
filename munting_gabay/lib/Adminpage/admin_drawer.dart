@@ -31,7 +31,7 @@ class AdminDrawer extends StatelessWidget {
 
         // Retrieve the avatar path
         final snapshot = await FirebaseFirestore.instance
-            .collection('usersdata')
+            .collection('users')
             .doc(user?.email)
             .get();
 
@@ -53,7 +53,7 @@ class AdminDrawer extends StatelessWidget {
           UserAccountsDrawerHeader(
             accountName: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
-                  .collection('usersdata')
+                  .collection('users')
                   .doc(user?.email)
                   .get(),
               builder: (context, snapshot) {
@@ -73,7 +73,7 @@ class AdminDrawer extends StatelessWidget {
             accountEmail: Text(user?.email ?? ""),
             currentAccountPicture: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
-                  .collection('usersdata')
+                  .collection('users')
                   .doc(user?.email)
                   .get(),
               builder: (context, snapshot) {

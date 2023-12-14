@@ -88,8 +88,8 @@ class _AdminPageState extends State<AdminPage> {
               ),
               StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
-                    .collection('usersdata')
-                    .where('usertype', isEqualTo: 'DOCTORS')
+                    .collection('users')
+                    .where('role', isEqualTo: 'DOCTORS')
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {

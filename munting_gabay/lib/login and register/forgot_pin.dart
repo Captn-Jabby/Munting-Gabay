@@ -27,7 +27,7 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
 
         // Reauthentication successful, retrieve the PIN
         DocumentSnapshot userData = await FirebaseFirestore.instance
-            .collection('usersdata')
+            .collection('users')
             .doc(user.email)
             .get();
 

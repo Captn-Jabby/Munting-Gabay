@@ -71,14 +71,14 @@ class _LoginPageState extends State<LoginPage> {
             EasyLoading.showSuccess('You are successfully logged in.');
 
             DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-                .collection('usersdata')
+                .collection('users')
                 .doc(user.email)
                 .get();
-            String userType = userDataSnapshot['usertype'];
+            String role = userDataSnapshot['role'];
 
-            if (userType == 'PATIENTS') {
+            if (role == 'PATIENTS') {
               Navigator.pushReplacementNamed(context, '/homePT');
-            } else if (userType == 'DOCTORS') {
+            } else if (role == 'DOCTORS') {
               String status = userDataSnapshot['status'];
               if (status == 'Accepted') {
                 Navigator.pushReplacementNamed(context, '/homeDoctor');
@@ -250,7 +250,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           child: const Text(
                             'CREATE AN ACCOUNT',
-                            style: TextStyle(color: drawertext),
+                            style: TextStyle(color: text),
                           ),
                         ),
                       ],

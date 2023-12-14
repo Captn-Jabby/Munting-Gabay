@@ -42,7 +42,7 @@ class _pscyhState extends State<pscyh> {
     user = FirebaseAuth.instance.currentUser;
     currentEmail = user?.email;
 
-    final userCollection = FirebaseFirestore.instance.collection('usersdata');
+    final userCollection = FirebaseFirestore.instance.collection('users');
 
     await userCollection.doc(currentEmail).get().then((doc) {
       if (doc.exists) {
@@ -87,8 +87,8 @@ class _pscyhState extends State<pscyh> {
               Container(
                 child: StreamBuilder<QuerySnapshot>(
                   stream: FirebaseFirestore.instance
-                      .collection('usersdata')
-                      .where('usertype', isEqualTo: 'DOCTORS')
+                      .collection('users')
+                      .where('role', isEqualTo: 'DOCTORS')
                       .where('status', isEqualTo: 'Accepted')
                       .snapshots(),
                   builder: (context, snapshot) {

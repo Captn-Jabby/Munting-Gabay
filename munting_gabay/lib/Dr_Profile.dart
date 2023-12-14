@@ -44,7 +44,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
   void _loadUserData() async {
     if (_currentUser.email!.isNotEmpty) {
       final snapshot = await FirebaseFirestore.instance
-          .collection('usersdata')
+          .collection('users')
           .doc(_currentUser.email)
           .get();
 
@@ -93,7 +93,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
     print("Avatar Path: $_avatarPath"); // Add this line for debugging
 
     await FirebaseFirestore.instance
-        .collection('usersdata')
+        .collection('users')
         .doc(_currentUser.email)
         .update({
       'name': _nameController.text,
@@ -155,7 +155,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: DoctorsecondaryColor,
         title: Text(
           'Profile',
           style: TextStyle(color: text),
@@ -258,7 +258,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
 
         // Update the avatar path in Firestore
         await FirebaseFirestore.instance
-            .collection('usersdata')
+            .collection('users')
             .doc(_currentUser.email)
             .update({
           'avatarPath': downloadURL,

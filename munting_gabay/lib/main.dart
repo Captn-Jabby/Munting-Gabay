@@ -82,12 +82,11 @@ class _MyAppState extends State<MyApp> {
                     );
                   }
 
-                  String userType =
-                      userDataSnapshot.data?.get('usertype') ?? '';
+                  String role = userDataSnapshot.data?.get('role') ?? '';
 
-                  if (userType == 'PATIENTS') {
+                  if (role == 'PATIENTS') {
                     return const HomepagePT();
-                  } else if (userType == 'DOCTORS') {
+                  } else if (role == 'DOCTORS') {
                     String status = userDataSnapshot.data?.get('status') ?? '';
 
                     if (status == 'Accepted') {
@@ -98,7 +97,7 @@ class _MyAppState extends State<MyApp> {
                       return LoginScreen();
                     }
                   } else {
-                    return InvalidUserTypeScreen();
+                    return InvalidroleScreen();
                   }
                 },
               );
@@ -125,20 +124,20 @@ class _MyAppState extends State<MyApp> {
 
   Future<DocumentSnapshot> getUserDataFromFirestore(User user) async {
     return await FirebaseFirestore.instance
-        .collection('usersdata')
+        .collection('users')
         .doc(user.email)
         .get();
   }
 }
 
-class InvalidUserTypeScreen extends StatelessWidget {
+class InvalidroleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Invalid User Type'),
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -151,7 +150,16 @@ class InvalidUserTypeScreen extends StatelessWidget {
               'You do not have a valid user type for this app.',
               style: TextStyle(fontSize: 16),
             ),
-            // You can add more widgets, buttons, or information as needed
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to the LoginScreen
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreen()),
+                );
+              },
+              child: Text('Log in'),
+            ),
           ],
         ),
       ),
@@ -165,8 +173,8 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: mainBackgroundTheme,
-          width: double.infinity,
-          height: MediaQuery.of(context).size.height,
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
         child: Container(
           padding: const EdgeInsets.only(top: 75),
           child: Column(
@@ -175,25 +183,24 @@ class LoginScreen extends StatelessWidget {
                 child: SpinningContainer(),
               ),
 
-              Text('Munting Gabay',
+              Text(
+                'Munting Gabay',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.poppins(
-                  letterSpacing: 2,
+                    letterSpacing: 2,
                     textStyle: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 40,
                       color: Color(0xFF95C440),
-                    )
-                ),
+                    )),
               ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 140),
                 child: Text('An Autism Aid and Awareness App',
-                style: smallTextStyle1
-                ),
+                    style: smallTextStyle1),
               ),
               Container(
-                height: MediaQuery.of(context).size.height /4,
+                height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -201,91 +208,95 @@ class LoginScreen extends StatelessWidget {
                     SizedBox(
                       height: BtnHeight,
                       width: BtnWidth,
-                      child: ElevatedButton(onPressed: (){},
+                      child: ElevatedButton(
+                        onPressed: () {},
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF95C440),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)
-                          )
-                        ),
-                        child:  Text(
+                            backgroundColor: const Color(0xFF95C440),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50))),
+                        child: Text(
                           'Get Started',
                           style: buttonTextStyle1,
                         ),
                       ),
                     ),
-
-        const SizedBox(height: 21,),
-                SizedBox(
-                  width: BtnWidth,
-                  height: BtnHeight,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LoginPage()),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFFDFDFE),
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50)
-                        )
+                    const SizedBox(
+                      height: 21,
                     ),
-                    child: Text(
-                      "Login",
-                      style: buttonTextStyle2
+                    SizedBox(
+                      width: BtnWidth,
+                      height: BtnHeight,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LoginPage()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFDFDFE),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(50))),
+                        child: Text("Login", style: buttonTextStyle2),
+                      ),
                     ),
-                  ),
-                ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                         Text('New around here?',
-                         style: smallTextStyle2,),
-                        TextButton(onPressed: (){
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Register'),
-                                content:
-                                const Text('Register as a Doctor or a Patient?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); // Close the dialog
-                                      // Navigate to the RegistrationPatients with type 'Doctor'
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegistrationDOCTORS(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('Doctor'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(context); // Close the dialog
-                                      // Navigate to the RegistrationPatients with type 'Patient'
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              RegistrationPatients(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text('Patient'),
-                                  ),
-                                ],
+                        Text(
+                          'New around here?',
+                          style: smallTextStyle2,
+                        ),
+                        TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: const Text('Register'),
+                                    content: const Text(
+                                        'Register as a Doctor or a Patient?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                          // Navigate to the RegistrationPatients with type 'Doctor'
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RegistrationDOCTORS(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Doctor'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(
+                                              context); // Close the dialog
+                                          // Navigate to the RegistrationPatients with type 'Patient'
+                                          Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  RegistrationPatients(),
+                                            ),
+                                          );
+                                        },
+                                        child: const Text('Patient'),
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },
-                          );
-                        }, child: Text('Sign up',
-                        style: smallTextStyle3,)),
+                            child: Text(
+                              'Sign up',
+                              style: smallTextStyle3,
+                            )),
                       ],
                     )
                   ],
@@ -371,7 +382,8 @@ class _SpinningContainerState extends State<SpinningContainer>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(minutes: 1), // Set the duration for one complete rotation
+      duration:
+          Duration(minutes: 1), // Set the duration for one complete rotation
     )..repeat(); // Repeat the animation infinitely
   }
 
@@ -383,9 +395,9 @@ class _SpinningContainerState extends State<SpinningContainer>
         height: MediaQuery.of(context).size.height / 4,
         decoration: const BoxDecoration(
             image: DecorationImage(
-                image: AssetImage("assets/images/world.png",)
-            )
-        ),
+                image: AssetImage(
+          "assets/images/world.png",
+        ))),
       ),
     );
   }

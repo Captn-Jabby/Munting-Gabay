@@ -28,7 +28,7 @@ class _ChangePinState extends State<ChangePin> {
 
       if (user != null) {
         final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('usersdata');
+            FirebaseFirestore.instance.collection('users');
 
         final String? currentUserEmail = user.email;
 
@@ -180,7 +180,7 @@ class _ChangePinState extends State<ChangePin> {
 
       if (user != null) {
         final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('usersdata');
+            FirebaseFirestore.instance.collection('users');
 
         final String? currentUserEmail = user.email;
 
@@ -204,7 +204,7 @@ class _ChangePinState extends State<ChangePin> {
 
       if (user != null && mounted) {
         final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('usersdata');
+            FirebaseFirestore.instance.collection('users');
 
         final String? currentUserEmail = user.email;
 
@@ -236,7 +236,7 @@ class _ChangePinState extends State<ChangePin> {
 
       if (user != null) {
         final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('usersdata');
+            FirebaseFirestore.instance.collection('users');
 
         final String? currentUserEmail = user.email;
 

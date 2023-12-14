@@ -44,7 +44,7 @@ class _ForumPageState extends State<ForumPage> {
   void createPost(String content) async {
     String userName = 'Anonymous User';
     DocumentSnapshot userSnapshot =
-        await _firestore.collection('usersdata').doc(_user?.uid).get();
+        await _firestore.collection('users').doc(_user?.uid).get();
     if (userSnapshot.exists) {
       userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
     }
@@ -60,7 +60,7 @@ class _ForumPageState extends State<ForumPage> {
   void addComment(String postId, String userId, String content) async {
     String userName = 'Anonymous User';
     DocumentSnapshot userSnapshot =
-        await _firestore.collection('usersdata').doc(_user?.uid).get();
+        await _firestore.collection('users').doc(_user?.uid).get();
     if (userSnapshot.exists) {
       userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
     }
@@ -218,7 +218,7 @@ class _PostModalState extends State<PostModal> {
   void addComment(String content) async {
     String userName = 'Anonymous User';
     DocumentSnapshot userSnapshot = await widget.firestore
-        .collection('usersdata')
+        .collection('users')
         .doc(widget.user?.email)
         .get();
     if (userSnapshot.exists) {

@@ -58,8 +58,7 @@ class webinarsScreen extends StatelessWidget {
     EducationalVdieos(
       title: '''What is Autism? | Cincinnati Children's''',
 
-      coverImage:
-          'assets/images/images/7.png', // Replace with actual asset path
+      coverImage: 'assets/images/7.png', // Replace with actual asset path
       link: 'https://www.youtube.com/watch?v=hwaaphuStxY',
     ),
   ];

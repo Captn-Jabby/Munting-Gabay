@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:munting_gabay/variable.dart';
 
 import 'login.dart';
@@ -58,10 +59,10 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
           'User registration successful! User ID: ${userCredential.user?.uid}');
 
       // Save additional user data to Firestore
-      await FirebaseFirestore.instance.collection('usersdata').doc(email).set({
+      await FirebaseFirestore.instance.collection('users').doc(email).set({
         'username': username,
         'name': name,
-        'usertype': 'PATIENTS',
+        'role': 'PATIENTS',
         'address': address,
         'birthdate': selectedDate,
         'email': email,
@@ -146,29 +147,24 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
             child: Stack(alignment: Alignment.topCenter, children: [
               Column(
                 children: [
-                  Text('Munting\nGabay',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 5,
-                        shadows: [
-                          Shadow(
-                              color: Color(0xBA205007).withOpacity(1.0),
-                              offset: const Offset(7, 2))
-                        ],
-                        fontSize: 75,
-                        color: Colors.white,
-                      )),
-                  const SizedBox(
-                    height: 12,
+                  Center(
+                    child: SpinningContainerP(),
                   ),
-                  const Text(
-                    'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                  Text(
+                    'Munting Gabay',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 17),
+                    style: GoogleFonts.poppins(
+                        letterSpacing: 2,
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          color: Color(0xFF95C440),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 140),
+                    child: Text('An Autism Aid and Awareness App',
+                        style: smallTextStyle1),
                   ),
                 ],
               ),
@@ -425,5 +421,46 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         ),
       ),
     );
+  }
+}
+
+class SpinningContainerP extends StatefulWidget {
+  @override
+  _SpinningContainerPState createState() => _SpinningContainerPState();
+}
+
+class _SpinningContainerPState extends State<SpinningContainerP>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration:
+          Duration(minutes: 1), // Set the duration for one complete rotation
+    )..repeat(); // Repeat the animation infinitely
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return RotationTransition(
+      turns: _controller,
+      child: Container(
+        height: MediaQuery.of(context).size.height / 4,
+        decoration: const BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage(
+          "assets/images/world.png",
+        ))),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }

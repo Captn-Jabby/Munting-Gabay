@@ -14,9 +14,9 @@ class DoctorScheduleScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: scaffoldBgColor,
+      backgroundColor: darkmode ? DoctorscaffoldBgColor : darkPrimary,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: darkmode ? DoctorscaffoldBgColor : darkPrimary,
         title: Text('Request Appointment'),
       ),
       body: StreamBuilder<DocumentSnapshot>(

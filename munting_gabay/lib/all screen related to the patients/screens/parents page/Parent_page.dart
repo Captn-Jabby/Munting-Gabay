@@ -26,9 +26,9 @@ class ParentPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "PARENT'S PAGE",
-                  style: buttonTextStyle1,
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Text('PARENTS PAGE', style: smallTextStyle11),
                 ),
               ],
             ),

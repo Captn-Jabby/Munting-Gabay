@@ -36,7 +36,7 @@ class _DocDashboardState extends State<DocDashboard>
 
     // Listen to changes in callStatus
     FirebaseFirestore.instance
-        .collection('usersdata') // Update with your collection name
+        .collection('users') // Update with your collection name
         .doc(widget.docId)
         .snapshots()
         .listen((DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -77,7 +77,7 @@ class _DocDashboardState extends State<DocDashboard>
               onPressed: () async {
                 // Update the callStatus field to false when rejecting the call
                 await FirebaseFirestore.instance
-                    .collection('usersdata') // Update with your collection name
+                    .collection('users') // Update with your collection name
                     .doc(widget.docId)
                     .update({'callStatus': false});
 
@@ -104,7 +104,7 @@ class _DocDashboardState extends State<DocDashboard>
 
                   // Update callStatus to false
                   await FirebaseFirestore.instance
-                      .collection('usersdata')
+                      .collection('users')
                       .doc(widget.docId)
                       .update({'callStatus': false});
 

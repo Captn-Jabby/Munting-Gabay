@@ -10,7 +10,7 @@ import '../../../../Doctors screen/doctor_call.dart';
 class UserSelectionPage extends StatelessWidget {
   Future<List<DocumentSnapshot>> fetchUsers() async {
     QuerySnapshot querySnapshot =
-        await FirebaseFirestore.instance.collection('usersdata').get();
+        await FirebaseFirestore.instance.collection('users').get();
     return querySnapshot.docs;
   }
 
@@ -20,7 +20,7 @@ class UserSelectionPage extends StatelessWidget {
   }
 
   Future<String> getCurrentUserName(String currentEmail) async {
-    final userCollection = FirebaseFirestore.instance.collection('usersdata');
+    final userCollection = FirebaseFirestore.instance.collection('users');
     DocumentSnapshot userDoc = await userCollection.doc(currentEmail).get();
 
     if (userDoc.exists) {

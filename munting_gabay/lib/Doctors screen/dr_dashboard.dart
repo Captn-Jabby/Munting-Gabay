@@ -40,7 +40,7 @@ class _DocDashboardState extends State<DocDashboard>
     _calendarFormat = CalendarFormat.month;
     // Listen to changes in callStatus
     FirebaseFirestore.instance
-        .collection('usersdata') // Update with your collection name
+        .collection('users') // Update with your collection name
         .doc(widget.docId)
         .snapshots()
         .listen((DocumentSnapshot<Map<String, dynamic>> snapshot) {
@@ -169,149 +169,157 @@ class _DocDashboardState extends State<DocDashboard>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: scaffoldBgColor,
-      appBar: AppBar(
-        backgroundColor: secondaryColor,
-        title: Text('Doctor Dashboard'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.message),
-            onPressed: () {
-              // Handle the action when the message button is pressed
-              // For example, navigate to the chat screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => UserSelectionPage(),
-                ),
-              );
-            },
-          ),
-          IconButton(
-            icon: Icon(
-              Icons.calendar_month,
-              color: Colors.indigo,
-            ),
-            onPressed: () {
-              // Handle the action when the calendar button is pressed
-              // For example, navigate to the calendar screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => DateListScreen()),
-              );
-            },
-          ),
-        ],
-      ),
-      drawer: DrDrawer(),
-      body: DefaultTabController(
-        length: 4,
-        child: Column(
-          children: [
-            TableCalendar(
-              firstDay: DateTime.utc(2023, 1, 1),
-              lastDay: DateTime.utc(2023, 12, 31),
-              focusedDay: _focusedDay,
-              calendarFormat: _calendarFormat,
-              onFormatChanged: (format) {
-                setState(() {
-                  _calendarFormat = format;
-                });
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-                // Add this print statement to track the selected date
-                print('Selected Date: $_selectedDay');
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.docId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
 
-                // Handle the click event here
-                // _handleDateClick(_events[selectedDay]);
-              },
-              eventLoader: (day) {
-                return _events[day] ?? [];
-              },
-              calendarStyle: const CalendarStyle(
-                markersAlignment: Alignment.bottomRight,
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
               ),
-              calendarBuilders: CalendarBuilders(
-                markerBuilder: (context, date, events) {
-                  final formattedDate = DateFormat('d MMMM').format(date);
+            );
+          }
 
-                  final isPending = pendingDateTimeSet.any((pendingDate) {
-                    final formattedPendingDate =
-                        DateFormat('d MMMM').format(pendingDate);
-                    return formattedDate == formattedPendingDate;
-                  });
+          bool darkmode = snapshot.data?['darkmode'] ?? false;
+          Color dynamicSecondaryColor =
+              darkmode ? darkSecond : DoctorsecondaryColor;
+          Color dynamicScaffoldBgColor =
+              darkmode ? darkPrimary : DoctorscaffoldBgColor;
 
-                  // Check for cancelled status
-                  final isCancelled = events?.any((event) {
-                        if (event is Map<String, dynamic>) {
-                          if (event['status'] == 'cancelled') {
-                            print(
-                                'Yellow mark for date: $formattedDate'); // Debug print for yellow mark
-                            return true;
-                          }
-                        }
-                        return false;
-                      }) ??
-                      false;
-
-                  if (isPending) {
-                    return Container(
-                      width: 24,
-                      height: 24,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.red,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${date.day}',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    );
-                  }
-                  // } else if (isCancelled) {
-                  //   print(
-                  //       'Cancelled date: $formattedDate'); // Debug print for cancelled date
-
-                  //   return Container(
-                  //     width: 24,
-                  //     height: 24,
-                  //     alignment: Alignment.center,
-                  //     decoration: BoxDecoration(
-                  //       color: Colors.yellow,
-                  //       shape: BoxShape.circle,
-                  //     ),
-                  //     child: Text(
-                  //       '${date.day}',
-                  //       style: TextStyle(color: Colors.black),
-                  //     ),
-                  //   );
-                  // }
-
-                  // return null;
-                },
-              ),
-            ),
-            Expanded(
-              child: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildDayList('Available'),
-                  _buildDayList('Pending'),
-                  _buildDayList('Canceled'),
-                  _buildDayList('Accepted'),
+          return Scaffold(
+              backgroundColor: dynamicScaffoldBgColor,
+              appBar: AppBar(
+                backgroundColor: dynamicSecondaryColor,
+                title: Text('Doctor Dashboard'),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.message),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserSelectionPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.calendar_month,
+                      color: dynamicSecondaryColor,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DateListScreen()),
+                      );
+                    },
+                  ),
                 ],
               ),
-            ),
-          ],
-        ),
-      ),
-    );
+              drawer: DrDrawer(),
+              body: DefaultTabController(
+                length: 4,
+                child: Column(
+                  children: [
+                    TableCalendar(
+                      firstDay: DateTime.utc(2023, 1, 1),
+                      lastDay: DateTime.utc(2024, 12, 31),
+                      focusedDay: _focusedDay,
+                      calendarFormat: _calendarFormat,
+                      onFormatChanged: (format) {
+                        setState(() {
+                          _calendarFormat = format;
+                        });
+                      },
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                        });
+                        // Add this print statement to track the selected date
+                        print('Selected Date: $_selectedDay');
+
+                        // Handle the click event here
+                        // _handleDateClick(_events[selectedDay]);
+                      },
+                      eventLoader: (day) {
+                        return _events[day] ?? [];
+                      },
+                      calendarStyle: const CalendarStyle(
+                        markersAlignment: Alignment.bottomRight,
+                      ),
+                      calendarBuilders: CalendarBuilders(
+                        markerBuilder: (context, date, events) {
+                          final formattedDate =
+                              DateFormat('d MMMM').format(date);
+
+                          final isPending =
+                              pendingDateTimeSet.any((pendingDate) {
+                            final formattedPendingDate =
+                                DateFormat('d MMMM').format(pendingDate);
+                            return formattedDate == formattedPendingDate;
+                          });
+
+                          // Check for cancelled status
+                          final isCancelled = events?.any((event) {
+                                if (event is Map<String, dynamic>) {
+                                  if (event['status'] == 'cancelled') {
+                                    print(
+                                        'Yellow mark for date: $formattedDate'); // Debug print for yellow mark
+                                    return true;
+                                  }
+                                }
+                                return false;
+                              }) ??
+                              false;
+
+                          if (isPending) {
+                            return Container(
+                              width: 24,
+                              height: 24,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                '${date.day}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
+                          }
+
+                          // return null;
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildDayList('Available'),
+                          _buildDayList('Pending'),
+                          _buildDayList('Canceled'),
+                          _buildDayList('Accepted'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        });
   }
 
 //////////////////////////////////////////////////////////////
@@ -329,7 +337,7 @@ class _DocDashboardState extends State<DocDashboard>
       child: Text(
         '${date.day}',
         style: TextStyle(
-          color: isSelected ? Colors.white : Colors.black,
+          color: isSelected ? text : drawertext,
         ),
       ),
     );
@@ -340,7 +348,10 @@ class _DocDashboardState extends State<DocDashboard>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Incoming Call'),
+          title: Text(
+            'Incoming Call',
+            style: TextStyle(color: text),
+          ),
           content: Text(
               'You have an incoming call from $currentUserUid. Do you want to answer it?'),
           actions: <Widget>[
@@ -349,7 +360,7 @@ class _DocDashboardState extends State<DocDashboard>
               onPressed: () async {
                 // Update the callStatus field to false when rejecting the call
                 await FirebaseFirestore.instance
-                    .collection('usersdata') // Update with your collection name
+                    .collection('users') // Update with your collection name
                     .doc(widget.docId)
                     .update({'callStatus': false});
 
@@ -365,8 +376,7 @@ class _DocDashboardState extends State<DocDashboard>
                 // Fetch currentUserUid from Firestore
                 final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
                     await FirebaseFirestore.instance
-                        .collection(
-                            'usersdata') // Update with your collection name
+                        .collection('users') // Update with your collection name
                         .doc(widget.docId)
                         .get();
 
@@ -376,7 +386,7 @@ class _DocDashboardState extends State<DocDashboard>
 
                   // Update callStatus to false
                   await FirebaseFirestore.instance
-                      .collection('usersdata')
+                      .collection('users')
                       .doc(widget.docId)
                       .update({'callStatus': false});
 
@@ -441,11 +451,20 @@ class _DocDashboardState extends State<DocDashboard>
           return SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                Text('Doctor Name: ${widget.docId}'),
-                Text('Available Days:'),
+                Text(
+                  'Doctor Name: ${widget.docId}',
+                  style: TextStyle(color: text),
+                ),
+                Text(
+                  'Available Days:',
+                  style: TextStyle(color: text),
+                ),
                 filteredDays.isEmpty
                     ? Center(
-                        child: Text('No $statusFilter slots available.'),
+                        child: Text(
+                          'No $statusFilter slots available.',
+                          style: TextStyle(color: text),
+                        ),
                       )
                     : Column(
                         children: filteredDays.map<Widget>((day) {
@@ -501,19 +520,28 @@ class _DayCardDOCState extends State<DayCardDOC> {
       child: Column(
         children: <Widget>[
           ListTile(
-            title: Text('Day: ${widget.dayData['day']}'),
-            subtitle: Text('Date: ${widget.dayData['date']}'),
+            title: Text(
+              'Day: ${widget.dayData['day']}',
+              style: TextStyle(color: text),
+            ),
+            subtitle: Text(
+              'Date: ${widget.dayData['date']}',
+              style: TextStyle(color: text),
+            ),
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
                 primary:
-                    scaffoldBgColor, // Change this color to the desired background color
+                    DoctorsecondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
                   slotsVisible = !slotsVisible;
                 });
               },
-              child: Text(slotsVisible ? 'Hide Slots' : 'Show Slots'),
+              child: Text(
+                slotsVisible ? 'Hide Slots' : 'Show Slots',
+                style: TextStyle(color: text),
+              ),
             ),
           ),
           if (slotsVisible)
@@ -565,7 +593,10 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
 
     if (status == widget.selectedStatusFilter) {
       return ListTile(
-        title: Text(' ${widget.slotData['slot']} \n Status: $status'),
+        title: Text(
+          ' ${widget.slotData['slot']} \n Status: $status',
+          style: TextStyle(color: text),
+        ),
         subtitle: Text('Patient: $patientName'),
         trailing: Visibility(
           visible: status !=
@@ -573,7 +604,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
               primary:
-                  scaffoldBgColor, // Change this color to the desired background color
+                  dynamicScaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               if (widget.slotData['status'] == 'Canceled') {

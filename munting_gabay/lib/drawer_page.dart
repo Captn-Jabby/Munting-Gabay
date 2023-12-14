@@ -30,7 +30,7 @@ class AppDrawer extends StatelessWidget {
 
         // Retrieve the avatar path
         final snapshot = await FirebaseFirestore.instance
-            .collection('usersdata')
+            .collection('users')
             .doc(user?.email)
             .get();
 
@@ -55,26 +55,26 @@ class AppDrawer extends StatelessWidget {
               child: UserAccountsDrawerHeader(
                 accountName: FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
-                      .collection('usersdata')
+                      .collection('users')
                       .doc(user?.email)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Text(
                         'Loading...',
-                        style: TextStyle(color: drawertext),
+                        style: TextStyle(color: text),
                       );
                     }
                     if (snapshot.hasError) {
                       return Text(
                         'Error: ${snapshot.error}',
-                        style: TextStyle(color: drawertext),
+                        style: TextStyle(color: text),
                       );
                     }
                     if (!snapshot.hasData || !snapshot.data!.exists) {
                       return Text(
                         'User not found',
-                        style: TextStyle(color: drawertext),
+                        style: TextStyle(color: text),
                       );
                     }
                     String username = snapshot.data!['username'];
@@ -84,7 +84,7 @@ class AppDrawer extends StatelessWidget {
                 accountEmail: Text(user?.email ?? ""),
                 currentAccountPicture: FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
-                      .collection('usersdata')
+                      .collection('users')
                       .doc(user?.email)
                       .get(),
                   builder: (context, snapshot) {
@@ -94,7 +94,7 @@ class AppDrawer extends StatelessWidget {
                     if (snapshot.hasError) {
                       return Text(
                         'Error: ${snapshot.error}',
-                        style: TextStyle(color: drawertext),
+                        style: TextStyle(color: text),
                       );
                     }
                     if (!snapshot.hasData || !snapshot.data!.exists) {
@@ -116,7 +116,7 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Icons.person),
                   title: Text(
                     'Profile',
-                    style: TextStyle(color: drawertext),
+                    style: TextStyle(color: text),
                   ),
                   onTap: () {
                     // Handle navigation to profile
@@ -131,7 +131,7 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Icons.home_filled),
                   title: Text(
                     'Home',
-                    style: TextStyle(color: drawertext),
+                    style: TextStyle(color: text),
                   ),
                   onTap: () {
                     // Handle navigation to profile
@@ -145,7 +145,7 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Icons.settings),
                   title: Text(
                     'Settings',
-                    style: TextStyle(color: drawertext),
+                    style: TextStyle(color: text),
                   ),
                   onTap: () {
                     Navigator.pushReplacement(
@@ -158,7 +158,7 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Icons.color_lens),
                   title: Text(
                     'Themes',
-                    style: TextStyle(color: drawertext),
+                    style: TextStyle(color: text),
                   ),
                   onTap: () {
                     Navigator.pushReplacement(
@@ -175,7 +175,7 @@ class AppDrawer extends StatelessWidget {
                   leading: Icon(Icons.logout),
                   title: Text(
                     'Logout',
-                    style: TextStyle(color: drawertext),
+                    style: TextStyle(color: text),
                   ),
                   onTap: () {
                     showDialog(
@@ -184,17 +184,17 @@ class AppDrawer extends StatelessWidget {
                         return AlertDialog(
                           title: Text(
                             'Confirm Logout',
-                            style: TextStyle(color: drawertext),
+                            style: TextStyle(color: text),
                           ),
                           content: Text(
                             'Are you sure you want to log out?',
-                            style: TextStyle(color: drawertext),
+                            style: TextStyle(color: text),
                           ),
                           actions: <Widget>[
                             TextButton(
                               child: Text(
                                 'Cancel',
-                                style: TextStyle(color: drawertext),
+                                style: TextStyle(color: text),
                               ),
                               onPressed: () {
                                 Navigator.of(context).pop(); // Close the dialog

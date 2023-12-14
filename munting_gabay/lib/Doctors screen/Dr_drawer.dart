@@ -19,6 +19,7 @@ class DrDrawer extends StatefulWidget {
 class _DrDrawerState extends State<DrDrawer> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool avail = false;
+  bool currentStatus = false;
   @override
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
@@ -35,7 +36,7 @@ class _DrDrawerState extends State<DrDrawer> {
 
         // Retrieve the avatar path
         final snapshot = await FirebaseFirestore.instance
-            .collection('usersdata')
+            .collection('users')
             .doc(user?.email)
             .get();
 
@@ -56,7 +57,7 @@ class _DrDrawerState extends State<DrDrawer> {
           UserAccountsDrawerHeader(
             accountName: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
-                  .collection('usersdata')
+                  .collection('users')
                   .doc(user?.email)
                   .get(),
               builder: (context, snapshot) {
@@ -76,7 +77,7 @@ class _DrDrawerState extends State<DrDrawer> {
             accountEmail: Text(user?.email ?? ""),
             currentAccountPicture: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
-                  .collection('usersdata')
+                  .collection('users')
                   .doc(user?.email)
                   .get(),
               builder: (context, snapshot) {
@@ -108,36 +109,74 @@ class _DrDrawerState extends State<DrDrawer> {
               },
             ),
           ),
-          ElevatedButton(
-            onPressed: () async {
-              setState(() {
-                avail = !avail;
-              });
-              // Fetch the current status
-              DocumentSnapshot userDataSnapshot = await FirebaseFirestore
-                  .instance
-                  .collection('usersdata')
-                  .doc(user?.email)
-                  .get();
-              String currentStatus = userDataSnapshot['DoctorStatus'];
 
-              // Toggle the status
-              String newStatus =
-                  currentStatus == 'Available' ? 'Not Available' : 'Available';
+          Row(children: [
+            SizedBox(
+              width: 10,
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  avail = !avail;
+                });
+                // Fetch the current status
+                DocumentSnapshot userDataSnapshot = await FirebaseFirestore
+                    .instance
+                    .collection('users')
+                    .doc(user?.email)
+                    .get();
+                String currentStatus = userDataSnapshot['DoctorStatus'];
 
-              // Update the status in Firestore
-              await FirebaseFirestore.instance
-                  .collection('usersdata')
-                  .doc(user?.email)
-                  .update({'DoctorStatus': newStatus});
+                // Toggle the status
+                String newStatus = currentStatus == 'Available'
+                    ? 'Not Available'
+                    : 'Available';
 
-              // Show a message indicating the status change
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('Doctor status changed to $newStatus'),
-              ));
-            },
-            child: Text(avail ? 'Available ' : 'Not Available'),
-          ),
+                // Update the status in Firestore
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user?.email)
+                    .update({'DoctorStatus': newStatus});
+
+                // Show a message indicating the status change
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Doctor status changed to $newStatus'),
+                ));
+              },
+              child: Text(avail ? 'Available ' : 'Not Available'),
+            ),
+            IconButton(
+              onPressed: () async {
+                // Get the current user's document
+                DocumentSnapshot userDataSnapshot = await FirebaseFirestore
+                    .instance
+                    .collection('users')
+                    .doc(user?.email)
+                    .get();
+
+                // Get the current dark mode status
+                bool currentStatus = userDataSnapshot['darkmode'] ?? false;
+
+                // Toggle the dark mode status
+                await FirebaseFirestore.instance
+                    .collection('users')
+                    .doc(user?.email)
+                    .update({'darkmode': !currentStatus});
+
+                // Show a message indicating the status change
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Dark mode toggled'),
+                  ),
+                );
+              },
+              icon: Icon(
+                currentStatus ? Icons.dark_mode : Icons.light_mode,
+                size: 24,
+                color: currentStatus ? Colors.black : Colors.yellow,
+              ),
+            )
+          ]),
 
           ListTile(
             leading: Icon(Icons.person),

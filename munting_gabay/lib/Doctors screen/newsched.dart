@@ -182,152 +182,177 @@ class _DateListScreenState extends State<DateListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: scaffoldBgColor,
-      appBar: AppBar(
-        backgroundColor: secondaryColor,
-        title: Text('Yearly Dates'),
-        actions: [
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary:
-                  scaffoldBgColor, // Change this color to the desired background color
-            ),
-            onPressed: () {
-              deleteSchedule();
-            },
-            child: Text('Delete'),
-          ),
-          if (hasSchedule)
-            Icon(
-              Icons.check_circle, // Show a checkmark icon if a schedule exists
-              color: Colors.green,
-              size: 24.0,
-            ),
-          IconButton(
-            icon: Icon(
-              Icons.access_time,
-              color: scaffoldBgColor,
-            ),
-            onPressed: () {
-              // Handle the action when the message button is pressed
-              // For example, navigate to the chat screen
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => SavedDatesScreen(),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Select days to filter: '),
-            ],
-          ),
-          Container(
-            height: 40,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                for (String day in [
-                  'Mon',
-                  'Tue',
-                  'Wed',
-                  'Thu',
-                  'Fri',
-                  'Sat',
-                  'Sun'
-                ])
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 4),
-                    child: FilterChip(
-                      label: Text(day),
-                      selected: selectedDays.contains(day),
-                      onSelected: (selected) {
-                        setState(() {
-                          if (selected) {
-                            selectedDays.add(day);
-                          } else {
-                            selectedDays.remove(day);
-                          }
-                        });
-                      },
-                    ),
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(user?.email)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator(); // Placeholder for loading state
+          }
+          if (!snapshot.hasData || !snapshot.data!.exists) {
+            return Text('User data not found');
+          }
+
+          bool darkMode = snapshot.data!['darkmode'] ?? false;
+
+          bool darkmode = snapshot.data?['darkmode'] ?? false;
+          Color dynamicSecondaryColor =
+              darkmode ? darkSecond : DoctorsecondaryColor;
+          Color dynamicScaffoldBgColor =
+              darkmode ? darkPrimary : DoctorscaffoldBgColor;
+
+          return Scaffold(
+            backgroundColor: dynamicScaffoldBgColor,
+            appBar: AppBar(
+              backgroundColor: dynamicSecondaryColor,
+              title: Text('Yearly Dates'),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary:
+                        darkPrimary, // Change this color to the desired background color
                   ),
+                  onPressed: () {
+                    deleteSchedule();
+                  },
+                  child: Text('Delete'),
+                ),
+                if (hasSchedule)
+                  Icon(
+                    Icons
+                        .check_circle, // Show a checkmark icon if a schedule exists
+                    color: Colors.green,
+                    size: 24.0,
+                  ),
+                IconButton(
+                  icon: Icon(
+                    Icons.access_time,
+                    color: darkPrimary,
+                  ),
+                  onPressed: () {
+                    // Handle the action when the message button is pressed
+                    // For example, navigate to the chat screen
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SavedDatesScreen(),
+                      ),
+                    );
+                  },
+                ),
               ],
             ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      secondaryColor, // Change this color to the desired background color
+            body: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text('Select days to filter: '),
+                  ],
                 ),
-                onPressed: () {
-                  filterDates();
-                },
-                child: Text(
-                  'Filter',
-                  style: TextStyle(color: text),
-                ),
-              ),
-              SizedBox(width: 16), // Add some spacing
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      secondaryColor, // Change this color to the desired background color
-                ),
-                onPressed: () {
-                  // Create and save slots for all filtered dates
-                  createSlotsForDateRange(filteredDates);
-                },
-                child: Text(
-                  'Save',
-                  style: TextStyle(color: text),
-                ),
-              ),
-
-              SizedBox(width: 16),
-            ],
-          ),
-          Expanded(
-            child: ListView.builder(
-              key: UniqueKey(),
-              itemCount: filteredDates.length,
-              itemBuilder: (context, index) {
-                return Dismissible(
-                  key: UniqueKey(), // Ensure each item has a unique key
-                  onDismissed: (direction) {
-                    // Delete the schedule when the item is dismissed
-                    deleteScheduleForDate(filteredDates[index]);
-                  },
-                  background: Container(
-                    color: Colors.red, // Background color for swipe action
-                    child: Icon(Icons.delete, color: Colors.white),
-                    alignment: Alignment.centerRight,
-                    padding: EdgeInsets.only(right: 16.0),
+                Container(
+                  height: 40,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      for (String day in [
+                        'Mon',
+                        'Tue',
+                        'Wed',
+                        'Thu',
+                        'Fri',
+                        'Sat',
+                        'Sun'
+                      ])
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 4),
+                          child: FilterChip(
+                            label: Text(day),
+                            selected: selectedDays.contains(day),
+                            onSelected: (selected) {
+                              setState(() {
+                                if (selected) {
+                                  selectedDays.add(day);
+                                } else {
+                                  selectedDays.remove(day);
+                                }
+                              });
+                            },
+                          ),
+                        ),
+                    ],
                   ),
-                  child: ListTile(
-                    title: Text(
-                      DateFormat('E, MMM d, y').format(filteredDates[index]),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            secondaryColor, // Change this color to the desired background color
+                      ),
+                      onPressed: () {
+                        filterDates();
+                      },
+                      child: Text(
+                        'Filter',
+                        style: TextStyle(color: text),
+                      ),
                     ),
-                    // Rest of your ListTile code...
+                    SizedBox(width: 16), // Add some spacing
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            DoctorsecondaryColor, // Change this color to the desired background color
+                      ),
+                      onPressed: () {
+                        // Create and save slots for all filtered dates
+                        createSlotsForDateRange(filteredDates);
+                      },
+                      child: Text(
+                        'Save',
+                        style: TextStyle(color: text),
+                      ),
+                    ),
+
+                    SizedBox(width: 16),
+                  ],
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    key: UniqueKey(),
+                    itemCount: filteredDates.length,
+                    itemBuilder: (context, index) {
+                      return Dismissible(
+                        key: UniqueKey(), // Ensure each item has a unique key
+                        onDismissed: (direction) {
+                          // Delete the schedule when the item is dismissed
+                          deleteScheduleForDate(filteredDates[index]);
+                        },
+                        background: Container(
+                          color:
+                              Colors.red, // Background color for swipe action
+                          child: Icon(Icons.delete, color: Colors.white),
+                          alignment: Alignment.centerRight,
+                          padding: EdgeInsets.only(right: 16.0),
+                        ),
+                        child: ListTile(
+                          title: Text(
+                            DateFormat('E, MMM d, y')
+                                .format(filteredDates[index]),
+                          ),
+                          // Rest of your ListTile code...
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
-          ),
-        ],
-      ),
-    );
+          );
+        });
   }
 
   void deleteScheduleForDate(DateTime date) {

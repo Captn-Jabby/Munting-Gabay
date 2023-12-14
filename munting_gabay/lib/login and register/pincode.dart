@@ -83,7 +83,7 @@ class _PinScreenState extends State<PinScreen> {
 
         // Retrieve the 'pincode' field for the current user from Firestore using their email
         DocumentSnapshot userData = await FirebaseFirestore.instance
-            .collection('usersdata')
+            .collection('users')
             .doc(user.email) // Use the user's email as the document ID
             .get();
         // print('User Data: ${userData.data()}'); // Print the entire user data

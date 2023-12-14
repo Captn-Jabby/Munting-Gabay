@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:munting_gabay/login%20and%20register/Clinic%20Address.dart';
 
 import 'package:munting_gabay/variable.dart';
 
@@ -34,29 +36,24 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
             child: Stack(alignment: Alignment.topCenter, children: [
               Column(
                 children: [
-                  Text('Munting\nGabay',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 5,
-                        shadows: [
-                          Shadow(
-                              color: Color(0xBA205007).withOpacity(1.0),
-                              offset: const Offset(7, 2))
-                        ],
-                        fontSize: 75,
-                        color: Colors.white,
-                      )),
-                  const SizedBox(
-                    height: 12,
+                  Center(
+                    child: SpinningContainer(),
                   ),
-                  const Text(
-                    'A MOBILE-BASED AUTISM AID\nAND AWARENESS APPLICATION',
+                  Text(
+                    'Munting Gabay',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 17),
+                    style: GoogleFonts.poppins(
+                        letterSpacing: 2,
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 40,
+                          color: Color(0xFF95C440),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 140),
+                    child: Text('An Autism Aid and Awareness App',
+                        style: smallTextStyle1),
                   ),
                 ],
               ),
@@ -199,7 +196,7 @@ class _PersonalIdentificationScreenState
                   ),
                   // Text(
                   //   'Personal Identification Form',
-                  //   style: TextStyle(color: drawertext, fontSize: 20),
+                  //   style: TextStyle(color: text, fontSize: 20),
                   // ),
                   TextFormField(
                     controller: _usernameController,
@@ -356,6 +353,9 @@ class _PersonalIdentificationScreenState
                       return null; // Return null if the validation succeeds
                     },
                   ),
+                  SizedBox(
+                    height: 15,
+                  ),
                   TextFormField(
                     controller: _confirmPasswordController,
                     decoration: InputDecoration(
@@ -472,30 +472,7 @@ class DoctorsIdentificationScreen extends StatefulWidget {
 
 class _DoctorsIdentificationScreenState
     extends State<DoctorsIdentificationScreen> {
-  Future<String> uploadImageToStorage(String title) async {
-    final fileName = '$title-${DateTime.now()}.png';
-    final storageRef =
-        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
-    await storageRef.putFile(_imageFile!);
-    return await storageRef.getDownloadURL();
-  }
-
-  Future<String> uploadImageToStorage2(String title) async {
-    final fileName = '$title-${DateTime.now()}.png';
-    final storageRef =
-        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
-    await storageRef.putFile(_imageFile2!);
-    return await storageRef.getDownloadURL();
-  }
-
-  Future<String> uploadImage(String title) async {
-    final fileName = '$title-${DateTime.now()}.png';
-    final storageRef =
-        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
-    await storageRef.putFile(profilepic!);
-    return await storageRef.getDownloadURL();
-  }
-
+  bool darkmode = false;
   void _registerUser() async {
     String password = _passwordController.text;
     String confirmPassword = _confirmPasswordController.text;
@@ -534,21 +511,21 @@ class _DoctorsIdentificationScreenState
       _emailController.clear();
       _passwordController.clear();
       _pinController.clear();
-      _clinicController.clear();
-      _addressHospital.clear();
-      _phoneNumber.clear();
+      // _clinicController.clear();
+      // _addressHospital.clear();
+      // _phoneNumber.clear();
       _confirmPasswordController.clear();
       EasyLoading.dismiss();
       // Save additional user data to Firestore
       await FirebaseFirestore.instance
-          .collection('usersdata')
+          .collection('users')
           .doc(userData.email)
           .set({
         'username': userData.username,
         'IDENTIFICATION': imageUrl,
         'Licensure': imageUrl2,
         'name': userData.name,
-        'usertype': 'DOCTORS',
+        'role': 'DOCTORS',
         'address': userData.address,
         'birthdate': userData.birthdate,
         'email': userData.email,
@@ -557,7 +534,8 @@ class _DoctorsIdentificationScreenState
         'clinic': _clinicController.text,
         'addressHospital': _addressHospital.text,
         'phoneNumber': _phoneNumber.text,
-        'DoctorStatus': 'Not Available'
+        'DoctorStatus': 'Not Available',
+        'darkmode': darkmode
       });
 
       // Perform further actions like saving additional user data to Firestore
@@ -565,9 +543,8 @@ class _DoctorsIdentificationScreenState
       EasyLoading.show(status: 'Error during user registration: $e');
       print('Error during user registration: $e');
       print('Stack trace: $stackTrace');
-      EasyLoading.dismiss();
     }
-
+    EasyLoading.dismiss();
     // Show a success message and navigate to the LoginScreen
     showDialog(
       context: context,
@@ -590,6 +567,315 @@ class _DoctorsIdentificationScreenState
         );
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: scaffoldBgColor,
+      appBar: AppBar(
+        backgroundColor: scaffoldBgColor,
+      ),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Doctor\'s Identification Form'),
+              Container(
+                padding: EdgeInsets.all(16.0),
+                child: Form(
+                  key: __formKey,
+                  child: Column(
+                    children: [
+                      TextFormField(
+                        controller: _clinicController,
+                        decoration: InputDecoration(
+                          labelText: 'Clinic Name',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a clinic name';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      // ElevatedButton(
+                      //     onPressed: () {
+                      //       Navigator.push(
+                      //         context,
+                      //         MaterialPageRoute(
+                      //             builder: (context) => LocationPickerScreen()),
+                      //       );
+                      //     },
+                      //     child: Text('Set Clinic Address')),
+                      TextFormField(
+                        controller: _addressHospital,
+                        decoration: InputDecoration(
+                          labelText: 'Clinic Address',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Address';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      TextFormField(
+                        controller: _phoneNumber,
+                        decoration: InputDecoration(
+                          labelText: 'Phone Number',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
+                          ),
+                        ),
+                        inputFormatters: <TextInputFormatter>[
+                          FilteringTextInputFormatter
+                              .digitsOnly, // Allow only digits
+                        ],
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Phone Number';
+                          }
+                          return null; // Return null if the validation succeeds
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 15,
+              ),
+              Divider(
+                thickness: 2,
+                color: secondaryColor,
+              ),
+              Text(
+                'Please upload your Identification (ID) and Licensure photos.',
+                style: TextStyle(color: text),
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Identification',
+                    style: TextStyle(
+                      color: text,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          _pickImage(); // Call the function to pick an image from storage
+                        },
+                        icon: Icon(
+                          Icons.image, // Change to the desired icon
+                          color: text, // Change to the desired icon color
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              if (_imageFile != null)
+                Image.file(
+                  _imageFile!,
+                  width: 200,
+                  height: 200,
+                ),
+              Divider(
+                thickness: 2,
+                color: secondaryColor,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Licensure',
+                    style: TextStyle(
+                      color: text,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          _pickImage2(); // Call the function to pick an image from storage
+                        },
+                        icon: Icon(
+                          Icons.badge, // Change to the desired icon
+                          color: text, // Change to the desired icon color
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              if (_imageFile2 != null)
+                Image.file(
+                  _imageFile2!,
+                  width: 200,
+                  height: 200,
+                ),
+              Divider(
+                thickness: 2,
+                color: secondaryColor,
+              ),
+              const SizedBox(height: 20),
+              Row(
+                children: [
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                    'Profile Picture',
+                    style: TextStyle(
+                      color: text,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      fontStyle: FontStyle.italic,
+                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
+                    ),
+                  ),
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: IconButton(
+                        onPressed: () {
+                          _profilepic(); // Call the function to pick an image from storage
+                        },
+                        icon: Icon(
+                          Icons.person, // Change to the desired icon
+                          color: text, // Change to the desired icon color
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              if (profilepic != null)
+                Image.file(
+                  profilepic!,
+                  width: 200,
+                  height: 200,
+                ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  primary:
+                      secondaryColor, // Change this color to the desired background color
+                ),
+                onPressed: () {
+                  if (__formKey.currentState?.validate() ?? false) {
+                    if (_imageFile != null && _imageFile2 != null) {
+                      // Both images are selected, you can call the registration process here
+                      _registerUser(); // Call the registration process
+                      uploadImageToFirebase(
+                          _imageFile!,
+                          widget
+                              .userData.email); // Call the image upload process
+                    } else {
+                      // Alert dialog when images are not selected
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Error'),
+                            content: Text(
+                                'Please select both images before registering.'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pop(); // Close the dialog
+                                },
+                                child: Text(
+                                  'OK',
+                                  style: TextStyle(color: text),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
+                child: Text(
+                  'Register',
+                  style: TextStyle(color: text),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<String> uploadImageToStorage(String title) async {
+    final fileName = '$title-${DateTime.now()}.png';
+    final storageRef =
+        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
+    await storageRef.putFile(_imageFile!);
+    return await storageRef.getDownloadURL();
+  }
+
+  Future<String> uploadImageToStorage2(String title) async {
+    final fileName = '$title-${DateTime.now()}.png';
+    final storageRef =
+        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
+    await storageRef.putFile(_imageFile2!);
+    return await storageRef.getDownloadURL();
+  }
+
+  Future<String> uploadImage(String title) async {
+    final fileName = '$title-${DateTime.now()}.png';
+    final storageRef =
+        FirebaseStorage.instance.ref().child('requirments_images/$fileName');
+    await storageRef.putFile(profilepic!);
+    return await storageRef.getDownloadURL();
   }
 
   /// IMAGEEEEEEEE
@@ -672,282 +958,6 @@ class _DoctorsIdentificationScreenState
         uploadImageToFirebase(_imageFile2!, widget.userData.email);
       }
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: scaffoldBgColor,
-      appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text('Doctor\'s Identification Form'),
-              Container(
-                padding: EdgeInsets.all(16.0),
-                child: Form(
-                  key: __formKey,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: _clinicController,
-                        decoration: InputDecoration(
-                          labelText: 'Clinic Name',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a clinic name';
-                          }
-                          return null; // Return null if the validation succeeds
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        controller: _addressHospital,
-                        decoration: InputDecoration(
-                          labelText: 'Clinic Address',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a Address';
-                          }
-                          return null; // Return null if the validation succeeds
-                        },
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      TextFormField(
-                        controller: _phoneNumber,
-                        decoration: InputDecoration(
-                          labelText: 'Phone Number',
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
-                          ),
-                        ),
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter
-                              .digitsOnly, // Allow only digits
-                        ],
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a Phone Number';
-                          }
-                          return null; // Return null if the validation succeeds
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(
-                height: 15,
-              ),
-              Divider(
-                thickness: 2,
-                color: secondaryColor,
-              ),
-              Text(
-                'Please upload your Identification (ID) and Licensure photos.',
-                style: TextStyle(color: drawertext),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Identification',
-                    style: TextStyle(
-                      color: drawertext,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        onPressed: () {
-                          _pickImage(); // Call the function to pick an image from storage
-                        },
-                        icon: Icon(
-                          Icons.image, // Change to the desired icon
-                          color: drawertext, // Change to the desired icon color
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              if (_imageFile != null)
-                Image.file(
-                  _imageFile!,
-                  width: 200,
-                  height: 200,
-                ),
-              Divider(
-                thickness: 2,
-                color: secondaryColor,
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Licensure',
-                    style: TextStyle(
-                      color: drawertext,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        onPressed: () {
-                          _pickImage2(); // Call the function to pick an image from storage
-                        },
-                        icon: Icon(
-                          Icons.badge, // Change to the desired icon
-                          color: drawertext, // Change to the desired icon color
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              if (_imageFile2 != null)
-                Image.file(
-                  _imageFile2!,
-                  width: 200,
-                  height: 200,
-                ),
-              Divider(
-                thickness: 2,
-                color: secondaryColor,
-              ),
-              const SizedBox(height: 20),
-              Row(
-                children: [
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Text(
-                    'Profile Picture',
-                    style: TextStyle(
-                      color: drawertext,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      // You can also specify other text style properties here, such as fontSize, letterSpacing, etc.
-                    ),
-                  ),
-                  Expanded(
-                    child: Align(
-                      alignment: Alignment.centerRight,
-                      child: IconButton(
-                        onPressed: () {
-                          _profilepic(); // Call the function to pick an image from storage
-                        },
-                        icon: Icon(
-                          Icons.person, // Change to the desired icon
-                          color: drawertext, // Change to the desired icon color
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              if (profilepic != null)
-                Image.file(
-                  profilepic!,
-                  width: 200,
-                  height: 200,
-                ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  primary:
-                      secondaryColor, // Change this color to the desired background color
-                ),
-                onPressed: () {
-                  if (__formKey.currentState?.validate() ?? false) {
-                    if (_imageFile != null && _imageFile2 != null) {
-                      // Both images are selected, you can call the registration process here
-                      _registerUser(); // Call the registration process
-                      uploadImageToFirebase(
-                          _imageFile!,
-                          widget
-                              .userData.email); // Call the image upload process
-                    } else {
-                      // Alert dialog when images are not selected
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Error'),
-                            content: Text(
-                                'Please select both images before registering.'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.of(context)
-                                      .pop(); // Close the dialog
-                                },
-                                child: Text(
-                                  'OK',
-                                  style: TextStyle(color: drawertext),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  }
-                },
-                child: Text(
-                  'Register',
-                  style: TextStyle(color: drawertext),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-    );
   }
 
   final __formKey = GlobalKey<FormState>();
