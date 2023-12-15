@@ -216,7 +216,7 @@ class _DocDashboardState extends State<DocDashboard>
                   IconButton(
                     icon: Icon(
                       Icons.calendar_month,
-                      color: dynamicSecondaryColor,
+                      color: Colors.indigo,
                     ),
                     onPressed: () {
                       Navigator.push(
@@ -425,7 +425,16 @@ class _DocDashboardState extends State<DocDashboard>
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: CircularProgressIndicator(
+              // Color of the loading indicator
+              valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+              // Width of the indicator's line
+              strokeWidth: 4,
+
+              // Optional: Background color of the circle
+              backgroundColor: bgloadingColor,
+            ),
           );
         } else if (snapshot.hasError) {
           return Center(
