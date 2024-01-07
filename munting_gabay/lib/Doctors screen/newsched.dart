@@ -189,7 +189,18 @@ class _DateListScreenState extends State<DateListScreen> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return CircularProgressIndicator(); // Placeholder for loading state
+            return Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
+              ),
+            ); // S; // Placeholder for loading state
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
             return Text('User data not found');

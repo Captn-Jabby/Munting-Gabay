@@ -3,9 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import the intl package
 import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
+import 'package:munting_gabay/Doctors%20screen/doctor_call.dart';
 import 'package:munting_gabay/Doctors%20screen/newsched.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
-import 'package:munting_gabay/Doctors%20screen/doctor_call.dart';
 import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -31,11 +31,14 @@ class _DocDashboardState extends State<DocDashboard>
   DateTime _selectedDay = DateTime.now();
   // In _DocDashboardState
   bool previousCallStatus = false;
-
+  List<Map<String, dynamic>> pendingDatesAndSlots =
+      []; // Declare at the class level
+  DateTime selectedDate = DateTime.now();
+  bool Accepting = false;
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 4, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
     _fetchPendingDates();
     _calendarFormat = CalendarFormat.month;
     // Listen to changes in callStatus
@@ -83,15 +86,17 @@ class _DocDashboardState extends State<DocDashboard>
   void _updateEvents(List<String> pendingDates) {
     setState(() {
       _events = {}; // Clear existing events
-      pendingDateTimeSet = pendingDates.map((date) {
-        // Format the date from the pendingDates list to match the calendar format
-        final formattedDate = DateFormat('d MMMM')
-            .parse(date + ' 2023'); // Assuming the year is 2023
-        return formattedDate;
-      }).toSet();
+      pendingDateTimeSet = Set();
 
-      for (DateTime date in pendingDateTimeSet) {
-        _events[date] = [_getEventMarker(date)];
+      for (String date in pendingDates) {
+        final formattedDate = DateFormat('d MMMM').parse(date + ' 2023');
+        pendingDateTimeSet.add(formattedDate);
+
+        if (_events.containsKey(formattedDate)) {
+          _events[formattedDate]!.add(_getEventMarker(formattedDate));
+        } else {
+          _events[formattedDate] = [_getEventMarker(formattedDate)];
+        }
       }
     });
   }
@@ -125,222 +130,6 @@ class _DocDashboardState extends State<DocDashboard>
       default:
         throw FormatException('Invalid month number: $month');
     }
-  }
-
-  // Method to fetch pending dates from Firebase and update events
-  void _fetchPendingDates() {
-    FirebaseFirestore.instance
-        .collection('schedule')
-        .doc(widget.user?.email) // Assuming user.email is the document ID
-        .get()
-        .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
-      if (snapshot.exists) {
-        final Map<String, dynamic> data = snapshot.data()!;
-        final List<dynamic> availableDays = data['available_days'] ?? [];
-
-        // Extract pending dates from availableDays
-        final List<String> pendingDates = availableDays
-            .where((day) {
-              final slots = day['slots'] as List<dynamic>;
-              final pendingSlots = slots.where((slot) {
-                final status = slot['status'] as String;
-                print('Slot status: $status');
-                return status.toLowerCase() == 'pending';
-              }).toList();
-
-              return pendingSlots.isNotEmpty;
-            })
-            .map((day) => day['date'] as String)
-            .toList();
-
-        // Print availableDays and pendingDates for debugging
-        print('Available Days: $availableDays');
-        print('Pending Dates: $pendingDates');
-
-        // Update events with pending dates
-        _updateEvents(pendingDates);
-      } else {
-        print('Document does not exist for user: ${widget.user?.email}');
-      }
-    }).catchError((error) {
-      print('Error fetching pending dates: $error');
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-        stream: FirebaseFirestore.instance
-            .collection('users')
-            .doc(widget.docId)
-            .snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(
-                // Color of the loading indicator
-                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
-
-                // Width of the indicator's line
-                strokeWidth: 4,
-
-                // Optional: Background color of the circle
-                backgroundColor: bgloadingColor,
-              ),
-            );
-          }
-
-          bool darkmode = snapshot.data?['darkmode'] ?? false;
-          Color dynamicSecondaryColor =
-              darkmode ? darkSecond : DoctorsecondaryColor;
-          Color dynamicScaffoldBgColor =
-              darkmode ? darkPrimary : DoctorscaffoldBgColor;
-
-          return Scaffold(
-              backgroundColor: dynamicScaffoldBgColor,
-              appBar: AppBar(
-                backgroundColor: dynamicSecondaryColor,
-                title: Text('Doctor Dashboard'),
-                actions: [
-                  IconButton(
-                    icon: Icon(Icons.message),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => UserSelectionPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.calendar_month,
-                      color: Colors.indigo,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => DateListScreen()),
-                      );
-                    },
-                  ),
-                ],
-              ),
-              drawer: DrDrawer(),
-              body: DefaultTabController(
-                length: 4,
-                child: Column(
-                  children: [
-                    TableCalendar(
-                      firstDay: DateTime.utc(2023, 1, 1),
-                      lastDay: DateTime.utc(2024, 12, 31),
-                      focusedDay: _focusedDay,
-                      calendarFormat: _calendarFormat,
-                      onFormatChanged: (format) {
-                        setState(() {
-                          _calendarFormat = format;
-                        });
-                      },
-                      onDaySelected: (selectedDay, focusedDay) {
-                        setState(() {
-                          _selectedDay = selectedDay;
-                          _focusedDay = focusedDay;
-                        });
-                        // Add this print statement to track the selected date
-                        print('Selected Date: $_selectedDay');
-
-                        // Handle the click event here
-                        // _handleDateClick(_events[selectedDay]);
-                      },
-                      eventLoader: (day) {
-                        return _events[day] ?? [];
-                      },
-                      calendarStyle: const CalendarStyle(
-                        markersAlignment: Alignment.bottomRight,
-                      ),
-                      calendarBuilders: CalendarBuilders(
-                        markerBuilder: (context, date, events) {
-                          final formattedDate =
-                              DateFormat('d MMMM').format(date);
-
-                          final isPending =
-                              pendingDateTimeSet.any((pendingDate) {
-                            final formattedPendingDate =
-                                DateFormat('d MMMM').format(pendingDate);
-                            return formattedDate == formattedPendingDate;
-                          });
-
-                          // Check for cancelled status
-                          final isCancelled = events?.any((event) {
-                                if (event is Map<String, dynamic>) {
-                                  if (event['status'] == 'cancelled') {
-                                    print(
-                                        'Yellow mark for date: $formattedDate'); // Debug print for yellow mark
-                                    return true;
-                                  }
-                                }
-                                return false;
-                              }) ??
-                              false;
-
-                          if (isPending) {
-                            return Container(
-                              width: 24,
-                              height: 24,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: Colors.red,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Text(
-                                '${date.day}',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            );
-                          }
-
-                          // return null;
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
-                        children: [
-                          _buildDayList('Available'),
-                          _buildDayList('Pending'),
-                          _buildDayList('Canceled'),
-                          _buildDayList('Accepted'),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ));
-        });
-  }
-
-//////////////////////////////////////////////////////////////
-/////    schedule
-  // Function to build date cells with custom background color
-  Widget buildDateCell(DateTime date, bool isSelected) {
-    return Container(
-      margin: const EdgeInsets.all(4.0),
-      decoration: BoxDecoration(
-        color:
-            isSelected ? Colors.blue : null, // Change the selected date color
-        borderRadius: BorderRadius.circular(8),
-      ),
-      alignment: Alignment.center,
-      child: Text(
-        '${date.day}',
-        style: TextStyle(
-          color: isSelected ? text : drawertext,
-        ),
-      ),
-    );
   }
 
   Future<void> _showRejectDialog(String currentUserUid) async {
@@ -414,6 +203,341 @@ class _DocDashboardState extends State<DocDashboard>
         );
       },
     );
+  }
+
+  void _fetchPendingDates() {
+    FirebaseFirestore.instance
+        .collection('schedule')
+        .doc(widget.user?.email)
+        .get()
+        .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
+      if (snapshot.exists) {
+        final Map<String, dynamic> data = snapshot.data()!;
+        final List<dynamic> availableDays = data['available_days'] ?? [];
+
+        // Initialize pendingDatesAndSlots list
+        pendingDatesAndSlots = availableDays.where((day) {
+          final slots = day['slots'] as List<dynamic>;
+          final pendingSlots = slots.where((slot) {
+            final status = slot['status'] as String;
+            return status.toLowerCase() == 'pending';
+          }).toList();
+
+          return pendingSlots.isNotEmpty;
+        }).map<Map<String, dynamic>>((day) {
+          final date = day['date'] as String;
+          final slots = day['slots'] as List<dynamic>;
+
+          final pendingSlots =
+              slots.where((slot) => slot['status'] == 'Pending').toList();
+
+          return {'date': date, 'pendingSlots': pendingSlots};
+        }).toList();
+
+        // Print pendingDatesAndSlots for debugging
+        print('Pending Dates and Slots:');
+        pendingDatesAndSlots.forEach((item) {
+          final date = item['date'];
+          final pendingSlots = item['pendingSlots'];
+
+          print('Date: $date');
+          if (pendingSlots.isNotEmpty) {
+            print('Pending Slots:');
+            pendingSlots.forEach((slot) {
+              final slotTime = slot['slot'];
+              print('Time: $slotTime');
+            });
+          } else {
+            print('No Pending Slots on $date');
+          }
+        });
+
+        // Update events with pending dates
+        _updateEvents(pendingDatesAndSlots
+            .map((item) => item['date'].toString())
+            .toList());
+      } else {
+        print('Document does not exist for user: ${widget.user?.email}');
+      }
+    }).catchError((error) {
+      print('Error fetching pending dates: $error');
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.docId)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
+              ),
+            );
+          }
+
+          bool darkmode = snapshot.data?['darkmode'] ?? false;
+          Color dynamicSecondaryColor =
+              darkmode ? darkSecond : DoctorsecondaryColor;
+          Color dynamicScaffoldBgColor =
+              darkmode ? darkPrimary : DoctorscaffoldBgColor;
+
+          return Scaffold(
+              backgroundColor: dynamicScaffoldBgColor,
+              appBar: AppBar(
+                backgroundColor: dynamicSecondaryColor,
+                title: Text('Doctor Dashboard'),
+                actions: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      // Call the function to refresh the page here
+                      _fetchPendingDates();
+                    },
+                    tooltip: 'Refresh',
+                    child: Icon(Icons.refresh),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.message),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => UserSelectionPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      Icons.calendar_month,
+                      color: Colors.indigo,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DateListScreen()),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              drawer: DrDrawer(),
+              body: DefaultTabController(
+                length: 3,
+                child: Column(
+                  children: [
+                    TableCalendar(
+                      firstDay: DateTime.utc(2023, 1, 1),
+                      lastDay: DateTime.utc(2024, 12, 31),
+                      focusedDay: _focusedDay,
+                      calendarFormat: _calendarFormat,
+                      onFormatChanged: (format) {
+                        setState(() {
+                          _calendarFormat = format;
+                        });
+                      },
+                      onDaySelected: (selectedDay, focusedDay) {
+                        setState(() {
+                          _selectedDay = selectedDay;
+                          _focusedDay = focusedDay;
+                        });
+                        // Add this print statement to track the selected date
+                        print('Selected Date: $_selectedDay');
+
+                        // Call the function to display pending slots directly
+                        _displayPendingSlots();
+                      },
+                      eventLoader: (day) {
+                        return _events[day] ?? [];
+                      },
+                      calendarStyle: const CalendarStyle(
+                        markersAlignment: Alignment.bottomRight,
+                      ),
+                      calendarBuilders: CalendarBuilders(
+                        markerBuilder: (context, date, events) {
+                          final formattedDate =
+                              DateFormat('d MMMM').format(date);
+
+                          final isPending =
+                              pendingDateTimeSet.any((pendingDate) {
+                            final formattedPendingDate =
+                                DateFormat('d MMMM').format(pendingDate);
+                            return formattedDate == formattedPendingDate;
+                          });
+                          final pendingCount =
+                              pendingDateTimeSet.where((pendingDate) {
+                            final formattedPendingDate =
+                                DateFormat('d MMMM').format(pendingDate);
+                            return formattedDate == formattedPendingDate;
+                          }).length;
+                          if (isPending) {
+                            return Container(
+                              width: 24,
+                              height: 24,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Colors.red,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                '${pendingCount}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            );
+                          }
+
+                          // return null;
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: TabBarView(
+                        controller: _tabController,
+                        children: [
+                          _buildDayList('Available'),
+                          _buildDayList('Canceled'),
+                          _buildDayList('Accepted'),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ));
+        });
+  }
+
+  void _displayPendingSlots() {
+    // Check if the selected date has pending slots
+    final selectedDateString = DateFormat('d MMMM').format(_selectedDay);
+    final selectedDateSlots = pendingDatesAndSlots.firstWhere(
+      (item) => item['date'] == selectedDateString,
+      orElse: () => {'pendingSlots': []},
+    );
+
+    if (selectedDateSlots != null) {
+      final slots = selectedDateSlots['pendingSlots'] as List<dynamic>;
+
+      // Display the pending slots
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Pending Slots on $selectedDateString'),
+            content: Column(
+              children: slots.map<Widget>((slot) {
+                final slotTime = slot['slot'];
+                final status = slot['status'];
+                final patientName = slot['patients'];
+
+                return ListTile(
+                  title: Text(
+                    ' $slotTime \n Status: $status',
+                    style: TextStyle(color: text),
+                  ),
+                  subtitle: Text('Patient: $patientName'),
+                  trailing: Visibility(
+                    visible: status != 'Available',
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: dynamicScaffoldBgColor,
+                      ),
+                      onPressed: () {
+                        if (status == 'Canceled') {
+                          _changeSlotStatus(
+                              selectedDateString, slotTime, 'Canceled');
+                        } else {
+                          _changeSlotStatus(
+                              selectedDateString, slotTime, 'Accepted');
+                        }
+                        Navigator.pop(context);
+                      },
+                      child: Text(
+                        status == 'Canceled' ? 'Set Available' : 'Accept',
+                        style: TextStyle(color: text),
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Close'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  void _changeSlotStatus(String day, String timeSlot, String newStatus) async {
+    User? user = FirebaseAuth.instance.currentUser;
+    print('Changing status for: $day at $timeSlot to $newStatus');
+
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+    // Create a reference to the day within the document
+    DocumentReference dayRef =
+        firestore.collection('schedule').doc(widget.docId);
+
+    try {
+      // Get the existing day data
+      DocumentSnapshot<Map<String, dynamic>> daySnapshot =
+          await dayRef.get() as DocumentSnapshot<Map<String, dynamic>>;
+
+      if (daySnapshot.exists) {
+        Map<String, dynamic> dayData = daySnapshot.data()!;
+
+        // Find the day with the matching 'date' field
+        var selectedDay = dayData['available_days'].firstWhere(
+          (dayEntry) => dayEntry['date'] == day,
+          orElse: () => null,
+        );
+
+        if (selectedDay != null) {
+          // Find the slot with the matching 'slot' field
+          List<Map<String, dynamic>> slots =
+              List<Map<String, dynamic>>.from(selectedDay['slots']);
+          int slotIndex = slots.indexWhere(
+            (slotEntry) => slotEntry['slot'] == timeSlot,
+          );
+
+          if (slotIndex != -1) {
+            // Update the status in the selected slot
+            slots[slotIndex]['status'] = newStatus;
+
+            // Update the Firestore document with the modified day data
+            await dayRef.update({
+              'available_days': dayData['available_days'],
+            });
+
+            // Update _events and pendingDateTimeSet after the Firestore update
+            _updateEvents(dayData['available_days']
+                .map((item) => item['date'].toString())
+                .toList());
+          }
+        }
+      }
+    } catch (error) {
+      print('Error changing slot status: $error');
+      // Handle errors, e.g., show an error message if needed
+    }
   }
 
   Widget _buildDayList(String statusFilter) {
@@ -593,8 +717,6 @@ class SlotTileDOC extends StatefulWidget {
 }
 
 class _SlotTileDOCState extends State<SlotTileDOC> {
-  bool Accepting = false;
-
   @override
   Widget build(BuildContext context) {
     final String status = widget.slotData['status'];
@@ -607,187 +729,9 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
           style: TextStyle(color: text),
         ),
         subtitle: Text('Patient: $patientName'),
-        trailing: Visibility(
-          visible: status !=
-              'Available', // Hide the button if the status is 'Available'
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              primary:
-                  dynamicScaffoldBgColor, // Change this color to the desired background color
-            ),
-            onPressed: () {
-              if (widget.slotData['status'] == 'Canceled') {
-                // Clear the 'patients' field and set the status to 'Available'
-                _cancelAppointment(
-                    widget.day, widget.slotData['slot'] as String);
-              } else {
-                setState(() {
-                  Accepting = true;
-                });
-                _requestAppointment(
-                    widget.day, widget.slotData['slot'] as String);
-              }
-            },
-            child: Text(
-              widget.slotData['status'] == 'Canceled'
-                  ? 'Set Available'
-                  : Accepting
-                      ? 'Accepting...'
-                      : 'Accept',
-            ),
-          ),
-        ),
       );
     } else {
       return Container(); // Do not display slots with different statuses
     }
-  }
-
-  void _cancelAppointment(String day, String timeSlot) {
-    User? user = FirebaseAuth.instance.currentUser;
-    print('Canceling appointment for: $day at $timeSlot');
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Create a reference to the day within the document
-    DocumentReference dayRef =
-        firestore.collection('schedule').doc(widget.docId);
-
-    // Get the existing day data
-    dayRef.get().then((daySnapshot) {
-      if (mounted) {
-        // Check if the widget is still mounted
-        if (daySnapshot.exists) {
-          Map<String, dynamic> dayData =
-              daySnapshot.data() as Map<String, dynamic>;
-
-          // Find the day with the matching 'day' field
-          var selectedDay = dayData['available_days'].firstWhere(
-            (dayEntry) => dayEntry['day'] == day,
-            orElse: () => null,
-          );
-
-          if (selectedDay != null) {
-            // Remove the 'patients' field and set the status to 'Available'
-            List<dynamic> slots = List.from(selectedDay['slots']);
-            int slotIndex =
-                slots.indexWhere((slotEntry) => slotEntry['slot'] == timeSlot);
-
-            if (slotIndex != -1) {
-              // Clear the 'patients' field and set the status to 'Available'
-              slots[slotIndex]['patients'] = '';
-              slots[slotIndex]['status'] = 'Available';
-
-              // Update the slot in the list
-              dayData['available_days']
-                      [dayData['available_days'].indexOf(selectedDay)]
-                  ['slots'] = slots;
-
-              // Update the Firestore document with the modified day data
-              dayRef.update({
-                'available_days': dayData['available_days'],
-              }).then((_) {
-                if (mounted) {
-                  // Check if the widget is still mounted
-                  print('Appointment canceled.');
-                  setState(() {
-                    Accepting = false;
-                  });
-
-                  // Handle success, e.g., show a confirmation message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Appointment canceled.')),
-                  );
-                }
-              }).catchError((error) {
-                if (mounted) {
-                  // Check if the widget is still mounted
-                  print('Error canceling appointment: $error');
-                  setState(() {
-                    Accepting = false;
-                  });
-
-                  // Handle errors, e.g., show an error message
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Error canceling appointment.'),
-                    ),
-                  );
-                }
-              });
-            }
-          }
-        }
-      }
-    });
-  }
-
-  void _requestAppointment(String day, String timeSlot) {
-    User? user = FirebaseAuth.instance.currentUser;
-    print('Accepting appointment for: $day at $timeSlot');
-
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-
-    // Create a reference to the day within the document
-    DocumentReference dayRef =
-        firestore.collection('schedule').doc(widget.docId);
-
-    //sting day data
-    dayRef.get().then((daySnapshot) {
-      if (daySnapshot.exists) {
-        Map<String, dynamic> dayData =
-            daySnapshot.data() as Map<String, dynamic>;
-
-        // Find the day with the matching 'day' field
-        var selectedDay = dayData['available_days'].firstWhere(
-          (dayEntry) => dayEntry['day'] == day,
-          orElse: () => null,
-        );
-
-        if (selectedDay != null) {
-          // Update the Firestore document directly by removing the old slot and adding the updated slot
-          List<dynamic> slots = List.from(selectedDay['slots']);
-          int slotIndex =
-              slots.indexWhere((slotEntry) => slotEntry['slot'] == timeSlot);
-
-          if (slotIndex != -1) {
-            // Update the status and add the user's email
-            slots[slotIndex]['status'] = 'Accepted';
-
-            // Update the slot in the list
-            dayData['available_days']
-                    [dayData['available_days'].indexOf(selectedDay)]['slots'] =
-                slots;
-
-            // Update the Firestore document with the modified day data
-            dayRef.update({
-              'available_days': dayData['available_days'],
-            }).then((_) {
-              print('Appointment request submitted.');
-              setState(() {
-                Accepting = false;
-              });
-
-              // Handle success, e.g., show a confirmation message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Appointment request submitted.')),
-              );
-            }).catchError((error) {
-              print('Error submitting appointment request: $error');
-              setState(() {
-                Accepting = false;
-              });
-
-              // Handle errors, e.g., show an error message
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Error submitting appointment request.'),
-                ),
-              );
-            });
-          }
-        }
-      }
-    });
   }
 }

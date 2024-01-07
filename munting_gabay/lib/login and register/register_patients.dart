@@ -162,7 +162,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         )),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 140),
+                    padding: const EdgeInsets.only(bottom: 150),
                     child: Text('An Autism Aid and Awareness App',
                         style: smallTextStyle1),
                   ),
@@ -175,7 +175,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: 270,
+                        height: 310,
                       ),
                       TextFormField(
                         controller: _usernameController,
@@ -308,15 +308,16 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         decoration: InputDecoration(
                           labelText: 'Email',
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the border radius
-                            borderSide: BorderSide(
-                                color: Colors.blue), // Adjust the border color
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
-                            return 'Please enter an Email';
+                            return 'Please enter an email';
+                          } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@gmail.com$')
+                              .hasMatch(value)) {
+                            return 'Please enter a valid Gmail address';
                           }
                           return null; // Return null if the validation succeeds
                         },
@@ -329,10 +330,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         decoration: InputDecoration(
                           labelText: 'Password',
                           border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Adjust the border radius
-                            borderSide: BorderSide(
-                                color: Colors.blue), // Adjust the border color
+                            borderRadius: BorderRadius.circular(10.0),
+                            borderSide: BorderSide(color: Colors.blue),
                           ),
                           suffixIcon: GestureDetector(
                             onTap: () {
@@ -351,6 +350,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter a Password';
+                          } else if (value.length < 6) {
+                            return 'Password must be at least 6 characters';
                           }
                           return null; // Return null if the validation succeeds
                         },

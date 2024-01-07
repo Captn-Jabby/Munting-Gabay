@@ -306,19 +306,21 @@ class _PersonalIdentificationScreenState
                     decoration: InputDecoration(
                       labelText: 'Email',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                            10.0), // Adjust the border radius
-                        borderSide: BorderSide(
-                            color: Colors.blue), // Adjust the border color
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                     ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter a Email';
+                        return 'Please enter an email';
+                      } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@gmail.com$')
+                          .hasMatch(value)) {
+                        return 'Please enter a valid Gmail address';
                       }
                       return null; // Return null if the validation succeeds
                     },
                   ),
+
                   SizedBox(
                     height: 15,
                   ),
@@ -327,10 +329,8 @@ class _PersonalIdentificationScreenState
                     decoration: InputDecoration(
                       labelText: 'Password',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(
-                            10.0), // Adjust the border radius
-                        borderSide: BorderSide(
-                            color: Colors.blue), // Adjust the border color
+                        borderRadius: BorderRadius.circular(10.0),
+                        borderSide: BorderSide(color: Colors.blue),
                       ),
                       suffixIcon: GestureDetector(
                         onTap: () {
@@ -349,10 +349,13 @@ class _PersonalIdentificationScreenState
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Please enter a Password';
+                      } else if (value.length < 6) {
+                        return 'Password must be at least 6 characters';
                       }
                       return null; // Return null if the validation succeeds
                     },
                   ),
+
                   SizedBox(
                     height: 15,
                   ),

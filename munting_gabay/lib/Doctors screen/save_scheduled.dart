@@ -95,7 +95,18 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
       ),
       body: savedDatesAndSlots.isEmpty
           ? Center(
-              child: CircularProgressIndicator(),
+              child: Center(
+                child: CircularProgressIndicator(
+                  // Color of the loading indicator
+                  valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                  // Width of the indicator's line
+                  strokeWidth: 4,
+
+                  // Optional: Background color of the circle
+                  backgroundColor: bgloadingColor,
+                ),
+              ),
             )
           : ListView.builder(
               itemCount: savedDatesAndSlots.length,
