@@ -299,13 +299,12 @@ class _DocDashboardState extends State<DocDashboard>
                 backgroundColor: dynamicSecondaryColor,
                 title: Text('Doctor Dashboard'),
                 actions: [
-                  FloatingActionButton(
+                  IconButton(
                     onPressed: () {
                       // Call the function to refresh the page here
                       _fetchPendingDates();
                     },
-                    tooltip: 'Refresh',
-                    child: Icon(Icons.refresh),
+                    icon: Icon(Icons.refresh),
                   ),
                   IconButton(
                     icon: Icon(Icons.message),
@@ -460,6 +459,7 @@ class _DocDashboardState extends State<DocDashboard>
                         } else {
                           _changeSlotStatus(
                               selectedDateString, slotTime, 'Accepted');
+                          _showAcceptSnackbar(); // Show Snackbar after accepting
                         }
                         Navigator.pop(context);
                       },
@@ -484,6 +484,12 @@ class _DocDashboardState extends State<DocDashboard>
         },
       );
     }
+  }
+
+  void _showAcceptSnackbar() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Slot Accepted')),
+    );
   }
 
   void _changeSlotStatus(String day, String timeSlot, String newStatus) async {

@@ -516,7 +516,7 @@ class _DoctorsIdentificationScreenState
       _pinController.clear();
       // _clinicController.clear();
       // _addressHospital.clear();
-      // _phoneNumber.clear();
+      // phone_number.clear();
       _confirmPasswordController.clear();
       EasyLoading.dismiss();
       // Save additional user data to Firestore
@@ -536,7 +536,7 @@ class _DoctorsIdentificationScreenState
         'avatarPath': ProfilePicture,
         'clinic': _clinicController.text,
         'addressHospital': _addressHospital.text,
-        'phoneNumber': _phoneNumber.text,
+        'phone_number': phone_number.text,
         'DoctorStatus': 'Not Available',
         'darkmode': darkmode
       });
@@ -610,15 +610,6 @@ class _DoctorsIdentificationScreenState
                       SizedBox(
                         height: 15,
                       ),
-                      // ElevatedButton(
-                      //     onPressed: () {
-                      //       Navigator.push(
-                      //         context,
-                      //         MaterialPageRoute(
-                      //             builder: (context) => LocationPickerScreen()),
-                      //       );
-                      //     },
-                      //     child: Text('Set Clinic Address')),
                       TextFormField(
                         controller: _addressHospital,
                         decoration: InputDecoration(
@@ -639,7 +630,7 @@ class _DoctorsIdentificationScreenState
                         height: 15,
                       ),
                       TextFormField(
-                        controller: _phoneNumber,
+                        controller: phone_number,
                         decoration: InputDecoration(
                           labelText: 'Phone Number',
                           border: OutlineInputBorder(
@@ -974,6 +965,6 @@ TextEditingController _passwordController = TextEditingController();
 TextEditingController _pinController = TextEditingController();
 TextEditingController _clinicController = TextEditingController();
 TextEditingController _addressHospital = TextEditingController();
-TextEditingController _phoneNumber = TextEditingController();
+TextEditingController phone_number = TextEditingController();
 TextEditingController _confirmPasswordController =
     TextEditingController(); // New controller for confirm password

@@ -82,6 +82,9 @@ class _LoginPageState extends State<LoginPage> {
               String status = userDataSnapshot['status'];
               if (status == 'Accepted') {
                 Navigator.pushReplacementNamed(context, '/homeDoctor');
+              } else if (status == 'Rejected') {
+                _showError(
+                    '''Your doctor account has been rejected.\n\n\nPlease contact 'muntinggabay@gmail.com' for further assistance.''');
               } else if (status == 'ADMIN') {
                 Navigator.pushReplacementNamed(context, '/homeAdmin');
               } else {

@@ -3,18 +3,18 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:munting_gabay/variable.dart';
 
 class PhoneCallScreen extends StatelessWidget {
-  final String phoneNumber; // The phone number you want to call
+  final String phone_number; // The phone number you want to call
   final String docId;
   final String currentUserName;
 
   PhoneCallScreen({
-    required this.phoneNumber,
+    required this.phone_number,
     required this.docId,
     required this.currentUserName,
   });
 
   void makePhoneCall() async {
-    bool? res = await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+    bool? res = await FlutterPhoneDirectCaller.callNumber(phone_number);
     if (res != null) {
       if (res) {
         print('Phone call successful');
@@ -47,7 +47,7 @@ class PhoneCallScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: text),
             ),
             Text(
-              'Phone Number: $phoneNumber',
+              'Phone Number: $phone_number',
               style: TextStyle(fontSize: 18, color: text),
             ),
             SizedBox(height: 20),
@@ -60,7 +60,7 @@ class PhoneCallScreen extends StatelessWidget {
                 makePhoneCall(); // Call the function to make a phone call
               },
               child: Text(
-                'Call $phoneNumber',
+                'Call $phone_number',
                 style: TextStyle(color: text),
               ),
             ),

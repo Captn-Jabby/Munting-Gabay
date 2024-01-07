@@ -30,11 +30,11 @@ class DoctorInfoPage extends StatefulWidget {
   final String currentUserName;
   final bool isDoctor;
   final String DoctorStatus;
-  final String phoneNumber;
+  final String phone_number;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   DoctorInfoPage({
     required this.birthdate,
-    required this.phoneNumber,
+    required this.phone_number,
     required this.avatarPath,
     required this.IMAGE,
     required this.NameOfHospital,
@@ -215,7 +215,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => PhoneCallScreen(
-                                        phoneNumber: widget.phoneNumber,
+                                        phone_number: widget.phone_number,
                                         docId: widget.docId,
                                         currentUserName: widget.initialName,
                                       ),
@@ -341,7 +341,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                         ),
                         Text('Clinic Address: ${widget.NameOfHospital}',
                             style: const TextStyle(fontSize: 16)),
-                        Text('Phone Number: ${widget.phoneNumber}',
+                        Text('Phone Number: ${widget.phone_number}',
                             style: const TextStyle(fontSize: 16)),
                       ],
                     ),

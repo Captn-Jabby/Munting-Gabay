@@ -189,8 +189,8 @@ class _pscyhState extends State<pscyh> {
                                                         currentUserName ??
                                                             '', // Pass currentUserName here
                                                     isDoctor: false,
-                                                    phoneNumber:
-                                                        doc['phoneNumber'] ??
+                                                    phone_number:
+                                                        doc['phone_number'] ??
                                                             'Unknown',
                                                     DoctorStatus:
                                                         doc['DoctorStatus'] ??

@@ -21,6 +21,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController phone_number = TextEditingController();
   DateTime selectedDate = DateTime.now();
   late User _currentUser;
   String _avatarPath = '';
@@ -42,27 +43,34 @@ class _DrUserProfileState extends State<DrUserProfile> {
   }
 
   void _loadUserData() async {
-    if (_currentUser.email!.isNotEmpty) {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_currentUser.email)
-          .get();
+    try {
+      if (_currentUser.email!.isNotEmpty) {
+        final snapshot = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_currentUser.email)
+            .get();
 
-      if (snapshot.exists) {
-        setState(() {
-          _nameController.text = snapshot['name'];
-          _usernameController.text = snapshot['username'];
-          // Convert Timestamp to DateTime
-          Timestamp birthdateTimestamp = snapshot['birthdate'];
-          selectedDate = birthdateTimestamp.toDate();
-          _addressController.text = snapshot['address'];
-          _emailController.text = snapshot['email'];
-          _avatarPath = snapshot['avatarPath'] ?? '';
-        });
+        if (snapshot.exists) {
+          setState(() {
+            _nameController.text = snapshot['name'];
+            _usernameController.text = snapshot['username'];
+            // Convert Timestamp to DateTime
+            Timestamp birthdateTimestamp = snapshot['birthdate'];
+            selectedDate = birthdateTimestamp.toDate();
+            _addressController.text = snapshot['address'];
+            _emailController.text = snapshot['email'];
+            phone_number.text = snapshot['phone_number'];
+            _avatarPath = snapshot['avatarPath'] ?? '';
+          });
+        } else {
+          print('Error: Document does not exist');
+        }
+      } else {
+        print('Error: User email is empty');
+        // Handle the case where user email is empty
       }
-    } else {
-      print('Error: User email is empty');
-      // Handle the case where user email is empty
+    } catch (error) {
+      print('Error loading user data: $error');
     }
   }
 
@@ -101,6 +109,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
       'birthdate': selectedDate,
       'address': _addressController.text,
       'email': _emailController.text,
+      'phone_number': phone_number.text,
       'avatarPath': _avatarPath,
     });
 
@@ -192,6 +201,13 @@ class _DrUserProfileState extends State<DrUserProfile> {
             TextFormField(
               controller: _usernameController,
               decoration: InputDecoration(labelText: 'Username'),
+            ),
+            TextFormField(
+              controller: phone_number,
+              decoration: InputDecoration(labelText: 'Phone Number'),
+            ),
+            SizedBox(
+              height: 20,
             ),
             GestureDetector(
               onTap: () => _selectDate(context),
