@@ -54,13 +54,13 @@ class _DateListScreenState extends State<DateListScreen> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
-    if (user == null || user.email == null) {
+    if (user == null || user.uid == null) {
       print('User is not authenticated or does not have an email.');
       // Handle this case appropriately, such as showing an error message to the user.
       return;
     }
 
-    final documentReference = firestore.collection('schedule').doc(user.email);
+    final documentReference = firestore.collection('schedule').doc(user.uid);
 
     documentReference.get().then((docSnapshot) {
       final availableDays = dates.map((date) {
@@ -131,9 +131,8 @@ class _DateListScreenState extends State<DateListScreen> {
 
   // Function to check if a schedule exists for the user
   void checkIfScheduleExists() {
-    if (user != null && user?.email != null) {
-      final documentReference =
-          firestore.collection('schedule').doc(user?.email);
+    if (user != null && user?.uid != null) {
+      final documentReference = firestore.collection('schedule').doc(user?.uid);
       documentReference.get().then((docSnapshot) {
         if (docSnapshot.exists) {
           setState(() {
@@ -145,9 +144,8 @@ class _DateListScreenState extends State<DateListScreen> {
   }
 
   void deleteSchedule() {
-    if (user != null && user?.email != null) {
-      final documentReference =
-          firestore.collection('schedule').doc(user?.email);
+    if (user != null && user?.uid != null) {
+      final documentReference = firestore.collection('schedule').doc(user?.uid);
 
       // Check if any slot has content before deletion
       documentReference.get().then((docSnapshot) {
@@ -185,7 +183,7 @@ class _DateListScreenState extends State<DateListScreen> {
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .doc(user?.email)
+            .doc(user?.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
@@ -368,9 +366,8 @@ class _DateListScreenState extends State<DateListScreen> {
 
   void deleteScheduleForDate(DateTime date) {
     print('Deleting schedule for date: $date');
-    if (user != null && user?.email != null) {
-      final documentReference =
-          firestore.collection('schedule').doc(user?.email);
+    if (user != null && user?.uid != null) {
+      final documentReference = firestore.collection('schedule').doc(user?.uid);
 
       documentReference.get().then((docSnapshot) {
         if (docSnapshot.exists) {

@@ -217,10 +217,8 @@ class _PostModalState extends State<PostModal> {
 
   void addComment(String content) async {
     String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot = await widget.firestore
-        .collection('users')
-        .doc(widget.user?.email)
-        .get();
+    DocumentSnapshot userSnapshot =
+        await widget.firestore.collection('users').doc(widget.user?.uid).get();
     if (userSnapshot.exists) {
       userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
     }

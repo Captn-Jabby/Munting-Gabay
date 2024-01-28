@@ -134,7 +134,7 @@ class _ChatPageState extends State<ChatPage> {
                 final List<QueryDocumentSnapshot> documents =
                     snapshot.data!.docs;
 
-                final currentEmail = FirebaseAuth.instance.currentUser?.email;
+                final currentEmail = FirebaseAuth.instance.currentUser?.uid;
 
                 return ListView.builder(
                   itemCount: documents.length,

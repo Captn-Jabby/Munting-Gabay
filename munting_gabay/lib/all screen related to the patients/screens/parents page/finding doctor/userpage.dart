@@ -16,7 +16,7 @@ class UserSelectionPage extends StatelessWidget {
 
   Future<String> getCurrentUserEmail() async {
     final currentUser = FirebaseAuth.instance.currentUser;
-    return currentUser?.email ?? '';
+    return currentUser?.uid ?? '';
   }
 
   Future<String> getCurrentUserName(String currentEmail) async {

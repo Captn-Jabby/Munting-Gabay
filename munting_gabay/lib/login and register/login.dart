@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
 
             DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
                 .collection('users')
-                .doc(user.email)
+                .doc(user.uid)
                 .get();
             String role = userDataSnapshot['role'];
 

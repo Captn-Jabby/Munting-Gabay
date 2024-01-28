@@ -31,7 +31,7 @@ class AppDrawer extends StatelessWidget {
         // Retrieve the avatar path
         final snapshot = await FirebaseFirestore.instance
             .collection('users')
-            .doc(user?.email)
+            .doc(user?.uid)
             .get();
 
         if (snapshot.exists) {
@@ -56,7 +56,7 @@ class AppDrawer extends StatelessWidget {
                 accountName: FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(user?.email)
+                      .doc(user?.uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -81,11 +81,11 @@ class AppDrawer extends StatelessWidget {
                     return Text(username);
                   },
                 ),
-                accountEmail: Text(user?.email ?? ""),
+                accountEmail: Text(user?.uid ?? ""),
                 currentAccountPicture: FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
                       .collection('users')
-                      .doc(user?.email)
+                      .doc(user?.uid)
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {

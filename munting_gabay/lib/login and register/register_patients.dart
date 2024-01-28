@@ -59,7 +59,10 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
           'User registration successful! User ID: ${userCredential.user?.uid}');
 
       // Save additional user data to Firestore
-      await FirebaseFirestore.instance.collection('users').doc(email).set({
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set({
         'username': username,
         'name': name,
         'role': 'PATIENTS',

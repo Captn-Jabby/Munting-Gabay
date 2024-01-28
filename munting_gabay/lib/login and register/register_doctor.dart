@@ -508,21 +508,35 @@ class _DoctorsIdentificationScreenState
       print(
           'User registration successful! User ID: ${userCredential.user?.uid}');
 
+      // Get the currently authenticated user
+      User? currentUser = _auth.currentUser;
+
+      if (currentUser != null) {
+        // Access user properties
+        String userEmail = currentUser.email ?? '';
+        String userUid = currentUser.uid;
+
+        print('User Email: $userEmail');
+        print('User UID: $userUid');
+      } else {
+        // No user is currently authenticated
+        print('No user is currently authenticated');
+      }
+
+      // Clear controllers and dismiss loading indicator
       _usernameController.clear();
       _nameController.clear();
       _addressController.clear();
       _emailController.clear();
       _passwordController.clear();
       _pinController.clear();
-      // _clinicController.clear();
-      // _addressHospital.clear();
-      // phone_number.clear();
       _confirmPasswordController.clear();
       EasyLoading.dismiss();
+
       // Save additional user data to Firestore
       await FirebaseFirestore.instance
           .collection('users')
-          .doc(userData.email)
+          .doc(userCredential.user?.uid) // <-- Use UID from UserCredential
           .set({
         'username': userData.username,
         'IDENTIFICATION': imageUrl,
@@ -547,6 +561,7 @@ class _DoctorsIdentificationScreenState
       print('Error during user registration: $e');
       print('Stack trace: $stackTrace');
     }
+
     EasyLoading.dismiss();
     // Show a success message and navigate to the LoginScreen
     showDialog(

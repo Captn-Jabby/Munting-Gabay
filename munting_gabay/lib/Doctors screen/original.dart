@@ -131,7 +131,7 @@ class _DocDashboardState extends State<DocDashboard>
   void _fetchPendingDates() {
     FirebaseFirestore.instance
         .collection('schedule')
-        .doc(widget.user?.email) // Assuming user.email is the document ID
+        .doc(widget.user?.uid)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.exists) {
@@ -153,14 +153,14 @@ class _DocDashboardState extends State<DocDashboard>
             .map((day) => day['date'] as String)
             .toList();
 
-        // Print availableDays and pendingDates for debugging
-        print('Available Days: $availableDays');
-        print('Pending Dates: $pendingDates');
+        // // Print availableDays and pendingDates for debugging
+        // print('Available Days: $availableDays');
+        // print('Pending Dates: $pendingDates');
 
         // Update events with pending dates
         _updateEvents(pendingDates);
       } else {
-        print('Document does not exist for user: ${widget.user?.email}');
+        print('Document does not exist for user: ${widget.user?.uid}');
       }
     }).catchError((error) {
       print('Error fetching pending dates: $error');

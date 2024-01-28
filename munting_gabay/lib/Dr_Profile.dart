@@ -44,10 +44,10 @@ class _DrUserProfileState extends State<DrUserProfile> {
 
   void _loadUserData() async {
     try {
-      if (_currentUser.email!.isNotEmpty) {
+      if (_currentUser.uid!.isNotEmpty) {
         final snapshot = await FirebaseFirestore.instance
             .collection('users')
-            .doc(_currentUser.email)
+            .doc(_currentUser.uid)
             .get();
 
         if (snapshot.exists) {
@@ -102,7 +102,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
 
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(_currentUser.email)
+        .doc(_currentUser.uid)
         .update({
       'name': _nameController.text,
       'username': _usernameController.text,
@@ -176,7 +176,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
               context,
               MaterialPageRoute(
                 builder: (context) => DocDashboard(
-                  docId: _currentUser.email ?? '',
+                  docId: _currentUser.uid ?? '',
                 ),
               ),
             );
@@ -266,7 +266,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
     if (pickedFile != null) {
       // Upload the image to Firebase Storage
       Reference storageReference =
-          _storage.ref().child('avatars/${_currentUser.email}.jpg');
+          _storage.ref().child('avatars/${_currentUser.uid}.jpg');
       UploadTask uploadTask = storageReference.putFile(File(pickedFile.path));
       await uploadTask.whenComplete(() async {
         // Get the download URL of the uploaded image
@@ -275,7 +275,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
         // Update the avatar path in Firestore
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(_currentUser.email)
+            .doc(_currentUser.uid)
             .update({
           'avatarPath': downloadURL,
         });

@@ -3,12 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:munting_gabay/Adminpage/admin_profile.dart';
 import 'package:munting_gabay/Adminpage/adminpage.dart';
-import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
-import 'package:munting_gabay/Dr_Profile.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
+
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
+
 import 'package:munting_gabay/main.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -32,7 +29,7 @@ class AdminDrawer extends StatelessWidget {
         // Retrieve the avatar path
         final snapshot = await FirebaseFirestore.instance
             .collection('users')
-            .doc(user?.email)
+            .doc(user?.uid)
             .get();
 
         if (snapshot.exists) {
@@ -54,7 +51,7 @@ class AdminDrawer extends StatelessWidget {
             accountName: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
                   .collection('users')
-                  .doc(user?.email)
+                  .doc(user?.uid)
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -70,11 +67,11 @@ class AdminDrawer extends StatelessWidget {
                 return Text(username);
               },
             ),
-            accountEmail: Text(user?.email ?? ""),
+            accountEmail: Text(user?.uid ?? ""),
             currentAccountPicture: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
                   .collection('users')
-                  .doc(user?.email)
+                  .doc(user?.uid)
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {

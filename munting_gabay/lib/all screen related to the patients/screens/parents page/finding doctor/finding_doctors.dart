@@ -40,7 +40,7 @@ class _pscyhState extends State<pscyh> {
 
   Future<void> fetchCurrentUser() async {
     user = FirebaseAuth.instance.currentUser;
-    currentEmail = user?.email;
+    currentEmail = user?.uid;
 
     final userCollection = FirebaseFirestore.instance.collection('users');
 

@@ -21,9 +21,8 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
   }
 
   void retrieveSavedDatesAndSlots() {
-    if (user != null && user?.email != null) {
-      final documentReference =
-          firestore.collection('schedule').doc(user?.email);
+    if (user != null && user?.uid != null) {
+      final documentReference = firestore.collection('schedule').doc(user?.uid);
 
       documentReference.get().then((docSnapshot) {
         if (docSnapshot.exists) {
@@ -41,9 +40,8 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
   }
 
   void deleteSlot(String date, String slot) {
-    if (user != null && user?.email != null) {
-      final documentReference =
-          firestore.collection('schedule').doc(user?.email);
+    if (user != null && user?.uid != null) {
+      final documentReference = firestore.collection('schedule').doc(user?.uid);
 
       documentReference.get().then((docSnapshot) {
         if (docSnapshot.exists) {

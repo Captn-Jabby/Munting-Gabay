@@ -208,7 +208,7 @@ class _DocDashboardState extends State<DocDashboard>
   void _fetchPendingDates() {
     FirebaseFirestore.instance
         .collection('schedule')
-        .doc(widget.user?.email)
+        .doc(widget.user?.uid)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.exists) {
@@ -257,7 +257,7 @@ class _DocDashboardState extends State<DocDashboard>
             .map((item) => item['date'].toString())
             .toList());
       } else {
-        print('Document does not exist for user: ${widget.user?.email}');
+        print('Document does not exist for user: ${widget.user?.uid}');
       }
     }).catchError((error) {
       print('Error fetching pending dates: $error');
@@ -298,6 +298,14 @@ class _DocDashboardState extends State<DocDashboard>
               appBar: AppBar(
                 backgroundColor: dynamicSecondaryColor,
                 title: Text('Doctor Dashboard'),
+                //       bottom: TabBar(
+                //   tabs: [
+                //     Tab(text: 'Tab 1'),
+                //     Tab(text: 'Tab 2'),
+                //     Tab(text: 'Tab 3'),
+                //   ],
+                // ),
+
                 actions: [
                   IconButton(
                     onPressed: () {
@@ -401,13 +409,34 @@ class _DocDashboardState extends State<DocDashboard>
                         },
                       ),
                     ),
+                    Divider(
+                      height: 10,
+                      color: Colors.black,
+                    ),
                     Expanded(
-                      child: TabBarView(
-                        controller: _tabController,
+                      child: Column(
                         children: [
-                          _buildDayList('Available'),
-                          _buildDayList('Canceled'),
-                          _buildDayList('Accepted'),
+                          TabBar(
+                            controller: _tabController,
+                            tabs: [
+                              _buildCustomTab('Accepted'),
+                              _buildCustomTab('Canceled'),
+                              _buildCustomTab('Available'),
+                            ],
+                          ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Expanded(
+                            child: TabBarView(
+                              controller: _tabController,
+                              children: [
+                                _buildDayList('Accepted'),
+                                _buildDayList('Canceled'),
+                                _buildDayList('Available'),
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -415,6 +444,28 @@ class _DocDashboardState extends State<DocDashboard>
                 ),
               ));
         });
+  }
+
+  Widget _buildCustomTab(String title) {
+    return Tab(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.0),
+          color: secondaryColor, // Customize the tab background color
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: TextStyle(
+              color: text, // Customize the text color
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   void _displayPendingSlots() {
@@ -588,34 +639,32 @@ class _DocDashboardState extends State<DocDashboard>
           }).toList();
 
           return SingleChildScrollView(
-            child: Column(
-              children: <Widget>[
-                Text(
-                  'Doctor Name: ${widget.docId}',
-                  style: TextStyle(color: text),
-                ),
-                Text(
-                  'Available Days:',
-                  style: TextStyle(color: text),
-                ),
-                filteredDays.isEmpty
-                    ? Center(
-                        child: Text(
-                          'No $statusFilter slots available.',
-                          style: TextStyle(color: text),
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Available Days:',
+                    style: TextStyle(color: text),
+                  ),
+                  filteredDays.isEmpty
+                      ? Center(
+                          child: Text(
+                            'No $statusFilter slots available.',
+                            style: TextStyle(color: text),
+                          ),
+                        )
+                      : Column(
+                          children: filteredDays.map<Widget>((day) {
+                            var dayData = day as Map<String, dynamic>;
+                            return DayCardDOC(
+                              dayData: dayData,
+                              docId: widget.docId,
+                              selectedStatusFilter: statusFilter,
+                            );
+                          }).toList(),
                         ),
-                      )
-                    : Column(
-                        children: filteredDays.map<Widget>((day) {
-                          var dayData = day as Map<String, dynamic>;
-                          return DayCardDOC(
-                            dayData: dayData,
-                            docId: widget.docId,
-                            selectedStatusFilter: statusFilter,
-                          );
-                        }).toList(),
-                      ),
-              ],
+                ],
+              ),
             ),
           );
         }

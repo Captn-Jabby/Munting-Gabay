@@ -16,7 +16,7 @@ class DoctorsHM extends StatelessWidget {
     return StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
             .collection('users')
-            .doc(user?.email)
+            .doc(user?.uid)
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {

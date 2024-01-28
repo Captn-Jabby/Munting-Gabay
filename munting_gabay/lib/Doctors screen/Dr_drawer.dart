@@ -37,7 +37,7 @@ class _DrDrawerState extends State<DrDrawer> {
         // Retrieve the avatar path
         final snapshot = await FirebaseFirestore.instance
             .collection('users')
-            .doc(user?.email)
+            .doc(user?.uid)
             .get();
 
         if (snapshot.exists) {
@@ -58,7 +58,7 @@ class _DrDrawerState extends State<DrDrawer> {
             accountName: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
                   .collection('users')
-                  .doc(user?.email)
+                  .doc(user?.uid)
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -74,11 +74,11 @@ class _DrDrawerState extends State<DrDrawer> {
                 return Text(username);
               },
             ),
-            accountEmail: Text(user?.email ?? ""),
+            accountEmail: Text(user?.uid ?? ""),
             currentAccountPicture: FutureBuilder<DocumentSnapshot>(
               future: FirebaseFirestore.instance
                   .collection('users')
-                  .doc(user?.email)
+                  .doc(user?.uid)
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
@@ -123,7 +123,7 @@ class _DrDrawerState extends State<DrDrawer> {
                 DocumentSnapshot userDataSnapshot = await FirebaseFirestore
                     .instance
                     .collection('users')
-                    .doc(user?.email)
+                    .doc(user?.uid)
                     .get();
                 String currentStatus = userDataSnapshot['DoctorStatus'];
 
@@ -135,7 +135,7 @@ class _DrDrawerState extends State<DrDrawer> {
                 // Update the status in Firestore
                 await FirebaseFirestore.instance
                     .collection('users')
-                    .doc(user?.email)
+                    .doc(user?.uid)
                     .update({'DoctorStatus': newStatus});
 
                 // Show a message indicating the status change
@@ -151,7 +151,7 @@ class _DrDrawerState extends State<DrDrawer> {
                 DocumentSnapshot userDataSnapshot = await FirebaseFirestore
                     .instance
                     .collection('users')
-                    .doc(user?.email)
+                    .doc(user?.uid)
                     .get();
 
                 // Get the current dark mode status
@@ -160,7 +160,7 @@ class _DrDrawerState extends State<DrDrawer> {
                 // Toggle the dark mode status
                 await FirebaseFirestore.instance
                     .collection('users')
-                    .doc(user?.email)
+                    .doc(user?.uid)
                     .update({'darkmode': !currentStatus});
 
                 // Show a message indicating the status change

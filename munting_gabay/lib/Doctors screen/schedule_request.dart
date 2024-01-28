@@ -203,7 +203,7 @@ class _SlotTileState extends State<SlotTile> {
         if ((dayData['available_days'] as List<dynamic>).any((dayEntry) {
           var slots = dayEntry['slots'] as List<dynamic>;
           return slots.any((slotEntry) =>
-              slotEntry['patients'] == user?.email &&
+              slotEntry['patients'] == user?.uid &&
               slotEntry['status'] == 'Pending');
         })) {
           setState(() {
@@ -239,7 +239,7 @@ class _SlotTileState extends State<SlotTile> {
 
             // Update the status and add the user's email
             slots[slotIndex]['status'] = 'Pending';
-            slots[slotIndex]['patients'] = user?.email;
+            slots[slotIndex]['patients'] = user?.uid;
 
             // Update the slot in the list
             dayData['available_days']

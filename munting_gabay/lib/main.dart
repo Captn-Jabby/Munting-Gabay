@@ -11,7 +11,7 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homep
 import 'package:munting_gabay/variable.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:provider/provider.dart';
+
 import 'Adminpage/adminpage.dart';
 
 void main() async {
@@ -48,13 +48,8 @@ class _MyAppState extends State<MyApp> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: CircularProgressIndicator(
-                // Color of the loading indicator
                 valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
-
-                // Width of the indicator's line
                 strokeWidth: 4,
-
-                // Optional: Background color of the circle
                 backgroundColor: bgloadingColor,
               ),
             );
@@ -70,19 +65,14 @@ class _MyAppState extends State<MyApp> {
                       ConnectionState.waiting) {
                     return const Center(
                       child: CircularProgressIndicator(
-                        // Color of the loading indicator
                         valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
-
-                        // Width of the indicator's line
                         strokeWidth: 4,
-
-                        // Optional: Background color of the circle
                         backgroundColor: bgloadingColor,
                       ),
                     );
                   }
 
-                  String role = userDataSnapshot.data?.get('role') ?? '';
+                  String role = userDataSnapshot.data?['role'] ?? '';
 
                   if (role == 'PATIENTS') {
                     return const HomepagePT();
@@ -90,14 +80,23 @@ class _MyAppState extends State<MyApp> {
                     String status = userDataSnapshot.data?.get('status') ?? '';
 
                     if (status == 'Accepted') {
-                      return DocDashboard(docId: user.email!);
+                      return DocDashboard(docId: user.uid!);
                     } else if (status == 'ADMIN') {
                       return const AdminPage();
                     } else {
                       return LoginScreen();
                     }
                   } else {
-                    return InvalidroleScreen();
+                    // Handle the case when the role is neither 'PATIENTS' nor 'DOCTORS'
+                    return Container(
+                      color: Colors.red, // Set the color or customize as needed
+                      child: Center(
+                        child: Text(
+                          'Invalid User Role',
+                          style: TextStyle(fontSize: 18, color: Colors.white),
+                        ),
+                      ),
+                    );
                   }
                 },
               );
@@ -111,10 +110,9 @@ class _MyAppState extends State<MyApp> {
       routes: {
         '/homePT': (context) => const HomepagePT(),
         '/homeDoctor': (context) {
-          // Access user.email and pass it as docId
           User? user = FirebaseAuth.instance.currentUser;
           return DocDashboard(
-              docId: user?.email ??
+              docId: user?.uid ??
                   ''); // You can pass an empty string or handle null values
         },
         '/homeAdmin': (context) => const AdminPage(),
@@ -125,45 +123,8 @@ class _MyAppState extends State<MyApp> {
   Future<DocumentSnapshot> getUserDataFromFirestore(User user) async {
     return await FirebaseFirestore.instance
         .collection('users')
-        .doc(user.email)
+        .doc(user.uid)
         .get();
-  }
-}
-
-class InvalidroleScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Invalid User Type'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Invalid User Type',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 10),
-            Text(
-              'You do not have a valid user type for this app.',
-              style: TextStyle(fontSize: 16),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Navigate to the LoginScreen
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreen()),
-                );
-              },
-              child: Text('Log in'),
-            ),
-          ],
-        ),
-      ),
-    );
   }
 }
 
@@ -182,7 +143,6 @@ class LoginScreen extends StatelessWidget {
               Center(
                 child: SpinningContainer(),
               ),
-
               Text(
                 'Munting Gabay',
                 textAlign: TextAlign.center,
@@ -302,64 +262,6 @@ class LoginScreen extends StatelessWidget {
                   ],
                 ),
               ),
-
-              // Container(
-              //   width: BtnWidth,
-              //   height: BtnHeight,
-              //   decoration: BoxDecoration(
-              //     // color: const Color(0xFF18B091),
-              //     color: const Color(0xFF95C440),
-              //     borderRadius: BorderRadius.circular(BtnCircularRadius),
-              //   ),
-              //   child: TextButton(
-              //     onPressed: () {
-              //       showDialog(
-              //         context: context,
-              //         builder: (BuildContext context) {
-              //           return AlertDialog(
-              //             title: const Text('Register'),
-              //             content:
-              //                 const Text('Register as a Doctor or a Patient?'),
-              //             actions: [
-              //               TextButton(
-              //                 onPressed: () {
-              //                   Navigator.pop(context); // Close the dialog
-              //                   // Navigate to the RegistrationPatients with type 'Doctor'
-              //                   Navigator.push(
-              //                     context,
-              //                     MaterialPageRoute(
-              //                       builder: (context) =>
-              //                           RegistrationDOCTORS(),
-              //                     ),
-              //                   );
-              //                 },
-              //                 child: const Text('Doctor'),
-              //               ),
-              //               TextButton(
-              //                 onPressed: () {
-              //                   Navigator.pop(context); // Close the dialog
-              //                   // Navigate to the RegistrationPatients with type 'Patient'
-              //                   Navigator.push(
-              //                     context,
-              //                     MaterialPageRoute(
-              //                       builder: (context) =>
-              //                           RegistrationPatients(),
-              //                     ),
-              //                   );
-              //                 },
-              //                 child: const Text('Patient'),
-              //               ),
-              //             ],
-              //           );
-              //         },
-              //       );
-              //     },
-              //     child: Text(
-              //       'Register',
-              //       style: buttonTextStyle1,
-              //     ),
-              //   ),
-              // ),
             ],
           ),
         ),

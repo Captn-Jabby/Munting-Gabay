@@ -34,7 +34,7 @@ class _RequestListScreenState extends State<RequestListScreen> {
           final requestList = (requestData['available_days'] as List)
               .expand((dayData) => (dayData['slots'] as List)
                       .where((slotData) =>
-                          (slotData['patients'] as String) == user?.email)
+                          (slotData['patients'] as String) == user?.uid)
                       .map((slotData) {
                     return {
                       'slot': slotData['slot'] as String,

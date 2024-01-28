@@ -50,7 +50,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
     if (_currentUser.email!.isNotEmpty) {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
-          .doc(_currentUser.email)
+          .doc(_currentUser.uid)
           .get();
 
       if (snapshot.exists) {
@@ -107,7 +107,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
 
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(_currentUser.email)
+        .doc(_currentUser.uid)
         .update({
       'name': _nameController.text,
       'username': _usernameController.text,
@@ -258,7 +258,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
     if (pickedFile != null) {
       // Upload the image to Firebase Storage
       Reference storageReference =
-          _storage.ref().child('avatars/${_currentUser.email}.jpg');
+          _storage.ref().child('avatars/${_currentUser.uid}.jpg');
       UploadTask uploadTask = storageReference.putFile(File(pickedFile.path));
       await uploadTask.whenComplete(() async {
         // Get the download URL of the uploaded image
@@ -267,7 +267,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
         // Update the avatar path in Firestore
         await FirebaseFirestore.instance
             .collection('users')
-            .doc(_currentUser.email)
+            .doc(_currentUser.uid)
             .update({
           'avatarPath': downloadURL,
         });

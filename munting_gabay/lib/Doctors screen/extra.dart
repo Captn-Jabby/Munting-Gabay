@@ -105,7 +105,7 @@ class _DocDashboardState extends State<DocDashboard>
   void _fetchPendingAndCancelledDates() {
     FirebaseFirestore.instance
         .collection('schedule')
-        .doc(widget.user?.email)
+        .doc(widget.user?.uid)
         .get()
         .then((DocumentSnapshot<Map<String, dynamic>> snapshot) {
       if (snapshot.exists) {
@@ -141,7 +141,7 @@ class _DocDashboardState extends State<DocDashboard>
 
         _updatePendingAndCancelledEvents(pendingDates, cancelledDates);
       } else {
-        print('Document does not exist for user: ${widget.user?.email}');
+        print('Document does not exist for user: ${widget.user?.uid}');
       }
     }).catchError((error) {
       print('Error fetching dates: $error');

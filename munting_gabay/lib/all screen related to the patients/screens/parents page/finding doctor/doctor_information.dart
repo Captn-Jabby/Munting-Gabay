@@ -1,4 +1,4 @@
-import 'dart:ffi';
+// import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -32,6 +32,7 @@ class DoctorInfoPage extends StatefulWidget {
   final String DoctorStatus;
   final String phone_number;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
   DoctorInfoPage({
     required this.birthdate,
     required this.phone_number,
