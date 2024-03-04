@@ -65,6 +65,7 @@ dependencies:
   shared_preferences: ^2.2.1
   table_calendar: ^3.0.9
   url_launcher: ^6.1.14
+  video_player: ^2.8.2
   webview_flutter: ^4.4.1
 flutter_icons:
   android: true
@@ -92,17 +93,7 @@ flutter:
     - assets/Colors/
     - assets/images/
     - assets/songs/
-    # - assets/images/ringtone1.mp3
-    # - assets/images/avatar1.png
-    # - assets/images/avatar2.png
-    # - assets/images/avatar3.png
-    # - assets/images/avatar4.png
-    # - assets/images/avatar5.png
-    # - assets/images/hands.png
-    # - assets/images/MenuLogo.png
-    # - assets/images/playtime.png
-    # - assets/images/register.png
-    # - assets/images/world.png
+    - assets/videos/
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

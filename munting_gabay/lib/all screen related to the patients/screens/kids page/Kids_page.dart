@@ -183,7 +183,9 @@ class KidsPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => KidsVideos()));
+                                    builder: (context) => VideoListScreen(
+                                        // title: 'Video Player ',
+                                        )));
                             print('Videos button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
