@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/games/animal.dart';
+
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/kids_videos.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/kids%20page/musicplayer.dart';
 
 import 'package:munting_gabay/variable.dart';
 import 'movies_screen.dart';
@@ -99,7 +100,13 @@ class KidsPage extends StatelessWidget {
                         ),
                         child: ElevatedButton(
                           onPressed: () {
-                            // TODO: Add Song button functionality here
+                            Navigator.push(
+                                context,
+                                CupertinoPageRoute(
+                                    builder: (context) => MusicPlayer(
+                                          title: 'Music ',
+                                        )));
+
                             print('Song button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
