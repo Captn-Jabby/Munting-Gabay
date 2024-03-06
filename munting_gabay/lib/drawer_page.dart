@@ -154,20 +154,20 @@ class AppDrawer extends StatelessWidget {
                     );
                   },
                 ),
-                ListTile(
-                  leading: Icon(Icons.color_lens),
-                  title: Text(
-                    'Themes',
-                    style: TextStyle(color: text),
-                  ),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => ColorChangerScreen()),
-                    );
-                  },
-                ),
+                // ListTile(
+                //   leading: Icon(Icons.color_lens),
+                //   title: Text(
+                //     'Themes',
+                //     style: TextStyle(color: text),
+                //   ),
+                //   onTap: () {
+                //     Navigator.pushReplacement(
+                //       context,
+                //       MaterialPageRoute(
+                //           builder: (context) => ColorChangerScreen()),
+                //     );
+                //   },
+                // ),
                 Divider(
                   color: Colors.black,
                 ), // Adds a visual divider

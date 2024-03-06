@@ -126,8 +126,10 @@ class _LoginPageState extends State<LoginPage> {
             ),
           )),
       body: Container(
-        padding: const EdgeInsets.all(34),
+        padding: const EdgeInsets.all(24),
         decoration: mainBackgroundTheme,
+        width: double.infinity,
+        height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Column(
             children: [
@@ -153,66 +155,105 @@ class _LoginPageState extends State<LoginPage> {
               ),
               Column(
                 children: [
+                  TextField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      labelText: 'Email',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50.0),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: BtnSpacing,
+                  ),
+                  TextField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isPasswordVisible = !_isPasswordVisible;
+                          });
+                        },
+                        child: Icon(
+                          _isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                        ),
+                      ),
+                    ),
+                    obscureText: !_isPasswordVisible,
+                  ),
+                  SizedBox(height: 20),
                   Container(
-                    height: MediaQuery.of(context).size.height,
-                    child: Column(
-                      children: [
-                        TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            labelText: 'Email',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50.0),
-                              borderSide: BorderSide(
-                                color: Colors
-                                    .blue, // You can adjust the border color
-                              ),
-                            ),
-                          ),
+                    width: BtnWidth,
+                    height: BtnHeight,
+                    child: ElevatedButton(
+                      onPressed: () => _signInUser(context),
+                      child: Text(
+                        'Login',
+                        style: buttonTextStyle1,
+                      ),
+                      style: buttonStyle1,
+                    ),
+                  ),
+                  Stack(
+                    alignment: Alignment(0.3,-1),
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Text('Confirmation'),
+                                content: Text(
+                                    'Are you sure you want to create an account?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context); // Close the dialog
+                                    },
+                                    child: Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(
+                                          context); // Close the dialog
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              RegistrationPatients(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Confirm',
+                                      style: TextStyle(color: Colors.red),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                        child: const Text(
+                          'CREATE AN ACCOUNT',
+                          style: TextStyle(color: text),
                         ),
-                        SizedBox(
-                          height: BtnSpacing,
-                        ),
-                        TextField(
-                          controller: _passwordController,
-                          decoration: InputDecoration(
-                            labelText: 'Password',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(50),
-                              borderSide: BorderSide(
-                                color: Colors
-                                    .blue, // You can adjust the border color
-                              ),
-                            ),
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _isPasswordVisible = !_isPasswordVisible;
-                                });
-                              },
-                              child: Icon(
-                                _isPasswordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                            ),
-                          ),
-                          obscureText: !_isPasswordVisible,
-                        ),
-                        SizedBox(height: 20),
-                        Container(
-                          width: BtnWidth,
-                          height: BtnHeight,
-                          child: ElevatedButton(
-                            onPressed: () => _signInUser(context),
-                            child: Text(
-                              'Login',
-                              style: buttonTextStyle1,
-                            ),
-                            style: buttonStyle1,
-                          ),
-                        ),
-                        TextButton(
+                      ),
+                      Container(
+                        height: 34,
+                        margin: EdgeInsets.only(top: 30),
+
+                        child: TextButton(
                           onPressed: () {
                             showDialog(
                               context: context,
@@ -220,24 +261,22 @@ class _LoginPageState extends State<LoginPage> {
                                 return AlertDialog(
                                   title: Text('Confirmation'),
                                   content: Text(
-                                      'Are you sure you want to create an account?'),
+                                      'Are you sure you want to Forgot Password?'),
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context); // Close the dialog
+                                        Navigator.pop(context); // Close the dialog
                                       },
                                       child: Text('Cancel'),
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pop(
-                                            context); // Close the dialog
+                                        Navigator.pop(context); // Close the dialog
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                RegistrationPatients(),
+                                                ForgotPasswordScreen(),
                                           ),
                                         );
                                       },
@@ -251,55 +290,13 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             );
                           },
-                          child: const Text(
-                            'CREATE AN ACCOUNT',
-                            style: TextStyle(color: text),
+                          child: Text(
+                            'Forgot Password',
+                            style: TextStyle(color: Colors.black),
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text('Confirmation'),
-                            content: Text(
-                                'Are you sure you want to Forgot Password?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context); // Close the dialog
-                                },
-                                child: Text('Cancel'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context); // Close the dialog
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ForgotPasswordScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'Confirm',
-                                  style: TextStyle(color: Colors.red),
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: Text(
-                      'Forgot Password',
-                      style: TextStyle(color: Colors.white),
-                    ),
+                      ),
+                    ],
                   ),
                 ],
               ),
