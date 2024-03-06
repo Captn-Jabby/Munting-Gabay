@@ -81,7 +81,7 @@ class AppDrawer extends StatelessWidget {
                     return Text(username);
                   },
                 ),
-                accountEmail: Text(user?.uid ?? ""),
+                accountEmail: Text(user?.email ?? ""),
                 currentAccountPicture: FutureBuilder<DocumentSnapshot>(
                   future: FirebaseFirestore.instance
                       .collection('users')

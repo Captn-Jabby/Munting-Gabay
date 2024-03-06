@@ -569,7 +569,8 @@ class _DoctorsIdentificationScreenState
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Success'),
-          content: Text('You are successfully registered!'),
+          content: Text(
+              'You are successfully registered\nPlease check your email for verification!'),
           actions: [
             TextButton(
               onPressed: () {

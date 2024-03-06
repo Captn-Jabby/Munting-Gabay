@@ -45,6 +45,48 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 //////////////////////////////
+  void _resendVerificationEmail() async {
+    try {
+      User? user = _auth.currentUser;
+      if (user != null) {
+        await user.sendEmailVerification();
+        _showError('Verification email sent. Please check your email.');
+      } else {
+        _showError('User not found. Please log in again.');
+      }
+    } catch (error) {
+      _showError('Error sending verification email: $error');
+    }
+  }
+
+  void _showResendEmailDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Email Verification'),
+          content: Text(
+              'Your email is not verified. Would you like to resend the verification email?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _resendVerificationEmail();
+              },
+              child: Text('Resend Email'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _signInUser(BuildContext context) async {
     EasyLoading.show(status: 'Logging in...');
 
@@ -83,8 +125,8 @@ class _LoginPageState extends State<LoginPage> {
               if (status == 'Accepted') {
                 Navigator.pushReplacementNamed(context, '/homeDoctor');
               } else if (status == 'Rejected') {
-                _showError(
-                    '''Your doctor account has been rejected.\n\n\nPlease contact 'muntinggabay@gmail.com' for further assistance.''');
+                _showError('''Your doctor account has been rejected.
+              \n\nPlease contact 'muntinggabay@gmail.com' for further assistance.''');
               } else if (status == 'ADMIN') {
                 Navigator.pushReplacementNamed(context, '/homeAdmin');
               } else {
@@ -96,15 +138,19 @@ class _LoginPageState extends State<LoginPage> {
             }
           } else {
             // Email not verified, prompt the user to verify their email
-            _showError('Email is not verified. Please verify your email.');
-            // Optionally, you can prompt the user to resend the verification email
+            _showResendEmailDialog(context);
           }
         } else {
-          _showError('Login failed');
+          // User does not exist
+          _showError('User does not exist. Please sign up first.');
         }
       } catch (error) {
-        _showError('Login error: $error');
+        _showError(
+            'There is no user record corresponding to this email address.\nPlease check your email or try registering.');
       }
+    } else {
+      _showError(
+          'Invalid password. Password should be at least 6 characters long.');
     }
 
     EasyLoading.dismiss();
@@ -203,7 +249,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   Stack(
-                    alignment: Alignment(0.3,-1),
+                    alignment: Alignment(0.3, -1),
                     children: [
                       TextButton(
                         onPressed: () {
@@ -252,7 +298,6 @@ class _LoginPageState extends State<LoginPage> {
                       Container(
                         height: 34,
                         margin: EdgeInsets.only(top: 30),
-
                         child: TextButton(
                           onPressed: () {
                             showDialog(
@@ -265,13 +310,15 @@ class _LoginPageState extends State<LoginPage> {
                                   actions: [
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pop(context); // Close the dialog
+                                        Navigator.pop(
+                                            context); // Close the dialog
                                       },
                                       child: Text('Cancel'),
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        Navigator.pop(context); // Close the dialog
+                                        Navigator.pop(
+                                            context); // Close the dialog
                                         Navigator.pushReplacement(
                                           context,
                                           MaterialPageRoute(
