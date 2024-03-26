@@ -4,9 +4,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -47,7 +45,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   void _loadUserData() async {
-    if (_currentUser.uid!.isNotEmpty) {
+    if (_currentUser.uid.isNotEmpty) {
       final snapshot = await FirebaseFirestore.instance
           .collection('users')
           .doc(_currentUser.uid)
@@ -167,21 +165,21 @@ class _UserProfilePageState extends State<UserProfilePage> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Profile'),
+        title: const Text('Profile'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomepagePT(),
+                builder: (context) => const HomepagePT(),
               ),
             );
           },
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -192,14 +190,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
                 backgroundImage: NetworkImage(_avatarPath),
               ),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextFormField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             GestureDetector(
               onTap: () => _selectDate(context),
@@ -220,27 +218,27 @@ class _UserProfilePageState extends State<UserProfilePage> {
             ),
             TextFormField(
               controller: _addressController,
-              decoration: InputDecoration(labelText: 'Address'),
+              decoration: const InputDecoration(labelText: 'Address'),
             ),
             TextFormField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email', enabled: false),
+              decoration: const InputDecoration(labelText: 'Email', enabled: false),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Container(
               // width: BtnWidth,
               // height: BtnHeight,
               child: ElevatedButton(
                 onPressed: _updateUserData,
-                child: Text(
-                  'Save',
-                  style: buttonTextStyle1,
-                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: secondaryColor, // Use the specified color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(BtnCircularRadius),
                   ),
+                ),
+                child: Text(
+                  'Save',
+                  style: buttonTextStyle1,
                 ),
               ),
             ),
@@ -251,9 +249,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
   }
 
   Future<void> _pickAndUploadAvatar() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       // Upload the image to Firebase Storage

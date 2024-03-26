@@ -5,6 +5,8 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homep
 import 'package:munting_gabay/variable.dart';
 
 class ColorChangerScreen extends StatefulWidget {
+  const ColorChangerScreen({super.key});
+
   @override
   _ColorChangerScreenState createState() => _ColorChangerScreenState();
 }
@@ -16,8 +18,8 @@ class _ColorChangerScreenState extends State<ColorChangerScreen> {
     super.initState();
     colorBox = Hive.box<Color>('colors');
     // Retrieve stored colors if available
-    secondaryColor = colorBox.get('secondaryColor') ?? Color(0xFFFA893D);
-    scaffoldBgColor = colorBox.get('scaffoldBgColor') ?? Color(0xFF3BD2A5);
+    secondaryColor = colorBox.get('secondaryColor') ?? const Color(0xFFFA893D);
+    scaffoldBgColor = colorBox.get('scaffoldBgColor') ?? const Color(0xFF3BD2A5);
   }
 
   void changeSecondaryColor(Color color) {
@@ -40,14 +42,14 @@ class _ColorChangerScreenState extends State<ColorChangerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Color Picker'),
+        title: const Text('Color Picker'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomepagePT(),
+                builder: (context) => const HomepagePT(),
               ),
             );
           },
@@ -68,14 +70,14 @@ class _ColorChangerScreenState extends State<ColorChangerScreen> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Pick a color'),
+                      title: const Text('Pick a color'),
                       content: SingleChildScrollView(
                         child: ColorPicker(
                           pickerColor: secondaryColor,
@@ -92,16 +94,16 @@ class _ColorChangerScreenState extends State<ColorChangerScreen> {
                   },
                 );
               },
-              child: Text('Change Secondary Color'),
+              child: const Text('Change Secondary Color'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 showDialog(
                   context: context,
                   builder: (BuildContext context) {
                     return AlertDialog(
-                      title: Text('Pick a color'),
+                      title: const Text('Pick a color'),
                       content: SingleChildScrollView(
                         child: ColorPicker(
                           pickerColor: scaffoldBgColor,
@@ -118,7 +120,7 @@ class _ColorChangerScreenState extends State<ColorChangerScreen> {
                   },
                 );
               },
-              child: Text('Change Scaffold Background Color'),
+              child: const Text('Change Scaffold Background Color'),
             ),
           ],
         ),

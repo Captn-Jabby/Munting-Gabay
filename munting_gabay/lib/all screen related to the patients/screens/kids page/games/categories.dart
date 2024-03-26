@@ -22,7 +22,7 @@ class _CategoriesState extends State<Categories> {
         backgroundColor: secondaryColor,
         title: const Text("kiddiElearning"),
       ),
-      body: Container(
+      body: SizedBox(
         width: double.infinity,
         height: MediaQuery.of(context).size.height,
         child: GridView(

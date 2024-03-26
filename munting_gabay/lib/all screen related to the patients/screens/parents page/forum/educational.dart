@@ -63,24 +63,26 @@ class webinarsScreen extends StatelessWidget {
     ),
   ];
 
+  webinarsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: scaffoldBgColor,
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () {
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ParentPage(),
+                  builder: (context) => const ParentPage(),
                 ),
               );
             },
           ),
           backgroundColor: secondaryColor,
-          title: Text('Educational Videos'),
+          title: const Text('Educational Videos'),
         ),
         body: ListView.builder(
           itemCount: EducationalVdieoss.length * 2 -
@@ -88,7 +90,7 @@ class webinarsScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             if (index.isOdd) {
               // Return a divider for odd indices
-              return Divider(
+              return const Divider(
                 thickness: 1, // Set thickness of the divider
                 color: Colors.black, // Set color of the divider
               );
@@ -123,7 +125,7 @@ class webinarsScreen extends StatelessWidget {
 class WebViewPage extends StatelessWidget {
   final String url;
 
-  WebViewPage({required this.url});
+  const WebViewPage({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +133,7 @@ class WebViewPage extends StatelessWidget {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text(
+        title: const Text(
           'Web View',
           style: TextStyle(color: text),
         ),

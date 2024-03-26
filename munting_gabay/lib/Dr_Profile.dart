@@ -44,7 +44,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
 
   void _loadUserData() async {
     try {
-      if (_currentUser.uid!.isNotEmpty) {
+      if (_currentUser.uid.isNotEmpty) {
         final snapshot = await FirebaseFirestore.instance
             .collection('users')
             .doc(_currentUser.uid)
@@ -165,12 +165,12 @@ class _DrUserProfileState extends State<DrUserProfile> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: DoctorsecondaryColor,
-        title: Text(
+        title: const Text(
           'Profile',
           style: TextStyle(color: text),
         ),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
@@ -184,7 +184,7 @@ class _DrUserProfileState extends State<DrUserProfile> {
         ),
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -193,20 +193,20 @@ class _DrUserProfileState extends State<DrUserProfile> {
               child: CircleAvatar(
                   radius: 60, backgroundImage: NetworkImage(_avatarPath)),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: 'Name'),
+              decoration: const InputDecoration(labelText: 'Name'),
             ),
             TextFormField(
               controller: _usernameController,
-              decoration: InputDecoration(labelText: 'Username'),
+              decoration: const InputDecoration(labelText: 'Username'),
             ),
             TextFormField(
               controller: phone_number,
-              decoration: InputDecoration(labelText: 'Phone Number'),
+              decoration: const InputDecoration(labelText: 'Phone Number'),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             GestureDetector(
@@ -228,27 +228,27 @@ class _DrUserProfileState extends State<DrUserProfile> {
             ),
             TextFormField(
               controller: _addressController,
-              decoration: InputDecoration(labelText: 'Address'),
+              decoration: const InputDecoration(labelText: 'Address'),
             ),
             TextFormField(
               controller: _emailController,
-              decoration: InputDecoration(labelText: 'Email', enabled: false),
+              decoration: const InputDecoration(labelText: 'Email', enabled: false),
             ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             Container(
               // width: BtnWidth,
               // height: BtnHeight,
               child: ElevatedButton(
                 onPressed: _updateUserData,
-                child: Text(
-                  'Save',
-                  style: TextStyle(color: text),
-                ),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: scaffoldBgColor, // Use the specified color
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(BtnCircularRadius),
                   ),
+                ),
+                child: const Text(
+                  'Save',
+                  style: TextStyle(color: text),
                 ),
               ),
             ),
@@ -259,9 +259,9 @@ class _DrUserProfileState extends State<DrUserProfile> {
   }
 
   Future<void> _pickAndUploadAvatar() async {
-    final ImagePicker _picker = ImagePicker();
+    final ImagePicker picker = ImagePicker();
     final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       // Upload the image to Firebase Storage

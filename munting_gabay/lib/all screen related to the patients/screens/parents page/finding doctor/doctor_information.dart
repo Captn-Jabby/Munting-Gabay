@@ -10,13 +10,11 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/scree
 
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/call.dart';
-import 'package:munting_gabay/drawer_page.dart';
 import 'package:munting_gabay/login%20and%20register/calling_doctor.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:photo_view/photo_view.dart';
 
 import '../../../../ringtone/event_service.dart';
-import '../../../../ringtone/flutter_ringtone_player.dart';
 
 class DoctorInfoPage extends StatefulWidget {
   final String docId;
@@ -33,7 +31,7 @@ class DoctorInfoPage extends StatefulWidget {
   final String phone_number;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
-  DoctorInfoPage({
+  DoctorInfoPage({super.key, 
     required this.birthdate,
     required this.phone_number,
     required this.avatarPath,
@@ -71,7 +69,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Doctor Information'),
+        title: const Text('Doctor Information'),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -79,11 +77,11 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
           stream: doctorStream,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             if (!snapshot.hasData || snapshot.data == null) {
-              return Center(child: Text('No data available'));
+              return const Center(child: Text('No data available'));
             }
 
             String doctorStatus =
@@ -98,9 +96,9 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                   'DOCTORS INFORMATION',
                   style: buttonTextStyle1,
                 ),
-                Container(
+                const SizedBox(
                   width: double.infinity,
-                  child: const Divider(
+                  child: Divider(
                     color: Colors.black,
                     thickness: 2.0,
                   ),
@@ -207,7 +205,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                                 },
                               ),
                               IconButton(
-                                icon: Icon(
+                                icon: const Icon(
                                   Icons.phone,
                                   color: Colors.amber,
                                 ), // Icon for phone call
@@ -241,7 +239,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: BtnSpacing,
                         ),
                         Center(
@@ -298,7 +296,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                                 color: indicatorColor,
                               ),
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
                               doctorStatus,
                               style: TextStyle(
@@ -313,7 +311,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                           color: Colors.black,
                           thickness: 2.0,
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: BtnSpacing,
                         ),
                         Text(
@@ -328,7 +326,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                         Text(
                             'Birthdate: ${DateFormat('MMMM d, y').format(widget.birthdate)}',
                             style: const TextStyle(fontSize: 16)),
-                        SizedBox(
+                        const SizedBox(
                           height: BtnSpacing,
                         ),
                         const Text(
@@ -370,7 +368,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
 class ZoomableImage extends StatelessWidget {
   final String imageUrl;
 
-  ZoomableImage(this.imageUrl);
+  const ZoomableImage(this.imageUrl, {super.key});
 
   @override
   Widget build(BuildContext context) {

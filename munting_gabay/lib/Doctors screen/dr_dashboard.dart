@@ -14,7 +14,7 @@ class DocDashboard extends StatefulWidget {
   final String docId; // Doctor's ID
   User? user = FirebaseAuth.instance.currentUser; // Get the current user
 
-  DocDashboard({required this.docId}) {
+  DocDashboard({super.key, required this.docId}) {
     print('Accessed DocDashboard with docId: $docId');
   }
 
@@ -81,15 +81,15 @@ class _DocDashboardState extends State<DocDashboard>
     };
   }
 
-  Set<DateTime> pendingDateTimeSet = Set();
+  Set<DateTime> pendingDateTimeSet = {};
 
   void _updateEvents(List<String> pendingDates) {
     setState(() {
       _events = {}; // Clear existing events
-      pendingDateTimeSet = Set();
+      pendingDateTimeSet = Set<DateTime>.from(<dynamic>{});
 
       for (String date in pendingDates) {
-        final formattedDate = DateFormat('d MMMM').parse(date + ' 2023');
+        final formattedDate = DateFormat('d MMMM').parse('$date 2023');
         pendingDateTimeSet.add(formattedDate);
 
         if (_events.containsKey(formattedDate)) {
@@ -137,7 +137,7 @@ class _DocDashboardState extends State<DocDashboard>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             'Incoming Call',
             style: TextStyle(color: text),
           ),
@@ -145,7 +145,7 @@ class _DocDashboardState extends State<DocDashboard>
               'You have an incoming call from $currentUserUid. Do you want to answer it?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Reject'),
+              child: const Text('Reject'),
               onPressed: () async {
                 // Update the callStatus field to false when rejecting the call
                 await FirebaseFirestore.instance
@@ -160,7 +160,7 @@ class _DocDashboardState extends State<DocDashboard>
               },
             ),
             TextButton(
-              child: Text('Answer'),
+              child: const Text('Answer'),
               onPressed: () async {
                 // Fetch currentUserUid from Firestore
                 final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -236,7 +236,7 @@ class _DocDashboardState extends State<DocDashboard>
 
         // Print pendingDatesAndSlots for debugging
         print('Pending Dates and Slots:');
-        pendingDatesAndSlots.forEach((item) {
+        for (var item in pendingDatesAndSlots) {
           final date = item['date'];
           final pendingSlots = item['pendingSlots'];
 
@@ -250,7 +250,7 @@ class _DocDashboardState extends State<DocDashboard>
           } else {
             print('No Pending Slots on $date');
           }
-        });
+        }
 
         // Update events with pending dates
         _updateEvents(pendingDatesAndSlots
@@ -297,7 +297,7 @@ class _DocDashboardState extends State<DocDashboard>
               backgroundColor: dynamicScaffoldBgColor,
               appBar: AppBar(
                 backgroundColor: dynamicSecondaryColor,
-                title: Text('Doctor Dashboard'),
+                title: const Text('Doctor Dashboard'),
                 //       bottom: TabBar(
                 //   tabs: [
                 //     Tab(text: 'Tab 1'),
@@ -312,21 +312,21 @@ class _DocDashboardState extends State<DocDashboard>
                       // Call the function to refresh the page here
                       _fetchPendingDates();
                     },
-                    icon: Icon(Icons.refresh),
+                    icon: const Icon(Icons.refresh),
                   ),
                   IconButton(
-                    icon: Icon(Icons.message),
+                    icon: const Icon(Icons.message),
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserSelectionPage(),
+                          builder: (context) => const UserSelectionPage(),
                         ),
                       );
                     },
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.calendar_month,
                       color: Colors.indigo,
                     ),
@@ -334,13 +334,13 @@ class _DocDashboardState extends State<DocDashboard>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DateListScreen()),
+                            builder: (context) => const DateListScreen()),
                       );
                     },
                   ),
                 ],
               ),
-              drawer: DrDrawer(),
+              drawer: const DrDrawer(),
               body: DefaultTabController(
                 length: 3,
                 child: Column(
@@ -394,22 +394,23 @@ class _DocDashboardState extends State<DocDashboard>
                               width: 24,
                               height: 24,
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                               child: Text(
-                                '${pendingCount}',
-                                style: TextStyle(color: Colors.white),
+                                '$pendingCount',
+                                style: const TextStyle(color: Colors.white),
                               ),
                             );
                           }
+                          return null;
 
                           // return null;
                         },
                       ),
                     ),
-                    Divider(
+                    const Divider(
                       height: 10,
                       color: Colors.black,
                     ),
@@ -424,7 +425,7 @@ class _DocDashboardState extends State<DocDashboard>
                               _buildCustomTab('Available'),
                             ],
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 5,
                           ),
                           Expanded(
@@ -449,7 +450,7 @@ class _DocDashboardState extends State<DocDashboard>
   Widget _buildCustomTab(String title) {
     return Tab(
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10.0),
           color: secondaryColor, // Customize the tab background color
@@ -458,7 +459,7 @@ class _DocDashboardState extends State<DocDashboard>
           alignment: Alignment.center,
           child: Text(
             title,
-            style: TextStyle(
+            style: const TextStyle(
               color: text, // Customize the text color
               fontWeight: FontWeight.bold,
             ),
@@ -476,66 +477,64 @@ class _DocDashboardState extends State<DocDashboard>
       orElse: () => {'pendingSlots': []},
     );
 
-    if (selectedDateSlots != null) {
-      final slots = selectedDateSlots['pendingSlots'] as List<dynamic>;
+    final slots = selectedDateSlots['pendingSlots'] as List<dynamic>;
 
-      // Display the pending slots
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Pending Slots on $selectedDateString'),
-            content: Column(
-              children: slots.map<Widget>((slot) {
-                final slotTime = slot['slot'];
-                final status = slot['status'];
-                final patientName = slot['patients'];
+    // Display the pending slots
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pending Slots on $selectedDateString'),
+          content: Column(
+            children: slots.map<Widget>((slot) {
+              final slotTime = slot['slot'];
+              final status = slot['status'];
+              final patientName = slot['patients'];
 
-                return ListTile(
-                  title: Text(
-                    ' $slotTime \n Status: $status',
-                    style: TextStyle(color: text),
-                  ),
-                  subtitle: Text('Patient: $patientName'),
-                  trailing: Visibility(
-                    visible: status != 'Available',
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        primary: dynamicScaffoldBgColor,
-                      ),
-                      onPressed: () {
-                        if (status == 'Canceled') {
-                          _changeSlotStatus(
-                              selectedDateString, slotTime, 'Canceled');
-                        } else {
-                          _changeSlotStatus(
-                              selectedDateString, slotTime, 'Accepted');
-                          _showAcceptSnackbar(); // Show Snackbar after accepting
-                        }
-                        Navigator.pop(context);
-                      },
-                      child: Text(
-                        status == 'Canceled' ? 'Set Available' : 'Accept',
-                        style: TextStyle(color: text),
-                      ),
+              return ListTile(
+                title: Text(
+                  ' $slotTime \n Status: $status',
+                  style: const TextStyle(color: text),
+                ),
+                subtitle: Text('Patient: $patientName'),
+                trailing: Visibility(
+                  visible: status != 'Available',
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: dynamicScaffoldBgColor,
+                    ),
+                    onPressed: () {
+                      if (status == 'Canceled') {
+                        _changeSlotStatus(
+                            selectedDateString, slotTime, 'Canceled');
+                      } else {
+                        _changeSlotStatus(
+                            selectedDateString, slotTime, 'Accepted');
+                        _showAcceptSnackbar(); // Show Snackbar after accepting
+                      }
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      status == 'Canceled' ? 'Set Available' : 'Accept',
+                      style: const TextStyle(color: text),
                     ),
                   ),
-                );
-              }).toList(),
+                ),
+              );
+            }).toList(),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Close'),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Close'),
-              ),
-            ],
-          );
-        },
-      );
+          ],
+        );
+      },
+    );
     }
-  }
 
   void _showAcceptSnackbar() {
     ScaffoldMessenger.of(context).showSnackBar(
@@ -605,7 +604,7 @@ class _DocDashboardState extends State<DocDashboard>
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               // Color of the loading indicator
               valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -622,7 +621,7 @@ class _DocDashboardState extends State<DocDashboard>
             child: Text('Error: ${snapshot.error}'),
           );
         } else if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Center(
+          return const Center(
             child: Text('No data found for this doctor.'),
           );
         } else {
@@ -642,7 +641,7 @@ class _DocDashboardState extends State<DocDashboard>
             child: Container(
               child: Column(
                 children: <Widget>[
-                  Text(
+                  const Text(
                     'Available Days:',
                     style: TextStyle(color: text),
                   ),
@@ -650,7 +649,7 @@ class _DocDashboardState extends State<DocDashboard>
                       ? Center(
                           child: Text(
                             'No $statusFilter slots available.',
-                            style: TextStyle(color: text),
+                            style: const TextStyle(color: text),
                           ),
                         )
                       : Column(
@@ -678,8 +677,8 @@ class DayCardDOC extends StatefulWidget {
   final String docId;
   final String selectedStatusFilter; // Add the selected status filter
 
-  DayCardDOC(
-      {required this.dayData,
+  const DayCardDOC(
+      {super.key, required this.dayData,
       required this.docId,
       required this.selectedStatusFilter});
 
@@ -700,7 +699,7 @@ class _DayCardDOCState extends State<DayCardDOC> {
     });
 
     if (!hasFilteredSlots) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Card(
@@ -710,16 +709,15 @@ class _DayCardDOCState extends State<DayCardDOC> {
           ListTile(
             title: Text(
               'Day: ${widget.dayData['day']}',
-              style: TextStyle(color: text),
+              style: const TextStyle(color: text),
             ),
             subtitle: Text(
               'Date: ${widget.dayData['date']}',
-              style: TextStyle(color: text),
+              style: const TextStyle(color: text),
             ),
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    DoctorsecondaryColor, // Change this color to the desired background color
+                backgroundColor: DoctorsecondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
@@ -728,7 +726,7 @@ class _DayCardDOCState extends State<DayCardDOC> {
               },
               child: Text(
                 slotsVisible ? 'Hide Slots' : 'Show Slots',
-                style: TextStyle(color: text),
+                style: const TextStyle(color: text),
               ),
             ),
           ),
@@ -760,7 +758,7 @@ class SlotTileDOC extends StatefulWidget {
   final String day;
   final String selectedStatusFilter; // Add the selected status filter
 
-  SlotTileDOC({
+  const SlotTileDOC({super.key, 
     required this.slotData,
     required this.docId,
     required this.day,
@@ -781,7 +779,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
       return ListTile(
         title: Text(
           ' ${widget.slotData['slot']} \n Status: $status',
-          style: TextStyle(color: text),
+          style: const TextStyle(color: text),
         ),
         subtitle: Text('Patient: $patientName'),
       );

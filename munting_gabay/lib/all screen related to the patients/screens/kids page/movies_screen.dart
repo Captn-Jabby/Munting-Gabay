@@ -48,17 +48,19 @@ List<Movie> movies = [
 ];
 
 class MovieScreen extends StatelessWidget {
+  const MovieScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Inspirational Movies'),
+        title: const Text('Inspirational Movies'),
       ),
       body: GridView.builder(
         itemCount: movies.length,
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
         ),
         itemBuilder: (context, index) {
@@ -72,7 +74,7 @@ class MovieScreen extends StatelessWidget {
 class MovieTile extends StatelessWidget {
   final Movie movie;
 
-  MovieTile({required this.movie});
+  const MovieTile({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +108,7 @@ class MovieTile extends StatelessWidget {
 class InAppWebViewPage extends StatelessWidget {
   final Movie movie;
 
-  InAppWebViewPage({required this.movie});
+  const InAppWebViewPage({super.key, required this.movie});
 
   @override
   Widget build(BuildContext context) {
@@ -127,7 +129,7 @@ class InAppWebViewPage extends StatelessWidget {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Close Trailer'),
+            child: const Text('Close Trailer'),
           ),
         ],
       ),

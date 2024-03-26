@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class LocationPickerScreen extends StatefulWidget {
+  const LocationPickerScreen({super.key});
+
   @override
   _LocationPickerScreenState createState() => _LocationPickerScreenState();
 }
 
 class _LocationPickerScreenState extends State<LocationPickerScreen> {
-  late LatLng _pickedLocation = LatLng(0, 0);
+  late LatLng _pickedLocation = const LatLng(0, 0);
   late GoogleMapController _controller;
 
   // Custom map style JSON string
-  String _mapStyle = '''
+  final String _mapStyle = '''
   [
     // Your custom map style JSON here
   ]
@@ -36,21 +38,21 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Pick a Location'),
+        title: const Text('Pick a Location'),
       ),
       body: GoogleMap(
         onMapCreated: _onMapCreated,
-        initialCameraPosition: CameraPosition(
+        initialCameraPosition: const CameraPosition(
           target: LatLng(0, 0), // Center the map at a default location
           zoom: 15.0,
         ),
         scrollGesturesEnabled: true, // Enable scroll gestures
         zoomGesturesEnabled: true, // Enable zoom gestures
-        markers: _pickedLocation == LatLng(0, 0)
+        markers: _pickedLocation == const LatLng(0, 0)
             ? {}
             : {
                 Marker(
-                  markerId: MarkerId('picked_location'),
+                  markerId: const MarkerId('picked_location'),
                   position: _pickedLocation,
                 ),
               },
@@ -60,7 +62,7 @@ class _LocationPickerScreenState extends State<LocationPickerScreen> {
           // Do something with the picked location
           Navigator.of(context).pop(_pickedLocation);
         },
-        child: Icon(Icons.check),
+        child: const Icon(Icons.check),
       ),
     );
   }

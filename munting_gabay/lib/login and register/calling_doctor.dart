@@ -7,7 +7,7 @@ class PhoneCallScreen extends StatelessWidget {
   final String docId;
   final String currentUserName;
 
-  PhoneCallScreen({
+  const PhoneCallScreen({super.key, 
     required this.phone_number,
     required this.docId,
     required this.currentUserName,
@@ -32,7 +32,7 @@ class PhoneCallScreen extends StatelessWidget {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Make a Phone Call'),
+        title: const Text('Make a Phone Call'),
       ),
       body: Center(
         child: Column(
@@ -40,28 +40,27 @@ class PhoneCallScreen extends StatelessWidget {
           children: <Widget>[
             Text(
               'Doctor ID: $docId',
-              style: TextStyle(fontSize: 18, color: text),
+              style: const TextStyle(fontSize: 18, color: text),
             ),
             Text(
               'Doctor Name: $currentUserName',
-              style: TextStyle(fontSize: 18, color: text),
+              style: const TextStyle(fontSize: 18, color: text),
             ),
             Text(
               'Phone Number: $phone_number',
-              style: TextStyle(fontSize: 18, color: text),
+              style: const TextStyle(fontSize: 18, color: text),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    secondaryColor, // Change this color to the desired background color
+                backgroundColor: secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 makePhoneCall(); // Call the function to make a phone call
               },
               child: Text(
                 'Call $phone_number',
-                style: TextStyle(color: text),
+                style: const TextStyle(color: text),
               ),
             ),
           ],

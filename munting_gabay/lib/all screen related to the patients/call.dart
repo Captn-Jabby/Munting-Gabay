@@ -64,18 +64,17 @@ class _CallState extends State<Call> {
         actions: [
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary:
-                  scaffoldBgColor, // Change this color to the desired background color
+              backgroundColor: scaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => pscyh(),
+                  builder: (context) => const pscyh(),
                 ),
               );
             },
-            child: Text('.'),
+            child: const Text('.'),
           ),
         ],
       ),
@@ -102,19 +101,19 @@ class _CallState extends State<Call> {
                   children: [
                     Text(
                       'Username: ${widget.currentUserName}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                     Text(
                       'Doc ID: ${widget.docId}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                     Text(
                       'Channel Name: ${client.agoraConnectionData.channelName}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                     Text(
                       'Channel username: ${client.agoraConnectionData.username}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                   ],
                 ),

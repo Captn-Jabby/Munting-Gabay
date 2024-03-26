@@ -24,7 +24,7 @@ class _HostControlsState extends State<HostControls> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
-      icon: Icon(Icons.more_vert, color: Colors.white),
+      icon: const Icon(Icons.more_vert, color: Colors.white),
       enableFeedback: true,
       tooltip: 'Host Controls',
       itemBuilder: (BuildContext context) => <PopupMenuEntry>[
@@ -47,13 +47,13 @@ class _HostControlsState extends State<HostControls> {
                     widget.muted ? Icons.mic_off : Icons.mic,
                     size: 15,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   widget.muted
-                      ? Text(
+                      ? const Text(
                           'Ask user to unmute the mic',
                           style: TextStyle(fontSize: 15),
                         )
-                      : Text(
+                      : const Text(
                           'Ask user to mute the mic',
                           style: TextStyle(fontSize: 15),
                         )
@@ -81,13 +81,13 @@ class _HostControlsState extends State<HostControls> {
                     widget.videoDisabled ? Icons.videocam_off : Icons.videocam,
                     size: 15,
                   ),
-                  SizedBox(width: 5),
+                  const SizedBox(width: 5),
                   widget.videoDisabled
-                      ? Text(
+                      ? const Text(
                           'Ask user to turn on the camera',
                           style: TextStyle(fontSize: 15),
                         )
-                      : Text(
+                      : const Text(
                           'Ask user to turn off the camera',
                           style: TextStyle(fontSize: 15),
                         )

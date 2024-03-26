@@ -8,6 +8,8 @@ import 'package:munting_gabay/Doctors%20screen/save_scheduled.dart';
 import 'package:munting_gabay/variable.dart';
 
 class DateListScreen extends StatefulWidget {
+  const DateListScreen({super.key});
+
   @override
   _DateListScreenState createState() => _DateListScreenState();
 }
@@ -54,7 +56,7 @@ class _DateListScreenState extends State<DateListScreen> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     User? user = FirebaseAuth.instance.currentUser;
 
-    if (user == null || user.uid == null) {
+    if (user == null) {
       print('User is not authenticated or does not have an email.');
       // Handle this case appropriately, such as showing an error message to the user.
       return;
@@ -70,7 +72,7 @@ class _DateListScreenState extends State<DateListScreen> {
           'slots': List.generate(18, (index) {
             final startTime = DateTime(date.year, date.month, date.day, 8, 0)
                 .add(Duration(minutes: 30 * index));
-            final endTime = startTime.add(Duration(minutes: 30));
+            final endTime = startTime.add(const Duration(minutes: 30));
 
             return {
               'slot':
@@ -122,7 +124,7 @@ class _DateListScreenState extends State<DateListScreen> {
     while (currentDatePointer.isBefore(endOfYear) ||
         currentDatePointer.isAtSameMomentAs(endOfYear)) {
       dateRange.add(currentDatePointer);
-      currentDatePointer = currentDatePointer.add(Duration(days: 1));
+      currentDatePointer = currentDatePointer.add(const Duration(days: 1));
     }
 
     // Create and save slots for the range of dates
@@ -150,7 +152,7 @@ class _DateListScreenState extends State<DateListScreen> {
       // Check if any slot has content before deletion
       documentReference.get().then((docSnapshot) {
         if (docSnapshot.exists) {
-          final data = docSnapshot.data() as Map<String, dynamic>?;
+          final data = docSnapshot.data();
           if (data != null && data['available_days'] != null) {
             final List<dynamic> availableDays =
                 data['available_days'] as List<dynamic>;
@@ -187,7 +189,7 @@ class _DateListScreenState extends State<DateListScreen> {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 // Color of the loading indicator
                 valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -201,7 +203,7 @@ class _DateListScreenState extends State<DateListScreen> {
             ); // S; // Placeholder for loading state
           }
           if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Text('User data not found');
+            return const Text('User data not found');
           }
 
           bool darkMode = snapshot.data!['darkmode'] ?? false;
@@ -216,20 +218,19 @@ class _DateListScreenState extends State<DateListScreen> {
             backgroundColor: dynamicScaffoldBgColor,
             appBar: AppBar(
               backgroundColor: dynamicSecondaryColor,
-              title: Text('Yearly Dates'),
+              title: const Text('Yearly Dates'),
               actions: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    primary:
-                        darkPrimary, // Change this color to the desired background color
+                    backgroundColor: darkPrimary, // Change this color to the desired background color
                   ),
                   onPressed: () {
                     deleteSchedule();
                   },
-                  child: Text('Delete'),
+                  child: const Text('Delete'),
                 ),
                 if (hasSchedule)
-                  Icon(
+                  const Icon(
                     Icons
                         .check_circle, // Show a checkmark icon if a schedule exists
                     color: Colors.green,
@@ -246,7 +247,7 @@ class _DateListScreenState extends State<DateListScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SavedDatesScreen(),
+                        builder: (context) => const SavedDatesScreen(),
                       ),
                     );
                   },
@@ -255,13 +256,13 @@ class _DateListScreenState extends State<DateListScreen> {
             ),
             body: Column(
               children: <Widget>[
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text('Select days to filter: '),
                   ],
                 ),
-                Container(
+                SizedBox(
                   height: 40,
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -299,34 +300,32 @@ class _DateListScreenState extends State<DateListScreen> {
                   children: <Widget>[
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary:
-                            secondaryColor, // Change this color to the desired background color
+                        backgroundColor: secondaryColor, // Change this color to the desired background color
                       ),
                       onPressed: () {
                         filterDates();
                       },
-                      child: Text(
+                      child: const Text(
                         'Filter',
                         style: TextStyle(color: text),
                       ),
                     ),
-                    SizedBox(width: 16), // Add some spacing
+                    const SizedBox(width: 16), // Add some spacing
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary:
-                            DoctorsecondaryColor, // Change this color to the desired background color
+                        backgroundColor: DoctorsecondaryColor, // Change this color to the desired background color
                       ),
                       onPressed: () {
                         // Create and save slots for all filtered dates
                         createSlotsForDateRange(filteredDates);
                       },
-                      child: Text(
+                      child: const Text(
                         'Save',
                         style: TextStyle(color: text),
                       ),
                     ),
 
-                    SizedBox(width: 16),
+                    const SizedBox(width: 16),
                   ],
                 ),
                 Expanded(
@@ -342,10 +341,10 @@ class _DateListScreenState extends State<DateListScreen> {
                         },
                         background: Container(
                           color:
-                              Colors.red, // Background color for swipe action
-                          child: Icon(Icons.delete, color: Colors.white),
+                              Colors.red,
                           alignment: Alignment.centerRight,
-                          padding: EdgeInsets.only(right: 16.0),
+                          padding: const EdgeInsets.only(right: 16.0), // Background color for swipe action
+                          child: const Icon(Icons.delete, color: Colors.white),
                         ),
                         child: ListTile(
                           title: Text(
@@ -371,7 +370,7 @@ class _DateListScreenState extends State<DateListScreen> {
 
       documentReference.get().then((docSnapshot) {
         if (docSnapshot.exists) {
-          final data = docSnapshot.data() as Map<String, dynamic>?;
+          final data = docSnapshot.data();
           if (data != null && data['available_days'] != null) {
             final List<dynamic> availableDays =
                 data['available_days'] as List<dynamic>;

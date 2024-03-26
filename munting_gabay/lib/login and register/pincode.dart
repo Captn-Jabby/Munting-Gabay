@@ -8,6 +8,8 @@ import 'package:munting_gabay/variable.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class PinScreen extends StatefulWidget {
+  const PinScreen({super.key});
+
   @override
   _PinScreenState createState() => _PinScreenState();
 }
@@ -21,7 +23,7 @@ class _PinScreenState extends State<PinScreen> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Enter PIN'),
+        title: const Text('Enter PIN'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -41,25 +43,24 @@ class _PinScreenState extends State<PinScreen> {
                 _verifyPin(value); // Call the verification method
               },
             ),
-            SizedBox(height: 20.0),
-            Text(
+            const SizedBox(height: 20.0),
+            const Text(
               'Enter your PIN',
               style: TextStyle(fontSize: 18.0),
             ),
             // Inside your PinScreen widget build method:
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    secondaryColor, // Change this color to the desired background color
+                backgroundColor: secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 // Navigate to the ForgotPINScreen when the button is pressed
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ViewPINScreen()),
+                  MaterialPageRoute(builder: (context) => const ViewPINScreen()),
                 );
               },
-              child: Text(
+              child: const Text(
                 "Forgot PIN",
                 style: TextStyle(color: text),
               ),
@@ -99,7 +100,7 @@ class _PinScreenState extends State<PinScreen> {
             // Correct PIN, proceed to the next screen
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ParentPage()),
+              MaterialPageRoute(builder: (context) => const ParentPage()),
             );
           } else {
             // Incorrect PIN, show an error message

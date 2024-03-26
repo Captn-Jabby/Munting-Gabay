@@ -6,7 +6,7 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homep
 import 'package:munting_gabay/variable.dart';
 
 class ChangePin extends StatefulWidget {
-  const ChangePin({Key? key});
+  const ChangePin({super.key, Key});
 
   @override
   _ChangePinState createState() => _ChangePinState();
@@ -61,17 +61,17 @@ class _ChangePinState extends State<ChangePin> {
       appBar: AppBar(
         backgroundColor: scaffoldBgColor,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => HomepagePT(),
+                builder: (context) => const HomepagePT(),
               ),
             );
           },
         ),
-        title: Text('Change PIN'),
+        title: const Text('Change PIN'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -85,11 +85,11 @@ class _ChangePinState extends State<ChangePin> {
                 });
               },
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Current PIN',
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             TextField(
               onChanged: (value) {
                 setState(() {
@@ -97,11 +97,11 @@ class _ChangePinState extends State<ChangePin> {
                 });
               },
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'New PIN',
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -136,7 +136,7 @@ class _ChangePinState extends State<ChangePin> {
                       children: [
                         Text(
                           pinEnabled ? 'OFF' : 'ON',
-                          style: TextStyle(
+                          style: const TextStyle(
                             color: Colors.white, // Adjust text color as needed
                             fontWeight: FontWeight.bold,
                           ),
@@ -149,21 +149,20 @@ class _ChangePinState extends State<ChangePin> {
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    secondaryColor, // Change this color to the desired background color
+                backgroundColor: secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 if (currentPin.isNotEmpty && newPin.isNotEmpty) {
                   changePin(currentPin, newPin);
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Please fill in both current and new PIN.'),
                     ),
                   );
                 }
               },
-              child: Text(
+              child: const Text(
                 'Change PIN',
                 style: TextStyle(color: text),
               ),
@@ -253,13 +252,13 @@ class _ChangePinState extends State<ChangePin> {
 
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('PIN changed successfully.'),
               ),
             );
           } else {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
+              const SnackBar(
                 content: Text('Incorrect current PIN. Please try again.'),
               ),
             );

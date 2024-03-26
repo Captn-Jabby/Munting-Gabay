@@ -17,7 +17,7 @@ class DoctorDetailsScreen extends StatefulWidget {
   final String imageUrl2;
   final String profilepic;
 
-  DoctorDetailsScreen({
+  const DoctorDetailsScreen({super.key, 
     required this.imageUrl,
     required this.imageUrl2,
     required this.clinic,
@@ -57,7 +57,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
       ),
       drawer: AppDrawer(),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -65,31 +65,31 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               'DOCTORS INFORMATION',
               style: buttonTextStyle1,
             ),
-            Divider(
+            const Divider(
               color: Colors.black,
               thickness: 2.0,
             ),
-            SizedBox(
+            const SizedBox(
               height: BtnSpacing,
             ),
             Text('Doctor ID: ${widget.docId}',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 16),
-            Text('Name: ${widget.initialName}', style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 16),
+            Text('Name: ${widget.initialName}', style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             Text('Address: ${widget.initialAddress}',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+                style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             Text('Birthdate: ${widget.initialBirthdate}',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+                style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             Text('Clinic Adress: ${widget.addressHospital}',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
+                style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
             Text('Clinic Name: ${widget.clinic}',
-                style: TextStyle(fontSize: 16)),
-            SizedBox(height: 16),
-            Text('Identification:', style: TextStyle(fontSize: 16)),
+                style: const TextStyle(fontSize: 16)),
+            const SizedBox(height: 16),
+            const Text('Identification:', style: TextStyle(fontSize: 16)),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -122,7 +122,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               ),
             ),
 
-            Text('lICENSURE:', style: TextStyle(fontSize: 16)),
+            const Text('lICENSURE:', style: TextStyle(fontSize: 16)),
             // if (widget.imageUrl2 !=
             GestureDetector(
               onTap: () {
@@ -156,7 +156,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               ),
             ),
 
-            Text('Profile pic:', style: TextStyle(fontSize: 16)),
+            const Text('Profile pic:', style: TextStyle(fontSize: 16)),
             GestureDetector(
               onTap: () {
                 Navigator.push(
@@ -189,7 +189,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
               ),
             ),
 
-            Text('Status:', style: TextStyle(fontSize: 16)),
+            const Text('Status:', style: TextStyle(fontSize: 16)),
             Row(
               children: [
                 Radio(
@@ -201,7 +201,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                     });
                   },
                 ),
-                Text('Accepted'),
+                const Text('Accepted'),
                 Radio(
                   value: 'Waiting',
                   groupValue: selectedStatus,
@@ -211,13 +211,12 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                     });
                   },
                 ),
-                Text('Denied'),
+                const Text('Denied'),
               ],
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    scaffoldBgColor, // Change this color to the desired background color
+                backgroundColor: scaffoldBgColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 // Update the status in Firestore
@@ -228,21 +227,21 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
                   'status': selectedStatus,
                 }).then((_) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Status updated!'),
                       duration: Duration(seconds: 2),
                     ),
                   );
                 }).catchError((error) {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Failed to update status.'),
                       duration: Duration(seconds: 2),
                     ),
                   );
                 });
               },
-              child: Text('Save'),
+              child: const Text('Save'),
             ),
           ],
         ),
@@ -254,7 +253,7 @@ class _DoctorDetailsScreenState extends State<DoctorDetailsScreen> {
 class ZoomableImage extends StatelessWidget {
   final String imageUrl;
 
-  ZoomableImage(this.imageUrl);
+  const ZoomableImage(this.imageUrl, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +276,7 @@ class ZoomableImage extends StatelessWidget {
 class ZoomableImage1 extends StatelessWidget {
   final String imageUrl2;
 
-  ZoomableImage1(this.imageUrl2);
+  const ZoomableImage1(this.imageUrl2, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -300,7 +299,7 @@ class ZoomableImage1 extends StatelessWidget {
 class ZoomableImage2 extends StatelessWidget {
   final String profilepic;
 
-  ZoomableImage2(this.profilepic);
+  const ZoomableImage2(this.profilepic, {super.key});
 
   @override
   Widget build(BuildContext context) {

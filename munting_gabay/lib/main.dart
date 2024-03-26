@@ -20,7 +20,7 @@ void main() async {
   Hive.registerAdapter<Color>(ColorAdapter()); // Register the ColorAdapter
   await Hive.initFlutter();
   await Hive.openBox<Color>('colors'); // Open a box to store colors
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 void configLoading() {
@@ -33,6 +33,8 @@ void configLoading() {
 }
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
   State<MyApp> createState() => _MyAppState();
 }
@@ -80,17 +82,17 @@ class _MyAppState extends State<MyApp> {
                     String status = userDataSnapshot.data?.get('status') ?? '';
 
                     if (status == 'Accepted') {
-                      return DocDashboard(docId: user.uid!);
+                      return DocDashboard(docId: user.uid);
                     } else if (status == 'ADMIN') {
                       return const AdminPage();
                     } else {
-                      return LoginScreen();
+                      return const LoginScreen();
                     }
                   } else {
                     // Handle the case when the role is neither 'PATIENTS' nor 'DOCTORS'
                     return Container(
                       color: Colors.red, // Set the color or customize as needed
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Invalid User Role',
                           style: TextStyle(fontSize: 18, color: Colors.white),
@@ -103,7 +105,7 @@ class _MyAppState extends State<MyApp> {
             }
           }
 
-          return LoginScreen();
+          return const LoginScreen();
         },
       ),
       builder: EasyLoading.init(),
@@ -129,6 +131,8 @@ class _MyAppState extends State<MyApp> {
 }
 
 class LoginScreen extends StatelessWidget {
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +144,7 @@ class LoginScreen extends StatelessWidget {
           padding: const EdgeInsets.only(top: 75),
           child: Column(
             children: [
-              Center(
+              const Center(
                 child: SpinningContainer(),
               ),
               Text(
@@ -159,7 +163,7 @@ class LoginScreen extends StatelessWidget {
                 child: Text('An Autism Aid and Awareness App',
                     style: smallTextStyle1),
               ),
-              Container(
+              SizedBox(
                 height: MediaQuery.of(context).size.height / 4,
                 width: MediaQuery.of(context).size.width * 0.8,
                 child: Column(
@@ -191,7 +195,7 @@ class LoginScreen extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginPage()),
+                                builder: (context) => const LoginPage()),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -227,7 +231,7 @@ class LoginScreen extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  RegistrationDOCTORS(),
+                                                  const RegistrationDOCTORS(),
                                             ),
                                           );
                                         },
@@ -242,7 +246,7 @@ class LoginScreen extends StatelessWidget {
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  RegistrationPatients(),
+                                                  const RegistrationPatients(),
                                             ),
                                           );
                                         },
@@ -271,6 +275,8 @@ class LoginScreen extends StatelessWidget {
 }
 
 class SpinningContainer extends StatefulWidget {
+  const SpinningContainer({super.key});
+
   @override
   _SpinningContainerState createState() => _SpinningContainerState();
 }
@@ -285,7 +291,7 @@ class _SpinningContainerState extends State<SpinningContainer>
     _controller = AnimationController(
       vsync: this,
       duration:
-          Duration(minutes: 1), // Set the duration for one complete rotation
+          const Duration(minutes: 1), // Set the duration for one complete rotation
     )..repeat(); // Repeat the animation infinitely
   }
 

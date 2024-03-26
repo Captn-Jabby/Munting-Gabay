@@ -130,7 +130,7 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
           Container(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
-              physics: BouncingScrollPhysics(),
+              physics: const BouncingScrollPhysics(),
               child: Container(
                 child: widget.enabledButtons == null
                     ? Row(
@@ -202,6 +202,12 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
         : RawMaterialButton(
             onPressed: () =>
                 shareScreen(sessionController: widget.client.sessionController),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: widget.client.sessionController.value.turnOnScreenSharing
+                ? Colors.blueAccent
+                : Colors.white,
+            padding: const EdgeInsets.all(12.0),
             child: Icon(
               widget.client.sessionController.value.turnOnScreenSharing
                   ? Icons.stop_screen_share_outlined
@@ -211,12 +217,6 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
                   : Colors.blueAccent,
               size: 20.0,
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: widget.client.sessionController.value.turnOnScreenSharing
-                ? Colors.blueAccent
-                : Colors.white,
-            padding: const EdgeInsets.all(12.0),
           );
   }
 
@@ -232,6 +232,12 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
             onPressed: () => toggleMute(
               sessionController: widget.client.sessionController,
             ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: widget.client.sessionController.value.isLocalUserMuted
+                ? Colors.blueAccent
+                : Colors.white,
+            padding: const EdgeInsets.all(12.0),
             child: Icon(
               widget.client.sessionController.value.isLocalUserMuted
                   ? Icons.mic_off
@@ -241,12 +247,6 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
                   : Colors.blueAccent,
               size: 20.0,
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: widget.client.sessionController.value.isLocalUserMuted
-                ? Colors.blueAccent
-                : Colors.white,
-            padding: const EdgeInsets.all(12.0),
           );
   }
 
@@ -258,11 +258,11 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
           )
         : RawMaterialButton(
             onPressed: () => _onCallEnd(context),
-            child: Icon(Icons.call_end, color: Colors.white, size: 35),
-            shape: CircleBorder(),
+            shape: const CircleBorder(),
             elevation: 2.0,
             fillColor: Colors.redAccent,
             padding: const EdgeInsets.all(15.0),
+            child: const Icon(Icons.call_end, color: Colors.white, size: 35),
           );
   }
 
@@ -278,15 +278,15 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
             onPressed: () => switchCamera(
               sessionController: widget.client.sessionController,
             ),
-            child: Icon(
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor: Colors.white,
+            padding: const EdgeInsets.all(12.0),
+            child: const Icon(
               Icons.switch_camera,
               color: Colors.blueAccent,
               size: 20.0,
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor: Colors.white,
-            padding: const EdgeInsets.all(12.0),
           );
   }
 
@@ -302,6 +302,13 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
             onPressed: () => toggleCamera(
               sessionController: widget.client.sessionController,
             ),
+            shape: const CircleBorder(),
+            elevation: 2.0,
+            fillColor:
+                widget.client.sessionController.value.isLocalVideoDisabled
+                    ? Colors.blueAccent
+                    : Colors.white,
+            padding: const EdgeInsets.all(12.0),
             child: Icon(
               widget.client.sessionController.value.isLocalVideoDisabled
                   ? Icons.videocam_off
@@ -311,13 +318,6 @@ class _AgoraVideoButtonsState extends State<AgoraVideoButtons> {
                   : Colors.blueAccent,
               size: 20.0,
             ),
-            shape: CircleBorder(),
-            elevation: 2.0,
-            fillColor:
-                widget.client.sessionController.value.isLocalVideoDisabled
-                    ? Colors.blueAccent
-                    : Colors.white,
-            padding: const EdgeInsets.all(12.0),
           );
   }
 

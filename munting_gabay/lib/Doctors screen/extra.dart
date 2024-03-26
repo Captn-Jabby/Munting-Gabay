@@ -2,19 +2,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart'; // Import the intl package
-import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
-import 'package:munting_gabay/Doctors%20screen/newsched.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
 
-import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
-import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class DocDashboard extends StatefulWidget {
   final String docId; // Doctor's ID
   User? user = FirebaseAuth.instance.currentUser; // Get the current user
 
-  DocDashboard({required this.docId}) {
+  DocDashboard({super.key, required this.docId}) {
     print('Accessed DocDashboard with docId: $docId');
   }
 
@@ -53,7 +48,7 @@ class _DocDashboardState extends State<DocDashboard>
 
   // Method to update events with pending dates
 // Add this field in _DocDashboardState
-  Set<DateTime> pendingDateTimeSet = Set();
+  Set<DateTime> pendingDateTimeSet = {};
 
   void _updateEvents(List<String> pendingDates) {
     setState(() {
@@ -61,7 +56,7 @@ class _DocDashboardState extends State<DocDashboard>
       pendingDateTimeSet = pendingDates.map((date) {
         // Format the date from the pendingDates list to match the calendar format
         final formattedDate = DateFormat('d MMMM')
-            .parse(date + ' 2023'); // Assuming the year is 2023
+            .parse('$date 2023'); // Assuming the year is 2023
         return formattedDate;
       }).toSet();
 
@@ -155,13 +150,13 @@ class _DocDashboardState extends State<DocDashboard>
 
       final List<DateTime> pendingDateTimeSet = pendingDates.map((date) {
         final formattedDate =
-            DateFormat('d MMMM').parse(date + ' 2023'); // Adjust year if needed
+            DateFormat('d MMMM').parse('$date 2023'); // Adjust year if needed
         return formattedDate;
       }).toList();
 
       final List<DateTime> cancelledDateTimeSet = cancelledDates.map((date) {
         final formattedDate =
-            DateFormat('d MMMM').parse(date + ' 2023'); // Adjust year if needed
+            DateFormat('d MMMM').parse('$date 2023'); // Adjust year if needed
         return formattedDate;
       }).toList();
 
@@ -179,7 +174,7 @@ class _DocDashboardState extends State<DocDashboard>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Doctor Dashboard'),
+        title: const Text('Doctor Dashboard'),
       ),
       body: DefaultTabController(
         length: 4,
@@ -219,7 +214,7 @@ class _DocDashboardState extends State<DocDashboard>
                   });
 
                   // Check for cancelled status
-                  final isCancelled = events?.any((event) {
+                  final isCancelled = events.any((event) {
                         if (event is Map<String, dynamic>) {
                           if (event['status'] == 'cancelled') {
                             print(
@@ -236,13 +231,13 @@ class _DocDashboardState extends State<DocDashboard>
                       width: 24,
                       height: 24,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.red,
                         shape: BoxShape.circle,
                       ),
                       child: Text(
                         '${date.day}',
-                        style: TextStyle(color: Colors.white),
+                        style: const TextStyle(color: Colors.white),
                       ),
                     );
                   } else if (isCancelled) {
@@ -253,13 +248,13 @@ class _DocDashboardState extends State<DocDashboard>
                       width: 24,
                       height: 24,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: Colors.yellow,
                         shape: BoxShape.circle,
                       ),
                       child: Text(
                         '${date.day}',
-                        style: TextStyle(color: Colors.black),
+                        style: const TextStyle(color: Colors.black),
                       ),
                     );
                   }

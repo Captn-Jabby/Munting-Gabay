@@ -8,13 +8,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:munting_gabay/login%20and%20register/Clinic%20Address.dart';
 
 import 'package:munting_gabay/variable.dart';
 
 import 'login.dart';
 
 class RegistrationDOCTORS extends StatefulWidget {
+  const RegistrationDOCTORS({super.key});
+
   @override
   _RegistrationDOCTORSState createState() => _RegistrationDOCTORSState();
 }
@@ -31,12 +32,12 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Center(
             child: Stack(alignment: Alignment.topCenter, children: [
               Column(
                 children: [
-                  Center(
+                  const Center(
                     child: SpinningContainer(),
                   ),
                   Text(
@@ -57,33 +58,32 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                   ),
                 ],
               ),
-              Container(
+              SizedBox(
                 width: 300,
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 500,
                     ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        primary:
-                            secondaryColor, // Change this color to the desired background color
+                        backgroundColor: secondaryColor, // Change this color to the desired background color
                       ),
                       onPressed: () {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) =>
-                                PersonalIdentificationScreen(),
+                                const PersonalIdentificationScreen(),
                           ),
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'Fill Up Personal Information Form',
                         style: TextStyle(color: text),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 270,
                     ),
                     TextButton(
@@ -92,14 +92,14 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                              title: Text('Confirmation'),
-                              content: Text('Are you sure you want to LOGIN?'),
+                              title: const Text('Confirmation'),
+                              content: const Text('Are you sure you want to LOGIN?'),
                               actions: [
                                 TextButton(
                                   onPressed: () {
                                     Navigator.pop(context); // Close the dialog
                                   },
-                                  child: Text('Cancel'),
+                                  child: const Text('Cancel'),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -107,11 +107,11 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                                     Navigator.pushReplacement(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (context) => LoginPage(),
+                                        builder: (context) => const LoginPage(),
                                       ),
                                     );
                                   },
-                                  child: Text(
+                                  child: const Text(
                                     'Confirm',
                                     style: TextStyle(color: Colors.red),
                                   ),
@@ -121,7 +121,7 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
                           },
                         );
                       },
-                      child: Text(
+                      child: const Text(
                         'CLICK HERE TO LOGIN',
                         style: TextStyle(color: Colors.white),
                       ),
@@ -138,6 +138,8 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
 }
 
 class PersonalIdentificationScreen extends StatefulWidget {
+  const PersonalIdentificationScreen({super.key});
+
   @override
   State<PersonalIdentificationScreen> createState() =>
       _PersonalIdentificationScreenState();
@@ -180,18 +182,18 @@ class _PersonalIdentificationScreenState
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Personal Identification'),
+        title: const Text('Personal Identification'),
       ),
       body: SingleChildScrollView(
         child: Center(
           child: Form(
             key: _formKey,
             child: Container(
-              padding: EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   // Text(
@@ -205,7 +207,7 @@ class _PersonalIdentificationScreenState
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             10.0), // Adjust the border radius
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                             color: Colors.blue), // Adjust the border color
                       ),
                     ),
@@ -216,7 +218,7 @@ class _PersonalIdentificationScreenState
                       return null; // Return null if the validation succeeds
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextFormField(
@@ -226,7 +228,7 @@ class _PersonalIdentificationScreenState
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             10.0), // Adjust the border radius
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                             color: Colors.blue), // Adjust the border color
                       ),
                     ),
@@ -237,7 +239,7 @@ class _PersonalIdentificationScreenState
                       return null; // Return null if the validation succeeds
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextFormField(
@@ -247,7 +249,7 @@ class _PersonalIdentificationScreenState
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             10.0), // Adjust the border radius
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                             color: Colors.blue), // Adjust the border color
                       ),
                     ),
@@ -258,7 +260,7 @@ class _PersonalIdentificationScreenState
                       return null; // Return null if the validation succeeds
                     },
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   GestureDetector(
@@ -272,7 +274,7 @@ class _PersonalIdentificationScreenState
                           labelText: 'Birthdate',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
+                            borderSide: const BorderSide(color: Colors.blue),
                           ),
                         ),
                         validator: (value) {
@@ -298,7 +300,7 @@ class _PersonalIdentificationScreenState
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextFormField(
@@ -307,7 +309,7 @@ class _PersonalIdentificationScreenState
                       labelText: 'Email',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.blue),
+                        borderSide: const BorderSide(color: Colors.blue),
                       ),
                     ),
                     validator: (value) {
@@ -321,7 +323,7 @@ class _PersonalIdentificationScreenState
                     },
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextFormField(
@@ -330,7 +332,7 @@ class _PersonalIdentificationScreenState
                       labelText: 'Password',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(10.0),
-                        borderSide: BorderSide(color: Colors.blue),
+                        borderSide: const BorderSide(color: Colors.blue),
                       ),
                       suffixIcon: GestureDetector(
                         onTap: () {
@@ -356,7 +358,7 @@ class _PersonalIdentificationScreenState
                     },
                   ),
 
-                  SizedBox(
+                  const SizedBox(
                     height: 15,
                   ),
                   TextFormField(
@@ -366,7 +368,7 @@ class _PersonalIdentificationScreenState
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(
                             10.0), // Adjust the border radius
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                             color: Colors.blue), // Adjust the border color
                       ),
                       suffixIcon: GestureDetector(
@@ -397,22 +399,21 @@ class _PersonalIdentificationScreenState
                     children: [
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            primary:
-                                secondaryColor, // Change this color to the desired background color
+                            backgroundColor: secondaryColor, // Change this color to the desired background color
                           ),
                           onPressed: () {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => RegistrationDOCTORS(),
+                                builder: (context) => const RegistrationDOCTORS(),
                               ),
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'BACK',
                             style: TextStyle(color: text),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         width: 210,
                       ),
                       ElevatedButton(
@@ -442,7 +443,7 @@ class _PersonalIdentificationScreenState
                         style: ElevatedButton.styleFrom(
                           backgroundColor: secondaryColor,
                         ),
-                        child: Text(
+                        child: const Text(
                           'Next',
                           style: TextStyle(color: text),
                         ),
@@ -462,7 +463,7 @@ class _PersonalIdentificationScreenState
 class DoctorsIdentificationScreen extends StatefulWidget {
   final UserData userData;
 
-  DoctorsIdentificationScreen({required this.userData});
+  const DoctorsIdentificationScreen({super.key, required this.userData});
 
   @override
   State<DoctorsIdentificationScreen> createState() =>
@@ -568,8 +569,8 @@ class _DoctorsIdentificationScreenState
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Success'),
-          content: Text(
+          title: const Text('Success'),
+          content: const Text(
               'You are successfully registered\nPlease check your email for verification!'),
           actions: [
             TextButton(
@@ -577,10 +578,10 @@ class _DoctorsIdentificationScreenState
                 Navigator.pop(context); // Close the dialog
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => LoginPage()),
+                  MaterialPageRoute(builder: (context) => const LoginPage()),
                 );
               },
-              child: Text('OK'),
+              child: const Text('OK'),
             ),
           ],
         );
@@ -600,9 +601,9 @@ class _DoctorsIdentificationScreenState
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Doctor\'s Identification Form'),
+              const Text('Doctor\'s Identification Form'),
               Container(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Form(
                   key: __formKey,
                   child: Column(
@@ -613,7 +614,7 @@ class _DoctorsIdentificationScreenState
                           labelText: 'Clinic Name',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
+                            borderSide: const BorderSide(color: Colors.blue),
                           ),
                         ),
                         validator: (value) {
@@ -623,7 +624,7 @@ class _DoctorsIdentificationScreenState
                           return null; // Return null if the validation succeeds
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       TextFormField(
@@ -632,7 +633,7 @@ class _DoctorsIdentificationScreenState
                           labelText: 'Clinic Address',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
+                            borderSide: const BorderSide(color: Colors.blue),
                           ),
                         ),
                         validator: (value) {
@@ -642,7 +643,7 @@ class _DoctorsIdentificationScreenState
                           return null; // Return null if the validation succeeds
                         },
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 15,
                       ),
                       TextFormField(
@@ -651,7 +652,7 @@ class _DoctorsIdentificationScreenState
                           labelText: 'Phone Number',
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(10.0),
-                            borderSide: BorderSide(color: Colors.blue),
+                            borderSide: const BorderSide(color: Colors.blue),
                           ),
                         ),
                         inputFormatters: <TextInputFormatter>[
@@ -669,23 +670,23 @@ class _DoctorsIdentificationScreenState
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 15,
               ),
               Divider(
                 thickness: 2,
                 color: secondaryColor,
               ),
-              Text(
+              const Text(
                 'Please upload your Identification (ID) and Licensure photos.',
                 style: TextStyle(color: text),
               ),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
+                  const Text(
                     'Identification',
                     style: TextStyle(
                       color: text,
@@ -702,7 +703,7 @@ class _DoctorsIdentificationScreenState
                         onPressed: () {
                           _pickImage(); // Call the function to pick an image from storage
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.image, // Change to the desired icon
                           color: text, // Change to the desired icon color
                         ),
@@ -711,7 +712,7 @@ class _DoctorsIdentificationScreenState
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               if (_imageFile != null)
@@ -727,10 +728,10 @@ class _DoctorsIdentificationScreenState
               const SizedBox(height: 20),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
+                  const Text(
                     'Licensure',
                     style: TextStyle(
                       color: text,
@@ -747,7 +748,7 @@ class _DoctorsIdentificationScreenState
                         onPressed: () {
                           _pickImage2(); // Call the function to pick an image from storage
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.badge, // Change to the desired icon
                           color: text, // Change to the desired icon color
                         ),
@@ -756,7 +757,7 @@ class _DoctorsIdentificationScreenState
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               if (_imageFile2 != null)
@@ -772,10 +773,10 @@ class _DoctorsIdentificationScreenState
               const SizedBox(height: 20),
               Row(
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
-                  Text(
+                  const Text(
                     'Profile Picture',
                     style: TextStyle(
                       color: text,
@@ -792,7 +793,7 @@ class _DoctorsIdentificationScreenState
                         onPressed: () {
                           _profilepic(); // Call the function to pick an image from storage
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.person, // Change to the desired icon
                           color: text, // Change to the desired icon color
                         ),
@@ -801,7 +802,7 @@ class _DoctorsIdentificationScreenState
                   ),
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               if (profilepic != null)
@@ -813,8 +814,7 @@ class _DoctorsIdentificationScreenState
               const SizedBox(height: 20),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary:
-                      secondaryColor, // Change this color to the desired background color
+                  backgroundColor: secondaryColor, // Change this color to the desired background color
                 ),
                 onPressed: () {
                   if (__formKey.currentState?.validate() ?? false) {
@@ -831,8 +831,8 @@ class _DoctorsIdentificationScreenState
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Error'),
-                            content: Text(
+                            title: const Text('Error'),
+                            content: const Text(
                                 'Please select both images before registering.'),
                             actions: [
                               TextButton(
@@ -840,7 +840,7 @@ class _DoctorsIdentificationScreenState
                                   Navigator.of(context)
                                       .pop(); // Close the dialog
                                 },
-                                child: Text(
+                                child: const Text(
                                   'OK',
                                   style: TextStyle(color: text),
                                 ),
@@ -852,7 +852,7 @@ class _DoctorsIdentificationScreenState
                     }
                   }
                 },
-                child: Text(
+                child: const Text(
                   'Register',
                   style: TextStyle(color: text),
                 ),

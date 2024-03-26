@@ -7,6 +7,8 @@ import 'package:munting_gabay/variable.dart';
 import '../../../../drawer_page.dart';
 
 class pscyh extends StatefulWidget {
+  const pscyh({super.key});
+
   @override
   State<pscyh> createState() => _pscyhState();
 }
@@ -15,7 +17,7 @@ class _pscyhState extends State<pscyh> {
   User? user;
   String? currentEmail;
   String? currentUserName;
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   late String _searchTerm = '';
 
   @override
@@ -66,7 +68,7 @@ class _pscyhState extends State<pscyh> {
           backgroundColor: secondaryColor,
           elevation: 0,
           iconTheme: IconThemeData(color: scaffoldBgColor),
-          title: Text('Pyschology search'),
+          title: const Text('Pyschology search'),
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -78,7 +80,7 @@ class _pscyhState extends State<pscyh> {
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
                   controller: _searchController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Search by Doctor\'s Name',
                     border: OutlineInputBorder(),
                   ),
@@ -93,7 +95,7 @@ class _pscyhState extends State<pscyh> {
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(
                           // Color of the loading indicator
                           valueColor:
@@ -109,7 +111,7 @@ class _pscyhState extends State<pscyh> {
                     }
 
                     if (!snapshot.hasData) {
-                      return Text('No psychologists available.');
+                      return const Text('No psychologists available.');
                     }
 
                     // final psychologistDocs = snapshot.data!.docs;
@@ -121,7 +123,7 @@ class _pscyhState extends State<pscyh> {
                     }).toList();
 
                     if (psychologistDocs.isEmpty) {
-                      return Text(
+                      return const Text(
                           'No psychologists found with the given name.');
                     }
                     return Column(
@@ -134,12 +136,12 @@ class _pscyhState extends State<pscyh> {
                           return Center(
                             child: Column(
                               children: [
-                                Container(
+                                SizedBox(
                                   width: double.infinity,
                                   child: Card(
                                     color: secondaryColor,
                                     elevation: 30,
-                                    margin: EdgeInsets.symmetric(
+                                    margin: const EdgeInsets.symmetric(
                                         vertical: 10, horizontal: 20),
                                     child: Padding(
                                       padding: const EdgeInsets.all(16.0),
@@ -151,16 +153,16 @@ class _pscyhState extends State<pscyh> {
                                               doc['avatarPath'] ?? '',
                                             ),
                                           ),
-                                          SizedBox(height: 10),
+                                          const SizedBox(height: 10),
                                           Text(
                                             'Name: $psychologistName',
-                                            style: TextStyle(fontSize: 16),
+                                            style: const TextStyle(fontSize: 16),
                                           ),
                                           Text(
                                             'Address: $psychologistAddress',
-                                            style: TextStyle(fontSize: 16),
+                                            style: const TextStyle(fontSize: 16),
                                           ),
-                                          SizedBox(height: 10),
+                                          const SizedBox(height: 10),
                                           ElevatedButton(
                                             onPressed: () {
                                               Navigator.push(
@@ -200,10 +202,9 @@ class _pscyhState extends State<pscyh> {
                                               );
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              primary: scaffoldBgColor,
-                                              onPrimary: Colors.white,
+                                              foregroundColor: Colors.white, backgroundColor: scaffoldBgColor,
                                             ),
-                                            child: Text(
+                                            child: const Text(
                                               'View Details',
                                               style: TextStyle(fontSize: 16),
                                             ),
@@ -218,7 +219,7 @@ class _pscyhState extends State<pscyh> {
                           );
                         } catch (e) {
                           print('Error in rendering psychologist: $e');
-                          return SizedBox
+                          return const SizedBox
                               .shrink(); // Return an empty container in case of error
                         }
                       }).toList(),

@@ -6,9 +6,7 @@ import 'package:munting_gabay/call/agora_uikit.dart';
 import 'package:munting_gabay/call/controllers/rtm_controller.dart';
 import 'package:munting_gabay/call/controllers/rtm_controller_helper.dart';
 import 'package:munting_gabay/call/controllers/session_controller.dart';
-import 'package:munting_gabay/call/models/agora_rtm_channel_event_handler.dart';
 import 'package:munting_gabay/call/models/rtm_message.dart';
-import 'package:munting_gabay/call/src/enums.dart';
 
 Future<void> rtmChannelEventHandler({
   required AgoraRtmChannel channel,

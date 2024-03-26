@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:munting_gabay/variable.dart';
 
 class ViewPINScreen extends StatefulWidget {
+  const ViewPINScreen({super.key});
+
   @override
   _ViewPINScreenState createState() => _ViewPINScreenState();
 }
@@ -50,14 +52,14 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Authentication Failed'),
-            content: Text('Incorrect password. Please try again.'),
+            title: const Text('Authentication Failed'),
+            content: const Text('Incorrect password. Please try again.'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(context).pop();
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -72,7 +74,7 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('View PIN'),
+        title: const Text('View PIN'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -82,21 +84,20 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
             TextField(
               controller: passwordController,
               obscureText: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Enter Password',
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    secondaryColor, // Change this color to the desired background color
+                backgroundColor: secondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 String password = passwordController.text.trim();
                 authenticateUser(password);
               },
-              child: Text(
+              child: const Text(
                 "Submit",
                 style: TextStyle(color: text),
               ),
@@ -106,7 +107,7 @@ class _ViewPINScreenState extends State<ViewPINScreen> {
                 height: 20.0,
                 child: Text(
                   'Your PIN: $userPIN',
-                  style: TextStyle(fontSize: 18.0),
+                  style: const TextStyle(fontSize: 18.0),
                 ),
               ),
           ],

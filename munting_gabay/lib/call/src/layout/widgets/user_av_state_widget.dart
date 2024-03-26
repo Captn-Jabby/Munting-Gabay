@@ -35,19 +35,19 @@ class _UserAVStateWidgetState extends State<UserAVStateWidget> {
                 child: Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: widget.videoDisabled
-                      ? Icon(
+                      ? const Icon(
                           Icons.videocam_off,
                           color: Colors.white,
                           size: 15,
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.videocam,
                           color: Colors.blue,
                           size: 15,
                         ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
               Container(
@@ -58,12 +58,12 @@ class _UserAVStateWidgetState extends State<UserAVStateWidget> {
                 child: Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: widget.muted
-                      ? Icon(
+                      ? const Icon(
                           Icons.mic_off,
                           color: Colors.white,
                           size: 15,
                         )
-                      : Icon(
+                      : const Icon(
                           Icons.mic,
                           color: Colors.blue,
                           size: 15,

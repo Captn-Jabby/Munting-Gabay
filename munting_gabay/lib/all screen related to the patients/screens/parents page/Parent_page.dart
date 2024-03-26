@@ -9,6 +9,8 @@ import '../../../drawer_page.dart';
 import 'forum/forum.dart';
 
 class ParentPage extends StatelessWidget {
+  const ParentPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +95,7 @@ class ParentPage extends StatelessWidget {
                 // Navigate to the screen for 'Psychologist Research'
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => pscyh()),
+                  MaterialPageRoute(builder: (context) => const pscyh()),
                 );
                 break;
               case 1:
@@ -113,7 +115,7 @@ class ParentPage extends StatelessWidget {
               case 3:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ForumPage()),
+                  MaterialPageRoute(builder: (context) => const ForumPage()),
                 );
                 break;
               case 4:
@@ -130,7 +132,7 @@ class ParentPage extends StatelessWidget {
           style: ElevatedButton.styleFrom(backgroundColor: secondaryColor),
           child: Text(
             buttonText,
-            style: TextStyle(fontSize: 16.0, color: text),
+            style: const TextStyle(fontSize: 16.0, color: text),
           ),
         ),
       ),

@@ -30,7 +30,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
 
     print('Video Assets: $videoAssets');
 
-    if (videoAssets == null || videoAssets.isEmpty) {
+    if (videoAssets.isEmpty) {
       print('No video assets found!');
     }
   }

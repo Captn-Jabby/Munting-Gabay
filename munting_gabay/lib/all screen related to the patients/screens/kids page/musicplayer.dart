@@ -137,7 +137,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                     },
                   ),
           ),
-          Container(
+          SizedBox(
             height: 100,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +147,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   onPressed: _playPrevious,
                   icon: const Icon(Icons.skip_previous),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 IconButton(
                   iconSize: 40,
                   onPressed: () async {
@@ -155,7 +155,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                   },
                   icon: const Icon(Icons.stop_circle_sharp),
                 ),
-                SizedBox(width: 20),
+                const SizedBox(width: 20),
                 IconButton(
                   iconSize: 40,
                   onPressed: _playNext,

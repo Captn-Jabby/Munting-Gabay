@@ -32,7 +32,7 @@ class OneToOneLayout extends StatefulWidget {
 }
 
 class _OneToOneLayoutState extends State<OneToOneLayout> {
-  Offset position = Offset(5, 5);
+  Offset position = const Offset(5, 5);
 
   Widget _getLocalViews() {
     return widget.client.sessionController.value.isScreenShared
@@ -89,7 +89,7 @@ class _OneToOneLayoutState extends State<OneToOneLayout> {
                             children: [
                               Container(
                                 color: Colors.black,
-                                child: Center(
+                                child: const Center(
                                   child: Text(
                                     'Remote User',
                                     style: TextStyle(color: Colors.white),
@@ -113,7 +113,7 @@ class _OneToOneLayoutState extends State<OneToOneLayout> {
                   padding: const EdgeInsets.only(top: 8.0, right: 4),
                   child: Align(
                     alignment: Alignment.topRight,
-                    child: Container(
+                    child: SizedBox(
                       height: MediaQuery.of(context).size.height * 0.2,
                       width: MediaQuery.of(context).size.width / 3,
                       child: ClipRRect(
@@ -133,7 +133,7 @@ class _OneToOneLayoutState extends State<OneToOneLayout> {
                       children: [
                         Container(
                           color: Colors.black,
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               'Local User',
                               style: TextStyle(color: Colors.white),

@@ -5,7 +5,6 @@ import 'package:munting_gabay/ringtone/android_sound.dart';
 
 import 'package:path_provider/path_provider.dart';
 
-import 'android_sound.dart';
 import 'flutter_ringtone_player_interface.dart';
 
 /// An implementation of [FlutterRingtonePlayerPlatform] that uses method channels.

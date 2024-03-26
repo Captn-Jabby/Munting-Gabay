@@ -1,6 +1,5 @@
 // In call.dart file
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/finding_doctors.dart';
 import 'package:munting_gabay/call/models/agora_connection_data.dart';
 import 'package:munting_gabay/call/src/agora_client.dart'
     as callAgoraClient; // Rename to avoid conflict
@@ -96,19 +95,19 @@ class _CallDoctorState extends State<CallDoctor> {
                   children: [
                     Text(
                       'Username: ${widget.currentUserName}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                     Text(
                       'Doc ID: ${widget.docId}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                     Text(
                       'Channel Name: ${client.agoraConnectionData.channelName}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     ),
                     Text(
                       'Channel uid: ${client.agoraConnectionData.username}',
-                      style: TextStyle(color: text),
+                      style: const TextStyle(color: text),
                     )
                   ],
                 ),

@@ -120,8 +120,8 @@ Future<void> _showRPSystemBroadcastPickerViewIfNeed() async {
     return;
   }
 
-  final MethodChannel iosScreenShareChannel =
-      const MethodChannel('example_screensharing_ios');
+  const MethodChannel iosScreenShareChannel =
+      MethodChannel('example_screensharing_ios');
   await iosScreenShareChannel.invokeMethod('showRPSystemBroadcastPickerView');
 }
 

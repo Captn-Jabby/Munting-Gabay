@@ -16,6 +16,8 @@ class _letters_catState extends State<letters_cat> {
       ),
       body: Container(
         child: GridView(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2),
           children: [
             //A
             Container(
@@ -382,8 +384,6 @@ class _letters_catState extends State<letters_cat> {
               ),
             )),
           ],
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2),
         ),
       ),
     );

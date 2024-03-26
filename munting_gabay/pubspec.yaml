@@ -68,6 +68,8 @@ dependencies:
   url_launcher: ^6.1.14
   video_player: ^2.8.2
   webview_flutter: ^4.4.1
+  plugin_platform_interface: any
+  path_provider: any
 flutter_icons:
   android: true
   ios: true

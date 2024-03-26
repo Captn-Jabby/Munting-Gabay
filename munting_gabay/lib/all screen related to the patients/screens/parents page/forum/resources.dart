@@ -47,24 +47,26 @@ class BookResourcesScreen extends StatelessWidget {
     ),
   ];
 
+   BookResourcesScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-                builder: (context) => ParentPage(),
+                builder: (context) => const ParentPage(),
               ),
             );
           },
         ),
         backgroundColor: secondaryColor,
-        title: Text('Book Resources'),
+        title: const Text('Book Resources'),
       ),
       body: ListView.builder(
         itemCount: books.length,
@@ -95,7 +97,7 @@ class BookResourcesScreen extends StatelessWidget {
 class WebViewPage extends StatelessWidget {
   final String url;
 
-  WebViewPage({required this.url});
+  const WebViewPage({super.key, required this.url});
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +105,7 @@ class WebViewPage extends StatelessWidget {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text(
+        title: const Text(
           'Web View',
           style: TextStyle(color: text),
         ),

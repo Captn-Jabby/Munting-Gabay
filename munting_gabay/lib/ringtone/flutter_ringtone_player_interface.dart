@@ -1,7 +1,6 @@
 import 'package:munting_gabay/ringtone/android_sound.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import 'android_sound.dart';
 import 'flutter_ringtone_player_method_channel.dart';
 
 abstract class FlutterRingtonePlayerPlatform extends PlatformInterface {
