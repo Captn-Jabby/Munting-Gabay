@@ -33,6 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: const Color(0xFF95C440),
           title: Text(title),
           actions: [
             ElevatedButton(
@@ -152,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       _showError(
-          'Invalid password. Password should be at least 6 characters long.');
+          'Information Empty');//invalid password logic history
     }
 
     EasyLoading.dismiss();

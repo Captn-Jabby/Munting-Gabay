@@ -59,7 +59,7 @@ class _ChangePinState extends State<ChangePin> {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
+        backgroundColor: secondaryColor,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -71,6 +71,7 @@ class _ChangePinState extends State<ChangePin> {
             );
           },
         ),
+        centerTitle: true,
         title: const Text('Change PIN'),
       ),
       body: Padding(

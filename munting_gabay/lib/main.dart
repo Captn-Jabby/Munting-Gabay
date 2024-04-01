@@ -5,6 +5,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
+import 'package:munting_gabay/GettingStarted/getting_started.dart';
 import 'package:munting_gabay/login%20and%20register/login.dart';
 import 'package:munting_gabay/login%20and%20register/register_doctor.dart';
 import 'package:munting_gabay/login%20and%20register/register_patients.dart';
@@ -100,7 +101,7 @@ class _MyAppState extends State<MyApp> {
                       ),
                     );
                   }
-                },
+                }
               );
             }
           }
@@ -173,7 +174,10 @@ class LoginScreen extends StatelessWidget {
                       height: BtnHeight,
                       width: BtnWidth,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(context, MaterialPageRoute(builder:
+                              (context)=> GettingStarted()));
+                        },
                         style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFF95C440),
                             shape: RoundedRectangleBorder(

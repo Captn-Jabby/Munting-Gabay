@@ -26,9 +26,6 @@ class _RegistrationDOCTORSState extends State<RegistrationDOCTORS> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: scaffoldBgColor,
-      ),
       backgroundColor: scaffoldBgColor,
       body: SingleChildScrollView(
         child: Padding(
