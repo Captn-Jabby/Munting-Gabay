@@ -7,6 +7,12 @@ class UnbordingContent {
 }
 
 List<UnbordingContent> contents = [
+
+  UnbordingContent(
+      title: 'Welcome to Munting Gabay',
+      image: 'assets/images/2.png',
+      discription: "Thank you for choosing us to support you on your journey."
+  ),
   UnbordingContent(
       title: 'What is Munting Gabay?',
       image: 'assets/images/2.png',
@@ -15,15 +21,32 @@ List<UnbordingContent> contents = [
           "Its primary goal is to enhance awareness, offer guidance, and foster inclusion for those affected by ASD."
   ),
   UnbordingContent(
-      title: 'Welcome to Munting Gabay',
+      title: 'Overview of the App',
       image: 'assets/images/2.png',
-      discription: "Thank you for choosing us to support you on your journey."
+      discription: "Discover a world of support with Munting Gabay. "
+          "Access resources, connect with professionals, and stay informed about autism."
   ),
   UnbordingContent(
-      title: 'Reward surprises',
+      title: 'Connecting with Professionals',
       image: 'assets/images/2.png',
-      discription: "simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the "
-          "industry's standard dummy text ever since the 1500s, "
-          "when an unknown printer took a galley of type and scrambled it "
+      discription: "Connect with psychologists and specialists for expert advice and support. "
+          "Join online consultations and forums. "
+  ),
+  UnbordingContent(
+      title: 'Stay Updated',
+      image: 'assets/images/2.png',
+      discription: "Stay informed with the latest news and events about autism. "
+          "Subscribe to notifications to raise awareness and understanding."
+  ),
+  UnbordingContent(
+      title: 'Get Support',
+      image: 'assets/images/2.png',
+      discription: "You're not alone. Find support through peer groups, online communities, or professional assistance within the app. "
+  ),
+  UnbordingContent(
+      title: 'Enjoy Your Experience',
+      image: 'assets/images/2.png',
+      discription: "Explore and engage with our app's features to make the most out of your experience. "
+          "We're here to support you every step of the way. "
   ),
 ];
