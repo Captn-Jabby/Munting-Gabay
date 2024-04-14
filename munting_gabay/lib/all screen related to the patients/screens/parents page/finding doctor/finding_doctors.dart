@@ -205,7 +205,9 @@ class _pscyhState extends State<pscyh> {
                                             ),
                                             child: Text(
                                               'View Details',
-                                              style: TextStyle(fontSize: 16),
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: secondaryColor),
                                             ),
                                           ),
                                         ],

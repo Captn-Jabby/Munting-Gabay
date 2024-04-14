@@ -46,6 +46,13 @@ final TextStyle buttonTextStyle1 = GoogleFonts.poppins(
     fontWeight: FontWeight.bold,
   ),
 );
+final TextStyle buttonTextStyle12 = GoogleFonts.poppins(
+  textStyle: const TextStyle(
+    color: Colors.white,
+    fontSize: 20,
+    fontWeight: FontWeight.bold,
+  ),
+);
 
 final TextStyle buttonTextStyle2 = GoogleFonts.poppins(
   textStyle: const TextStyle(

@@ -10,13 +10,12 @@ import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/scree
 
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/call.dart';
-import 'package:munting_gabay/drawer_page.dart';
+
 import 'package:munting_gabay/login%20and%20register/calling_doctor.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:photo_view/photo_view.dart';
 
 import '../../../../ringtone/event_service.dart';
-import '../../../../ringtone/flutter_ringtone_player.dart';
 
 class DoctorInfoPage extends StatefulWidget {
   final String docId;
@@ -31,7 +30,6 @@ class DoctorInfoPage extends StatefulWidget {
   final bool isDoctor;
   final String DoctorStatus;
   final String phone_number;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   DoctorInfoPage({
     required this.birthdate,
@@ -71,7 +69,9 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Doctor Information'),
+        title: Text(
+          'Doctor Information',
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
@@ -96,7 +96,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
               children: [
                 Text(
                   'DOCTORS INFORMATION',
-                  style: buttonTextStyle1,
+                  style: buttonTextStyle12,
                 ),
                 Container(
                   width: double.infinity,
