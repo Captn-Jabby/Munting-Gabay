@@ -13,12 +13,14 @@ class _shapes_catState extends State<shapes_cat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("SHAPES"),
+        title: const Text("SHAPES"),
         ),
         body: 
         //CIRCLE
         Container(
           child: GridView(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 15),
+            padding: const EdgeInsets.all(15),
             children: [
               Container(child: InkWell(onTap: () {
                 // final player = AudioCache();
@@ -28,7 +30,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Circle.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Circle.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -41,7 +43,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Rectangle.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Rectangle.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -54,7 +56,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Square.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Square.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -67,7 +69,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Triangle.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Triangle.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -80,7 +82,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Hexagon.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Hexagon.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -93,7 +95,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Pentagon.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Pentagon.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -106,7 +108,7 @@ class _shapes_catState extends State<shapes_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Shapes/Rhombus.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Shapes/Rhombus.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
@@ -114,8 +116,6 @@ class _shapes_catState extends State<shapes_cat> {
               )
                ),
             ],
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 15),
-            padding: EdgeInsets.all(15),
           ),
         ),
     );

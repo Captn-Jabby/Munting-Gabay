@@ -104,7 +104,7 @@ class _GridLayoutState extends State<GridLayout> {
       return Expanded(
         child: Container(
           color: Colors.white,
-          child: Center(
+          child: const Center(
             child: Text(
               'Waiting for the host to join',
               style: TextStyle(color: Colors.black),

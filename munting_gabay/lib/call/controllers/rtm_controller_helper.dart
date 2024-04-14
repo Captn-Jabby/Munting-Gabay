@@ -55,7 +55,7 @@ void messageReceived({
         );
       }
 
-      Future.delayed(Duration(seconds: 10), () {
+      Future.delayed(const Duration(seconds: 10), () {
         sessionController.value = sessionController.value.copyWith(
           displaySnackbar: false,
           showCameraMessage: false,

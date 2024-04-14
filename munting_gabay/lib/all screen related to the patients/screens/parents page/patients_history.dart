@@ -6,7 +6,7 @@ import 'package:munting_gabay/variable.dart';
 class RequestListScreen extends StatefulWidget {
   final String docId;
 
-  RequestListScreen({required this.docId});
+  const RequestListScreen({super.key, required this.docId});
 
   @override
   _RequestListScreenState createState() => _RequestListScreenState();
@@ -97,7 +97,7 @@ class _RequestListScreenState extends State<RequestListScreen> {
                 break; // Exit the loop after a successful cancel
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                       content: Text('You can only cancel pending requests.')),
                 );
               }
@@ -116,10 +116,10 @@ class _RequestListScreenState extends State<RequestListScreen> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('My Requests'),
+        title: const Text('My Requests'),
       ),
       body: myRequests.isEmpty
-          ? Center(
+          ? const Center(
               child: Text('You have not made any requests.'),
             )
           : ListView.builder(
@@ -134,21 +134,20 @@ class _RequestListScreenState extends State<RequestListScreen> {
                   title: Text('Date: $date, Slot: $slot, Status: $status'),
                   trailing: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      primary:
-                          scaffoldBgColor, // Change this color to the desired background color
+                      backgroundColor: scaffoldBgColor, // Change this color to the desired background color
                     ),
                     onPressed: () {
                       if (status == 'Pending') {
                         _cancelRequest(slot);
                       } else {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
+                          const SnackBar(
                               content: Text(
                                   'You can only cancel pending requests.')),
                         );
                       }
                     },
-                    child: Text('Cancel'),
+                    child: const Text('Cancel'),
                   ),
                 );
               },

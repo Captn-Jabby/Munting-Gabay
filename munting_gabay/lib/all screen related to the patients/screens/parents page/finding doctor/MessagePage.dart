@@ -17,7 +17,7 @@ class ChatPage extends StatefulWidget {
   final bool senderIsDoctor; // Indicates if the sender is a doctor
   final bool recipientIsDoctor; // Indicates if the recipient is a doctor
 
-  ChatPage({
+  const ChatPage({super.key, 
     required this.currentUserUid,
     required this.currentUserName,
     required this.docId,
@@ -83,8 +83,7 @@ class _ChatPageState extends State<ChatPage> {
         actions: [
           ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary:
-                    scaffoldBgColor, // Change this color to the desired background color
+                backgroundColor: scaffoldBgColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 print("userUID ${widget.currentUserUid}");
@@ -102,8 +101,8 @@ class _ChatPageState extends State<ChatPage> {
                   ),
                 );
               },
-              icon: Icon(Icons.call_made),
-              label: Text('call'))
+              icon: const Icon(Icons.call_made),
+              label: const Text('call'))
         ],
       ),
       body: Column(
@@ -116,7 +115,7 @@ class _ChatPageState extends State<ChatPage> {
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                       child: Center(
                     child: CircularProgressIndicator(
                       // Color of the loading indicator
@@ -155,7 +154,7 @@ class _ChatPageState extends State<ChatPage> {
                             : Alignment.centerLeft,
                         child: Container(
                           width: MediaQuery.of(context).size.width * 0.5,
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(8.0),
                             color: isCurrentUser ? Colors.blue : Colors.grey,
@@ -195,7 +194,7 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                         ],
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
                     );
                   },
                 );
@@ -209,13 +208,13 @@ class _ChatPageState extends State<ChatPage> {
                 Expanded(
                   child: TextField(
                     controller: messageController,
-                    decoration: InputDecoration(
+                    decoration: const InputDecoration(
                       hintText: 'Type your message...',
                     ),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.camera,
                     color: Colors.cyan,
                   ),
@@ -235,7 +234,7 @@ class _ChatPageState extends State<ChatPage> {
                   },
                 ),
                 IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.send,
                     color: Colors.cyan,
                   ),

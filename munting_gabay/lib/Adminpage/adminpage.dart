@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:munting_gabay/Adminpage/admin_drawer.dart';
-import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
 import 'package:munting_gabay/variable.dart';
 
-import '../../../drawer_page.dart';
 import 'doctors_list.dart';
 
 class AdminPage extends StatefulWidget {
@@ -25,7 +23,7 @@ class _AdminPageState extends State<AdminPage> {
         backgroundColor: scaffoldBgColor,
         elevation: 0,
         iconTheme: IconThemeData(color: scaffoldBgColor),
-        actions: [
+        actions: const [
           Center(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -105,7 +103,6 @@ class _AdminPageState extends State<AdminPage> {
                         backgroundColor: bgloadingColor,
                       ),
                     );
-                    ;
                   }
 
                   if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {

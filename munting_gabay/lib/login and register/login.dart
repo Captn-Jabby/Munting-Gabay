@@ -9,14 +9,16 @@ import 'package:munting_gabay/variable.dart';
 import 'forgetpassword.dart';
 
 class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
   bool _ispasswordValid = true;
 
@@ -31,13 +33,14 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: const Color(0xFF95C440),
           title: Text(title),
           actions: [
             ElevatedButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('Okay')),
+                child: const Text('Okay')),
           ],
         );
       },
@@ -64,22 +67,22 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Email Verification'),
-          content: Text(
+          title: const Text('Email Verification'),
+          content: const Text(
               'Your email is not verified. Would you like to resend the verification email?'),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 _resendVerificationEmail();
               },
-              child: Text('Resend Email'),
+              child: const Text('Resend Email'),
             ),
           ],
         );
@@ -150,7 +153,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } else {
       _showError(
-          'Invalid password. Password should be at least 6 characters long.');
+          'Information Empty');//invalid password logic history
     }
 
     EasyLoading.dismiss();
@@ -181,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               Column(
                 children: [
-                  Center(
+                  const Center(
                     child: SpinningContainer(),
                   ),
                   Padding(
@@ -194,7 +197,7 @@ class _LoginPageState extends State<LoginPage> {
                           textStyle: GoogleFonts.poppins(
                               fontWeight: FontWeight.bold,
                               fontSize: 27,
-                              color: Color(0xFF333333))),
+                              color: const Color(0xFF333333))),
                     ),
                   ),
                 ],
@@ -210,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: BtnSpacing,
                   ),
                   TextField(
@@ -235,21 +238,21 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     obscureText: !_isPasswordVisible,
                   ),
-                  SizedBox(height: 20),
-                  Container(
+                  const SizedBox(height: 20),
+                  SizedBox(
                     width: BtnWidth,
                     height: BtnHeight,
                     child: ElevatedButton(
                       onPressed: () => _signInUser(context),
+                      style: buttonStyle1,
                       child: Text(
                         'Login',
                         style: buttonTextStyle1,
                       ),
-                      style: buttonStyle1,
                     ),
                   ),
                   Stack(
-                    alignment: Alignment(0.3, -1),
+                    alignment: const Alignment(0.3, -1),
                     children: [
                       TextButton(
                         onPressed: () {
@@ -257,8 +260,8 @@ class _LoginPageState extends State<LoginPage> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: Text('Confirmation'),
-                                content: Text(
+                                title: const Text('Confirmation'),
+                                content: const Text(
                                     'Are you sure you want to create an account?'),
                                 actions: [
                                   TextButton(
@@ -266,7 +269,7 @@ class _LoginPageState extends State<LoginPage> {
                                       Navigator.pop(
                                           context); // Close the dialog
                                     },
-                                    child: Text('Cancel'),
+                                    child: const Text('Cancel'),
                                   ),
                                   TextButton(
                                     onPressed: () {
@@ -276,11 +279,11 @@ class _LoginPageState extends State<LoginPage> {
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
-                                              RegistrationPatients(),
+                                              const RegistrationPatients(),
                                         ),
                                       );
                                     },
-                                    child: Text(
+                                    child: const Text(
                                       'Confirm',
                                       style: TextStyle(color: Colors.red),
                                     ),
@@ -297,15 +300,15 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       Container(
                         height: 34,
-                        margin: EdgeInsets.only(top: 30),
+                        margin: const EdgeInsets.only(top: 30),
                         child: TextButton(
                           onPressed: () {
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return AlertDialog(
-                                  title: Text('Confirmation'),
-                                  content: Text(
+                                  title: const Text('Confirmation'),
+                                  content: const Text(
                                       'Are you sure you want to Forgot Password?'),
                                   actions: [
                                     TextButton(
@@ -313,7 +316,7 @@ class _LoginPageState extends State<LoginPage> {
                                         Navigator.pop(
                                             context); // Close the dialog
                                       },
-                                      child: Text('Cancel'),
+                                      child: const Text('Cancel'),
                                     ),
                                     TextButton(
                                       onPressed: () {
@@ -323,11 +326,11 @@ class _LoginPageState extends State<LoginPage> {
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                ForgotPasswordScreen(),
+                                                const ForgotPasswordScreen(),
                                           ),
                                         );
                                       },
-                                      child: Text(
+                                      child: const Text(
                                         'Confirm',
                                         style: TextStyle(color: Colors.red),
                                       ),
@@ -337,7 +340,7 @@ class _LoginPageState extends State<LoginPage> {
                               },
                             );
                           },
-                          child: Text(
+                          child: const Text(
                             'Forgot Password',
                             style: TextStyle(color: Colors.black),
                           ),
@@ -356,6 +359,8 @@ class _LoginPageState extends State<LoginPage> {
 }
 
 class SpinningContainer extends StatefulWidget {
+  const SpinningContainer({super.key});
+
   @override
   _SpinningContainerState createState() => _SpinningContainerState();
 }
@@ -370,7 +375,7 @@ class _SpinningContainerState extends State<SpinningContainer>
     _controller = AnimationController(
       vsync: this,
       duration:
-          Duration(minutes: 1), // Set the duration for one complete rotation
+          const Duration(minutes: 1), // Set the duration for one complete rotation
     )..repeat(); // Repeat the animation infinitely
   }
 
@@ -379,7 +384,7 @@ class _SpinningContainerState extends State<SpinningContainer>
     return RotationTransition(
       turns: _controller,
       child: Container(
-        padding: EdgeInsets.all(50),
+        padding: const EdgeInsets.all(50),
         height: MediaQuery.of(context).size.height / 4,
         decoration: const BoxDecoration(
             image: DecorationImage(

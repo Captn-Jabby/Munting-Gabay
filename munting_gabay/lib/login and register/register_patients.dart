@@ -6,26 +6,27 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:munting_gabay/variable.dart';
 
-import 'login.dart';
 import '../main.dart';
 
 class RegistrationPatients extends StatefulWidget {
+  const RegistrationPatients({super.key});
+
   @override
   _RegistrationPatientsState createState() => _RegistrationPatientsState();
 }
 
 class _RegistrationPatientsState extends State<RegistrationPatients> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _addressController = TextEditingController();
-  TextEditingController _emailController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
-  TextEditingController _pinController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _pinController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   bool _isPasswordVisible = false;
-  FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   bool pinStatus = true;
   final _formKey = GlobalKey<FormState>();
 
@@ -86,18 +87,18 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: Text('Success'),
-            content: Text('You are successfully registered!'),
+            title: const Text('Success'),
+            content: const Text('You are successfully registered!'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                    MaterialPageRoute(builder: (context) => const LoginScreen()),
                   );
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -115,10 +116,6 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
 
   // Selection of date
   Future<void> _selectDate(BuildContext context) async {
-    if (context == null) {
-      return;
-    }
-
     DateTime currentDate = DateTime.now();
     DateTime firstDate = DateTime(1900);
     DateTime lastDate = DateTime(2101);
@@ -152,7 +149,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.all(3.0),
+            padding: const EdgeInsets.all(3.0),
             child: Center(
               child: Column(
                 children: [
@@ -167,7 +164,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                           color: Color(0xFF95C440),
                         )),
                   ),
-                  Container(
+                  SizedBox(
                     width: 300,
                     child: Form(
                       key: _formKey,
@@ -180,7 +177,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Adjust the border radius
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                     color:
                                         Colors.blue), // Adjust the border color
                               ),
@@ -192,7 +189,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               return null; // Return null if the validation succeeds
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           TextFormField(
@@ -202,7 +199,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Adjust the border radius
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                     color:
                                         Colors.blue), // Adjust the border color
                               ),
@@ -214,7 +211,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               return null; // Return null if the validation succeeds
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           TextFormField(
@@ -224,7 +221,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Adjust the border radius
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                     color:
                                         Colors.blue), // Adjust the border color
                               ),
@@ -236,7 +233,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               return null; // Return null if the validation succeeds
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           TextField(
@@ -260,11 +257,11 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               counterText: '',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: const BorderSide(color: Colors.blue),
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           GestureDetector(
@@ -279,7 +276,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                                   labelText: 'Birthdate',
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: BorderSide(color: Colors.blue),
+                                    borderSide: const BorderSide(color: Colors.blue),
                                   ),
                                 ),
                                 validator: (value) {
@@ -303,7 +300,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           TextFormField(
@@ -312,7 +309,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               labelText: 'Email',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: const BorderSide(color: Colors.blue),
                               ),
                             ),
                             validator: (value) {
@@ -326,7 +323,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               return null; // Return null if the validation succeeds
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 15,
                           ),
                           TextFormField(
@@ -335,7 +332,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               labelText: 'Password',
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
-                                borderSide: BorderSide(color: Colors.blue),
+                                borderSide: const BorderSide(color: Colors.blue),
                               ),
                               suffixIcon: GestureDetector(
                                 onTap: () {
@@ -360,7 +357,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               return null; // Return null if the validation succeeds
                             },
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
                           TextFormField(
@@ -370,7 +367,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(
                                     10.0), // Adjust the border radius
-                                borderSide: BorderSide(
+                                borderSide: const BorderSide(
                                     color:
                                         Colors.blue), // Adjust the border color
                               ),
@@ -397,8 +394,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                               return null; // Return null if the validation succeeds
                             },
                           ),
-                          SizedBox(height: 20),
-                          Container(
+                          const SizedBox(height: 20),
+                          SizedBox(
                             width: BtnWidth,
                             height: BtnHeight,
                             child: ElevatedButton(
@@ -433,6 +430,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
 }
 
 class SpinningContainerP extends StatefulWidget {
+  const SpinningContainerP({super.key});
+
   @override
   _SpinningContainerPState createState() => _SpinningContainerPState();
 }
@@ -447,7 +446,7 @@ class _SpinningContainerPState extends State<SpinningContainerP>
     _controller = AnimationController(
       vsync: this,
       duration:
-          Duration(minutes: 1), // Set the duration for one complete rotation
+          const Duration(minutes: 1), // Set the duration for one complete rotation
     )..repeat(); // Repeat the animation infinitely
   }
 

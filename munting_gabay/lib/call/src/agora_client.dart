@@ -102,7 +102,7 @@ class AgoraClient {
     if (agoraConnectionData.rtmEnabled) {
       try {
         await _sessionController.initializeRtm(
-          agoraRtmClientEventHandler ?? AgoraRtmClientEventHandler(),
+          agoraRtmClientEventHandler ?? const AgoraRtmClientEventHandler(),
         );
       } catch (e) {
         log("Error while initializing Agora RTM SDK. ${e.toString()}",
@@ -120,8 +120,8 @@ class AgoraClient {
     }
 
     _sessionController.createEvents(
-      agoraRtmChannelEventHandler ?? AgoraRtmChannelEventHandler(),
-      agoraEventHandlers ?? AgoraRtcEventHandlers(),
+      agoraRtmChannelEventHandler ?? const AgoraRtmChannelEventHandler(),
+      agoraEventHandlers ?? const AgoraRtcEventHandlers(),
     );
 
     if (agoraChannelData != null) {

@@ -122,7 +122,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                         ? Padding(
                             key: Key('$index'),
                             padding: widget.floatingLayoutSubViewPadding,
-                            child: Container(
+                            child: SizedBox(
                               width: widget.floatingLayoutContainerWidth ??
                                   MediaQuery.of(context).size.width / 3,
                               child: Column(
@@ -136,7 +136,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                             color: Colors.black,
                                             child: Stack(
                                               children: [
-                                                Center(
+                                                const Center(
                                                   child: Text(
                                                     'Local User',
                                                     style: TextStyle(
@@ -184,12 +184,12 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                                         child: Container(
                                                           height: 24,
                                                           decoration:
-                                                              BoxDecoration(
+                                                              const BoxDecoration(
                                                             color: Colors.blue,
                                                             shape:
                                                                 BoxShape.circle,
                                                           ),
-                                                          child: Icon(
+                                                          child: const Icon(
                                                             Icons
                                                                 .push_pin_rounded,
                                                             color: Colors.white,
@@ -254,7 +254,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                                               },
                                                               child: Container(
                                                                 decoration:
-                                                                    BoxDecoration(
+                                                                    const BoxDecoration(
                                                                   color: Colors
                                                                       .white,
                                                                   shape: BoxShape
@@ -264,7 +264,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                                                     const EdgeInsets
                                                                         .all(
                                                                         3.0),
-                                                                child: Icon(
+                                                                child: const Icon(
                                                                   Icons
                                                                       .push_pin_rounded,
                                                                   color: Colors
@@ -305,7 +305,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                                       ],
                                                     ),
                                                   ),
-                                                  Positioned.fill(
+                                                  const Positioned.fill(
                                                       child: Align(
                                                     alignment:
                                                         Alignment.bottomLeft,
@@ -373,7 +373,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                                               },
                                                               child: Container(
                                                                 decoration:
-                                                                    BoxDecoration(
+                                                                    const BoxDecoration(
                                                                   color: Colors
                                                                       .white,
                                                                   shape: BoxShape
@@ -383,7 +383,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                                                     const EdgeInsets
                                                                         .all(
                                                                         3.0),
-                                                                child: Icon(
+                                                                child: const Icon(
                                                                   Icons
                                                                       .push_pin_rounded,
                                                                   color: Colors
@@ -512,7 +512,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                 children: [
                                   Container(
                                     color: Colors.black,
-                                    child: Center(
+                                    child: const Center(
                                       child: Text(
                                         'Local User',
                                         style: TextStyle(color: Colors.white),
@@ -551,7 +551,7 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                   Expanded(
                     child: Container(
                       color: Colors.white,
-                      child: Center(
+                      child: const Center(
                         child: Text(
                           'Waiting for the host to join.',
                           style: TextStyle(color: Colors.black),
@@ -588,11 +588,13 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Visibility(
+                    visible:
+                        widget.client.sessionController.value.displaySnackbar,
                     child: Container(
                         color: Colors.white,
                         width: MediaQuery.of(context).size.width,
                         padding:
-                            EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                            const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -601,15 +603,15 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                               widget.client.sessionController.value
                                           .muteRequest ==
                                       MicState.muted
-                                  ? Text("Please unmute your mic")
-                                  : Text("Please mute your mic"),
+                                  ? const Text("Please unmute your mic")
+                                  : const Text("Please mute your mic"),
                             if (widget.client.sessionController.value
                                 .showCameraMessage)
                               widget.client.sessionController.value
                                           .cameraRequest ==
                                       CameraState.disabled
-                                  ? Text("Please turn on your camera")
-                                  : Text("Please turn off your camera"),
+                                  ? const Text("Please turn on your camera")
+                                  : const Text("Please turn off your camera"),
                             TextButton(
                               onPressed: () {
                                 widget.client.sessionController.value
@@ -637,30 +639,28 @@ class _FloatingLayoutState extends State<FloatingLayout> {
                                   ? widget.client.sessionController.value
                                               .muteRequest ==
                                           MicState.muted
-                                      ? Text(
+                                      ? const Text(
                                           "Unmute",
                                           style: TextStyle(color: Colors.blue),
                                         )
-                                      : Text(
+                                      : const Text(
                                           "Mute",
                                           style: TextStyle(color: Colors.blue),
                                         )
                                   : widget.client.sessionController.value
                                               .cameraRequest ==
                                           CameraState.disabled
-                                      ? Text(
+                                      ? const Text(
                                           "Enable",
                                           style: TextStyle(color: Colors.blue),
                                         )
-                                      : Text(
+                                      : const Text(
                                           "Disable",
                                           style: TextStyle(color: Colors.blue),
                                         ),
                             )
                           ],
                         )),
-                    visible:
-                        widget.client.sessionController.value.displaySnackbar,
                   ),
                 ),
               ),

@@ -7,7 +7,7 @@ class DoctorScheduleScreen extends StatelessWidget {
   final String docId; // Doctor's ID
   User? user = FirebaseAuth.instance.currentUser; // Get the current user
 
-  DoctorScheduleScreen({required this.docId}) {
+  DoctorScheduleScreen({super.key, required this.docId}) {
     print('Accessed DoctorScheduleScreen with docId: $docId');
   }
 
@@ -17,7 +17,7 @@ class DoctorScheduleScreen extends StatelessWidget {
       backgroundColor: darkmode ? DoctorscaffoldBgColor : darkPrimary,
       appBar: AppBar(
         backgroundColor: darkmode ? DoctorscaffoldBgColor : darkPrimary,
-        title: Text('Request Appointment'),
+        title: const Text('Request Appointment'),
       ),
       body: StreamBuilder<DocumentSnapshot>(
         stream: FirebaseFirestore.instance
@@ -26,7 +26,7 @@ class DoctorScheduleScreen extends StatelessWidget {
             .snapshots(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(
                 // Color of the loading indicator
                 valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -43,7 +43,7 @@ class DoctorScheduleScreen extends StatelessWidget {
               child: Text('Error: ${snapshot.error}'),
             );
           } else if (!snapshot.hasData || !snapshot.data!.exists) {
-            return Center(
+            return const Center(
               child: Text('No data found for this doctor.'),
             );
           } else {
@@ -55,7 +55,7 @@ class DoctorScheduleScreen extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   // Text('Doctor Name: ${data['doctor_name']}'),
-                  Text('Available Days:'),
+                  const Text('Available Days:'),
                   Column(
                     children: availableDays.map<Widget>((day) {
                       var dayData = day as Map<String, dynamic>;
@@ -76,7 +76,7 @@ class DayCard extends StatefulWidget {
   final Map<String, dynamic> dayData; // Change this to dynamic
   final String docId;
 
-  DayCard({required this.dayData, required this.docId});
+  const DayCard({super.key, required this.dayData, required this.docId});
 
   @override
   _DayCardState createState() => _DayCardState();
@@ -97,8 +97,7 @@ class _DayCardState extends State<DayCard> {
                 Text('Date: ${widget.dayData['date']}'), // Display the date
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    scaffoldBgColor, // Change this color to the desired background color
+                backgroundColor: scaffoldBgColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
@@ -107,7 +106,7 @@ class _DayCardState extends State<DayCard> {
               },
               child: Text(
                 slotsVisible ? 'Hide Slots' : 'Show Slots',
-                style: TextStyle(color: text),
+                style: const TextStyle(color: text),
               ),
             ),
           ),
@@ -133,7 +132,7 @@ class SlotTile extends StatefulWidget {
   final String docId;
   final String day;
 
-  SlotTile({
+  const SlotTile({super.key, 
     required this.slotData,
     required this.docId,
     required this.day,
@@ -154,8 +153,7 @@ class _SlotTileState extends State<SlotTile> {
         title: Text('${widget.slotData['slot']}'),
         trailing: ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary:
-                scaffoldBgColor, // Change this color to the desired background color
+            backgroundColor: scaffoldBgColor, // Change this color to the desired background color
           ),
           onPressed: () {
             if (!alreadyRequestedOnDate) {
@@ -167,14 +165,14 @@ class _SlotTileState extends State<SlotTile> {
             } else {
               // Display a message to the user that they've already requested on this date
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                     content: Text('You have already requested on this date.')),
               );
             }
           },
           child: Text(
             requesting ? 'Requesting...' : 'Request',
-            style: TextStyle(color: text),
+            style: const TextStyle(color: text),
           ),
         ),
       );
@@ -213,7 +211,7 @@ class _SlotTileState extends State<SlotTile> {
 
           // Display a message to the user that they've already requested on this date
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('You have already requested.')),
+            const SnackBar(content: Text('You have already requested.')),
           );
 
           // Print statement for additional information
@@ -264,7 +262,7 @@ class _SlotTileState extends State<SlotTile> {
 
               // Handle success, e.g., show a confirmation message
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Appointment request submitted.')),
+                const SnackBar(content: Text('Appointment request submitted.')),
               );
             }).catchError((error) {
               print('Error submitting appointment request: $error');
@@ -278,7 +276,7 @@ class _SlotTileState extends State<SlotTile> {
 
               // Handle errors, e.g., show an error message
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Error submitting appointment request.'),
                 ),
               );

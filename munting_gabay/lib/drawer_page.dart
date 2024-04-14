@@ -1,11 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/Adminpage/adminpage.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:munting_gabay/darltheme.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -13,6 +11,8 @@ import 'main.dart';
 
 class AppDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  AppDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +60,7 @@ class AppDrawer extends StatelessWidget {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Text(
+                      return const Text(
                         'Loading...',
                         style: TextStyle(color: text),
                       );
@@ -68,11 +68,11 @@ class AppDrawer extends StatelessWidget {
                     if (snapshot.hasError) {
                       return Text(
                         'Error: ${snapshot.error}',
-                        style: TextStyle(color: text),
+                        style: const TextStyle(color: text),
                       );
                     }
                     if (!snapshot.hasData || !snapshot.data!.exists) {
-                      return Text(
+                      return const Text(
                         'User not found',
                         style: TextStyle(color: text),
                       );
@@ -89,16 +89,16 @@ class AppDrawer extends StatelessWidget {
                       .get(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return CircularProgressIndicator(); // Show a loading indicator
+                      return const CircularProgressIndicator(); // Show a loading indicator
                     }
                     if (snapshot.hasError) {
                       return Text(
                         'Error: ${snapshot.error}',
-                        style: TextStyle(color: text),
+                        style: const TextStyle(color: text),
                       );
                     }
                     if (!snapshot.hasData || !snapshot.data!.exists) {
-                      return CircleAvatar(
+                      return const CircleAvatar(
                         backgroundImage: AssetImage('assets/avatar1.png'),
                       );
                     }
@@ -113,8 +113,8 @@ class AppDrawer extends StatelessWidget {
             Column(
               children: [
                 ListTile(
-                  leading: Icon(Icons.person),
-                  title: Text(
+                  leading: const Icon(Icons.person),
+                  title: const Text(
                     'Profile',
                     style: TextStyle(color: text),
                   ),
@@ -123,13 +123,13 @@ class AppDrawer extends StatelessWidget {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserProfilePage()),
+                          builder: (context) => const UserProfilePage()),
                     );
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.home_filled),
-                  title: Text(
+                  leading: const Icon(Icons.home_filled),
+                  title: const Text(
                     'Home',
                     style: TextStyle(color: text),
                   ),
@@ -137,20 +137,20 @@ class AppDrawer extends StatelessWidget {
                     // Handle navigation to profile
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => HomepagePT()),
+                      MaterialPageRoute(builder: (context) => const HomepagePT()),
                     );
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text(
+                  leading: const Icon(Icons.settings),
+                  title: const Text(
                     'Settings',
                     style: TextStyle(color: text),
                   ),
                   onTap: () {
                     Navigator.pushReplacement(
                       context,
-                      MaterialPageRoute(builder: (context) => ChangePin()),
+                      MaterialPageRoute(builder: (context) => const ChangePin()),
                     );
                   },
                 ),
@@ -168,12 +168,12 @@ class AppDrawer extends StatelessWidget {
                 //     );
                 //   },
                 // ),
-                Divider(
+                const Divider(
                   color: Colors.black,
                 ), // Adds a visual divider
                 ListTile(
-                  leading: Icon(Icons.logout),
-                  title: Text(
+                  leading: const Icon(Icons.logout),
+                  title: const Text(
                     'Logout',
                     style: TextStyle(color: text),
                   ),
@@ -182,17 +182,17 @@ class AppDrawer extends StatelessWidget {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
-                          title: Text(
+                          title: const Text(
                             'Confirm Logout',
                             style: TextStyle(color: text),
                           ),
-                          content: Text(
+                          content: const Text(
                             'Are you sure you want to log out?',
                             style: TextStyle(color: text),
                           ),
                           actions: <Widget>[
                             TextButton(
-                              child: Text(
+                              child: const Text(
                                 'Cancel',
                                 style: TextStyle(color: text),
                               ),
@@ -201,7 +201,7 @@ class AppDrawer extends StatelessWidget {
                               },
                             ),
                             TextButton(
-                              child: Text(
+                              child: const Text(
                                 'Logout',
                                 style: TextStyle(color: Colors.red),
                               ),
@@ -211,7 +211,7 @@ class AppDrawer extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => LoginScreen()),
+                                        builder: (context) => const LoginScreen()),
                                   );
                                 } catch (e) {
                                   print('Error logging out: $e');

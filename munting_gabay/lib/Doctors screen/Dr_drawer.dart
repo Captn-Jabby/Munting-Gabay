@@ -1,17 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:munting_gabay/Adminpage/adminpage.dart';
 import 'package:munting_gabay/Doctors%20screen/dr_dashboard.dart';
 import 'package:munting_gabay/Dr_Profile.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/main.dart';
 import 'package:munting_gabay/variable.dart';
 
 class DrDrawer extends StatefulWidget {
+  const DrDrawer({super.key});
+
   @override
   State<DrDrawer> createState() => _DrDrawerState();
 }
@@ -62,13 +60,13 @@ class _DrDrawerState extends State<DrDrawer> {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading...');
+                  return const Text('Loading...');
                 }
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return Text('User not found');
+                  return const Text('User not found');
                 }
                 String username = snapshot.data!['username'];
                 return Text(username);
@@ -82,7 +80,7 @@ class _DrDrawerState extends State<DrDrawer> {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(
                       // Color of the loading indicator
                       valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -99,7 +97,7 @@ class _DrDrawerState extends State<DrDrawer> {
                   return Text('Error: ${snapshot.error}');
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return CircleAvatar(
+                  return const CircleAvatar(
                     backgroundImage: AssetImage('assets/images/avatar1.png'),
                   );
                 }
@@ -111,7 +109,7 @@ class _DrDrawerState extends State<DrDrawer> {
           ),
 
           Row(children: [
-            SizedBox(
+            const SizedBox(
               width: 10,
             ),
             ElevatedButton(
@@ -165,7 +163,7 @@ class _DrDrawerState extends State<DrDrawer> {
 
                 // Show a message indicating the status change
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
+                  const SnackBar(
                     content: Text('Dark mode toggled'),
                   ),
                 );
@@ -179,19 +177,19 @@ class _DrDrawerState extends State<DrDrawer> {
           ]),
 
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text('Profile'),
+            leading: const Icon(Icons.person),
+            title: const Text('Profile'),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => DrUserProfile()),
+                MaterialPageRoute(builder: (context) => const DrUserProfile()),
               );
             },
           ),
           ListTile(
-            leading: Icon(Icons.home_filled),
-            title: Text('Home'),
+            leading: const Icon(Icons.home_filled),
+            title: const Text('Home'),
             onTap: () {
               // Handle navigation to profile
               Navigator.pushReplacement(
@@ -203,28 +201,28 @@ class _DrDrawerState extends State<DrDrawer> {
               );
             },
           ),
-          Divider(
+          const Divider(
             color: Colors.black,
           ), // Adds a visual divider
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text('Logout'),
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
             onTap: () {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text('Confirm Logout'),
-                    content: Text('Are you sure you want to log out?'),
+                    title: const Text('Confirm Logout'),
+                    content: const Text('Are you sure you want to log out?'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('Cancel'),
+                        child: const Text('Cancel'),
                         onPressed: () {
                           Navigator.of(context).pop(); // Close the dialog
                         },
                       ),
                       TextButton(
-                        child: Text(
+                        child: const Text(
                           'Logout',
                           style: TextStyle(color: Colors.red),
                         ),
@@ -234,7 +232,7 @@ class _DrDrawerState extends State<DrDrawer> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
+                                  builder: (context) => const LoginScreen()),
                             );
                           } catch (e) {
                             print('Error logging out: $e');

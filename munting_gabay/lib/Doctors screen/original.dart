@@ -14,7 +14,7 @@ class DocDashboard extends StatefulWidget {
   final String docId; // Doctor's ID
   User? user = FirebaseAuth.instance.currentUser; // Get the current user
 
-  DocDashboard({required this.docId}) {
+  DocDashboard({super.key, required this.docId}) {
     print('Accessed DocDashboard with docId: $docId');
   }
 
@@ -78,7 +78,7 @@ class _DocDashboardState extends State<DocDashboard>
     };
   }
 
-  Set<DateTime> pendingDateTimeSet = Set();
+  Set<DateTime> pendingDateTimeSet = {};
 
   void _updateEvents(List<String> pendingDates) {
     setState(() {
@@ -86,7 +86,7 @@ class _DocDashboardState extends State<DocDashboard>
       pendingDateTimeSet = pendingDates.map((date) {
         // Format the date from the pendingDates list to match the calendar format
         final formattedDate = DateFormat('d MMMM')
-            .parse(date + ' 2023'); // Assuming the year is 2023
+            .parse('$date 2023'); // Assuming the year is 2023
         return formattedDate;
       }).toSet();
 
@@ -200,21 +200,21 @@ class _DocDashboardState extends State<DocDashboard>
               backgroundColor: dynamicScaffoldBgColor,
               appBar: AppBar(
                 backgroundColor: dynamicSecondaryColor,
-                title: Text('Doctor Dashboard'),
+                title: const Text('Doctor Dashboard'),
                 actions: [
                   IconButton(
-                    icon: Icon(Icons.message),
+                    icon: const Icon(Icons.message),
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => UserSelectionPage(),
+                          builder: (context) => const UserSelectionPage(),
                         ),
                       );
                     },
                   ),
                   IconButton(
-                    icon: Icon(
+                    icon: const Icon(
                       Icons.calendar_month,
                       color: Colors.indigo,
                     ),
@@ -222,13 +222,13 @@ class _DocDashboardState extends State<DocDashboard>
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => DateListScreen()),
+                            builder: (context) => const DateListScreen()),
                       );
                     },
                   ),
                 ],
               ),
-              drawer: DrDrawer(),
+              drawer: const DrDrawer(),
               body: DefaultTabController(
                 length: 4,
                 child: Column(
@@ -273,7 +273,7 @@ class _DocDashboardState extends State<DocDashboard>
                           });
 
                           // Check for cancelled status
-                          final isCancelled = events?.any((event) {
+                          final isCancelled = events.any((event) {
                                 if (event is Map<String, dynamic>) {
                                   if (event['status'] == 'cancelled') {
                                     print(
@@ -290,16 +290,17 @@ class _DocDashboardState extends State<DocDashboard>
                               width: 24,
                               height: 24,
                               alignment: Alignment.center,
-                              decoration: BoxDecoration(
+                              decoration: const BoxDecoration(
                                 color: Colors.red,
                                 shape: BoxShape.circle,
                               ),
                               child: Text(
                                 '${date.day}',
-                                style: TextStyle(color: Colors.white),
+                                style: const TextStyle(color: Colors.white),
                               ),
                             );
                           }
+                          return null;
 
                           // return null;
                         },
@@ -348,7 +349,7 @@ class _DocDashboardState extends State<DocDashboard>
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text(
+          title: const Text(
             'Incoming Call',
             style: TextStyle(color: text),
           ),
@@ -356,7 +357,7 @@ class _DocDashboardState extends State<DocDashboard>
               'You have an incoming call from $currentUserUid. Do you want to answer it?'),
           actions: <Widget>[
             TextButton(
-              child: Text('Reject'),
+              child: const Text('Reject'),
               onPressed: () async {
                 // Update the callStatus field to false when rejecting the call
                 await FirebaseFirestore.instance
@@ -371,7 +372,7 @@ class _DocDashboardState extends State<DocDashboard>
               },
             ),
             TextButton(
-              child: Text('Answer'),
+              child: const Text('Answer'),
               onPressed: () async {
                 // Fetch currentUserUid from Firestore
                 final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
@@ -424,7 +425,7 @@ class _DocDashboardState extends State<DocDashboard>
           .snapshots(),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(
               // Color of the loading indicator
               valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -441,7 +442,7 @@ class _DocDashboardState extends State<DocDashboard>
             child: Text('Error: ${snapshot.error}'),
           );
         } else if (!snapshot.hasData || !snapshot.data!.exists) {
-          return Center(
+          return const Center(
             child: Text('No data found for this doctor.'),
           );
         } else {
@@ -462,9 +463,9 @@ class _DocDashboardState extends State<DocDashboard>
               children: <Widget>[
                 Text(
                   'Doctor Name: ${widget.docId}',
-                  style: TextStyle(color: text),
+                  style: const TextStyle(color: text),
                 ),
-                Text(
+                const Text(
                   'Available Days:',
                   style: TextStyle(color: text),
                 ),
@@ -472,7 +473,7 @@ class _DocDashboardState extends State<DocDashboard>
                     ? Center(
                         child: Text(
                           'No $statusFilter slots available.',
-                          style: TextStyle(color: text),
+                          style: const TextStyle(color: text),
                         ),
                       )
                     : Column(
@@ -499,8 +500,8 @@ class DayCardDOC extends StatefulWidget {
   final String docId;
   final String selectedStatusFilter; // Add the selected status filter
 
-  DayCardDOC(
-      {required this.dayData,
+  const DayCardDOC(
+      {super.key, required this.dayData,
       required this.docId,
       required this.selectedStatusFilter});
 
@@ -521,7 +522,7 @@ class _DayCardDOCState extends State<DayCardDOC> {
     });
 
     if (!hasFilteredSlots) {
-      return SizedBox.shrink();
+      return const SizedBox.shrink();
     }
 
     return Card(
@@ -531,16 +532,15 @@ class _DayCardDOCState extends State<DayCardDOC> {
           ListTile(
             title: Text(
               'Day: ${widget.dayData['day']}',
-              style: TextStyle(color: text),
+              style: const TextStyle(color: text),
             ),
             subtitle: Text(
               'Date: ${widget.dayData['date']}',
-              style: TextStyle(color: text),
+              style: const TextStyle(color: text),
             ),
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                primary:
-                    DoctorsecondaryColor, // Change this color to the desired background color
+                backgroundColor: DoctorsecondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
@@ -549,7 +549,7 @@ class _DayCardDOCState extends State<DayCardDOC> {
               },
               child: Text(
                 slotsVisible ? 'Hide Slots' : 'Show Slots',
-                style: TextStyle(color: text),
+                style: const TextStyle(color: text),
               ),
             ),
           ),
@@ -581,7 +581,7 @@ class SlotTileDOC extends StatefulWidget {
   final String day;
   final String selectedStatusFilter; // Add the selected status filter
 
-  SlotTileDOC({
+  const SlotTileDOC({super.key, 
     required this.slotData,
     required this.docId,
     required this.day,
@@ -604,7 +604,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
       return ListTile(
         title: Text(
           ' ${widget.slotData['slot']} \n Status: $status',
-          style: TextStyle(color: text),
+          style: const TextStyle(color: text),
         ),
         subtitle: Text('Patient: $patientName'),
         trailing: Visibility(
@@ -612,8 +612,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
               'Available', // Hide the button if the status is 'Available'
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary:
-                  dynamicScaffoldBgColor, // Change this color to the desired background color
+              backgroundColor: dynamicScaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               if (widget.slotData['status'] == 'Canceled') {
@@ -696,7 +695,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
 
                   // Handle success, e.g., show a confirmation message
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Appointment canceled.')),
+                    const SnackBar(content: Text('Appointment canceled.')),
                   );
                 }
               }).catchError((error) {
@@ -709,7 +708,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
 
                   // Handle errors, e.g., show an error message
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
+                    const SnackBar(
                       content: Text('Error canceling appointment.'),
                     ),
                   );
@@ -770,7 +769,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
 
               // Handle success, e.g., show a confirmation message
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Appointment request submitted.')),
+                const SnackBar(content: Text('Appointment request submitted.')),
               );
             }).catchError((error) {
               print('Error submitting appointment request: $error');
@@ -780,7 +779,7 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
 
               // Handle errors, e.g., show an error message
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Error submitting appointment request.'),
                 ),
               );

@@ -12,10 +12,12 @@ class _colors_catState extends State<colors_cat> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("COLORS"),
+        title: const Text("COLORS"),
         ),
         body: Container(
           child: GridView(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 15),
+            padding: const EdgeInsets.all(15),
             children: [
               //YELLOW
               Container(child: InkWell(onTap: () {},
@@ -23,11 +25,11 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Colors/Red.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Red.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
-                child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+                child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -37,11 +39,11 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration(
-                  image: DecorationImage(image: AssetImage('assets/Colors/Blue.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Blue.png'),
                   fit: BoxFit.cover),
                    borderRadius: BorderRadius.circular(30)
                 ),
-                child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+                child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -51,10 +53,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Brown.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Brown.png'),
                   fit: BoxFit.cover),
                 ),
-                child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+                child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -64,10 +66,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Green.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Green.png'),
                   fit: BoxFit.cover),
                 ),
-                child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+                child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -77,10 +79,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Orange.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Orange.png'),
                   fit: BoxFit.cover),
                 ),
-              child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+              child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -90,10 +92,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Purple.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Purple.png'),
                   fit: BoxFit.cover),
                 ),
-              child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+              child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -103,10 +105,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Yellow.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Yellow.png'),
                   fit: BoxFit.cover),
                 ),
-              child: Center(child: Text('', style: TextStyle(fontSize: 40),)),
+              child: const Center(child: Text('', style: TextStyle(fontSize: 40),)),
               ),
               )
                ),
@@ -116,10 +118,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Pink.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Pink.png'),
                   fit: BoxFit.cover),
                 ),
-              child: Center(child: Text('', style: TextStyle(fontSize: 40, color: Colors.white),)),
+              child: const Center(child: Text('', style: TextStyle(fontSize: 40, color: Colors.white),)),
               ),
               )
                ),
@@ -129,10 +131,10 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/Black.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/Black.png'),
                   fit: BoxFit.cover),
                 ),
-              child: Center(child: Text('', style: TextStyle(fontSize: 40, color: Colors.white),)),
+              child: const Center(child: Text('', style: TextStyle(fontSize: 40, color: Colors.white),)),
               ),
               )
                ),
@@ -142,16 +144,14 @@ class _colors_catState extends State<colors_cat> {
                 height: 100,
                 width: 100,
                 decoration: BoxDecoration( borderRadius: BorderRadius.circular(30),
-                  image: DecorationImage(image: AssetImage('assets/Colors/White.png'),
+                  image: const DecorationImage(image: AssetImage('assets/Colors/White.png'),
                   fit: BoxFit.cover),
                 ),
-              child: Center(child: Text('', style: TextStyle(fontSize: 40, color: Colors.white),)),
+              child: const Center(child: Text('', style: TextStyle(fontSize: 40, color: Colors.white),)),
               ),
               )
                ),
             ],
-             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2, crossAxisSpacing: 15, mainAxisSpacing: 15),
-            padding: EdgeInsets.all(15),
           ),
         ),
     );

@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:munting_gabay/variable.dart';
 
 class SavedDatesScreen extends StatefulWidget {
+  const SavedDatesScreen({super.key});
+
   @override
   _SavedDatesScreenState createState() => _SavedDatesScreenState();
 }
@@ -89,10 +90,10 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
       backgroundColor: DoctorscaffoldBgColor,
       appBar: AppBar(
         backgroundColor: DoctorsecondaryColor,
-        title: Text('Saved Dates and Slots'),
+        title: const Text('Saved Dates and Slots'),
       ),
       body: savedDatesAndSlots.isEmpty
-          ? Center(
+          ? const Center(
               child: Center(
                 child: CircularProgressIndicator(
                   // Color of the loading indicator
@@ -114,7 +115,7 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
                   child: ListTile(
                     title: Text(
                       'Date: ${dateData['date']}',
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,9 +126,9 @@ class _SavedDatesScreenState extends State<SavedDatesScreen> {
                             direction: DismissDirection.endToStart,
                             background: Container(
                               alignment: Alignment.centerRight,
-                              padding: EdgeInsets.only(right: 20.0),
+                              padding: const EdgeInsets.only(right: 20.0),
                               color: Colors.red,
-                              child: Icon(
+                              child: const Icon(
                                 Icons.delete,
                                 color: Colors.white,
                               ),

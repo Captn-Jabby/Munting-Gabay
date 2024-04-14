@@ -6,18 +6,18 @@ import 'package:hive/hive.dart';
 const Color text = Colors.black;
 const Color drawertext = Colors.white;
 //
-Color secondaryColor = Color(0xFF95C440);
+Color secondaryColor = const Color(0xFF95C440);
 // Color secondaryColors = Color(0xFFFA893D);
-Color scaffoldBgColor = Color(0xFFF4F9EC);
+Color scaffoldBgColor = const Color(0xFFF4F9EC);
 
 ////  doctor side
-Color DoctorsecondaryColor = Color(0xFF95C440);
+Color DoctorsecondaryColor = const Color(0xFF95C440);
 Color DoctorscaffoldBgColor =
-    Color(0xFFF4F9EC); // Dark mode versions of the colors
+    const Color(0xFFF4F9EC); // Dark mode versions of the colors
 
 // Even darker versions of the colors with your variable names
-Color darkSecond = Color(0xFF40620D); // Even more darker color for dark mode
-Color darkPrimary = Color(0xFF888888); // Even more darker color for dark mode
+Color darkSecond = const Color(0xFF40620D); // Even more darker color for dark mode
+Color darkPrimary = const Color(0xFF888888); // Even more darker color for dark mode
 
 bool darkmode = false;
 Color dynamicSecondaryColor = darkmode ? darkSecond : DoctorsecondaryColor;
@@ -28,11 +28,11 @@ const Color LoadingColor = Colors.blue;
 const Color bgloadingColor = Colors.grey;
 //MediaQuery.of(context).size.height * 0.8,
 // Button Settings
-final double BtnHeight = 50;
-final double minus = 100;
-final double BtnWidth = 350;
-final double BtnSpacing = 25;
-final double BtnCircularRadius = 20;
+const double BtnHeight = 50;
+const double minus = 100;
+const double BtnWidth = 350;
+const double BtnSpacing = 25;
+const double BtnCircularRadius = 20;
 // const Color scaffoldBgColor = const Color(0xBA18B091); //drawer button color
 
 final ButtonStyle buttonStyle1 = ElevatedButton.styleFrom(
@@ -94,13 +94,13 @@ const TextStyle ParentbuttonTextStyle = TextStyle(
   fontWeight: FontWeight.bold,
 );
 // Main BG Theme
-final BoxDecoration mainBackgroundTheme = BoxDecoration(
-  color: const Color(0xFFF4F9EC),
+const BoxDecoration mainBackgroundTheme = BoxDecoration(
+  color: Color(0xFFF4F9EC),
 );
 // Logo width and height
-final double LOGOSIZE = 65;
-final double lOGOSpacing = 10;
-final double pageButton = 20;
+const double LOGOSIZE = 65;
+const double lOGOSpacing = 10;
+const double pageButton = 20;
 bool callStatus = false;
 
 class UserData {

@@ -13,7 +13,7 @@ import 'package:munting_gabay/login%20and%20register/pincode.dart';
 import 'package:munting_gabay/variable.dart';
 
 class HomepagePT extends StatefulWidget {
-  const HomepagePT({Key? key});
+  const HomepagePT({super.key, Key});
 
   @override
   State<HomepagePT> createState() => _HomepagePTState();
@@ -71,16 +71,16 @@ class _HomepagePTState extends State<HomepagePT> {
 
   Future<void> _onButtonPressed() async {
     EasyLoading.show(status: 'Please wait');
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 2));
     if (pinEnabled) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => ParentPage()),
+        MaterialPageRoute(builder: (context) => const ParentPage()),
       );
     } else {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => PinScreen()),
+        MaterialPageRoute(builder: (context) => const PinScreen()),
       );
     }
     EasyLoading.dismiss();
@@ -105,7 +105,7 @@ class _HomepagePTState extends State<HomepagePT> {
                   const SizedBox(
                     height: 30,
                   ),
-                  Center(
+                  const Center(
                     child: SpinningContainer(),
                   ),
                   Text(
@@ -134,7 +134,7 @@ class _HomepagePTState extends State<HomepagePT> {
                     width: LOGOSIZE,
                     height: LOGOSIZE,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: lOGOSpacing,
                   ),
                   SizedBox(
@@ -159,7 +159,7 @@ class _HomepagePTState extends State<HomepagePT> {
                   ),
                 ],
               ),
-              SizedBox(height: BtnSpacing),
+              const SizedBox(height: BtnSpacing),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -168,7 +168,7 @@ class _HomepagePTState extends State<HomepagePT> {
                     width: LOGOSIZE,
                     height: LOGOSIZE,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: lOGOSpacing,
                   ),
                   Container(
@@ -182,7 +182,7 @@ class _HomepagePTState extends State<HomepagePT> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => KidsPage()),
+                          MaterialPageRoute(builder: (context) => const KidsPage()),
                         );
                       },
                       child: Text(

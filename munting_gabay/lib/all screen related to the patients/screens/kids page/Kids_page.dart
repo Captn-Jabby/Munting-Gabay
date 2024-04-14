@@ -10,6 +10,8 @@ import '../../../drawer_page.dart';
 import 'games/categories.dart';
 
 class KidsPage extends StatelessWidget {
+  const KidsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,7 +27,7 @@ class KidsPage extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 Padding(
@@ -34,14 +36,14 @@ class KidsPage extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 40),
+            const SizedBox(height: 40),
             Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: pageButton,
                       ),
                       Image.asset(
@@ -49,7 +51,7 @@ class KidsPage extends StatelessWidget {
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: lOGOSpacing,
                       ),
                       Container(
@@ -65,7 +67,7 @@ class KidsPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => Categories()));
+                                    builder: (context) => const Categories()));
                             print('Games button pressed!');
                           },
                           style: ElevatedButton.styleFrom(
@@ -80,7 +82,7 @@ class KidsPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: pageButton,
                       ),
                       Image.asset(
@@ -88,7 +90,7 @@ class KidsPage extends StatelessWidget {
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: lOGOSpacing,
                       ),
                       Container(
@@ -103,7 +105,7 @@ class KidsPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => MusicPlayer(
+                                    builder: (context) => const MusicPlayer(
                                           title: 'Music ',
                                         )));
 
@@ -121,7 +123,7 @@ class KidsPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: pageButton,
                       ),
                       Image.asset(
@@ -129,7 +131,7 @@ class KidsPage extends StatelessWidget {
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: lOGOSpacing,
                       ),
                       Container(
@@ -144,7 +146,7 @@ class KidsPage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => MovieScreen()),
+                                  builder: (context) => const MovieScreen()),
                             );
                             print('Movies button pressed!');
                           },
@@ -160,7 +162,7 @@ class KidsPage extends StatelessWidget {
                   ),
                   Row(
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         width: pageButton,
                       ),
                       Image.asset(
@@ -168,7 +170,7 @@ class KidsPage extends StatelessWidget {
                         width: LOGOSIZE,
                         height: LOGOSIZE,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: lOGOSpacing,
                       ),
                       Container(
@@ -183,7 +185,7 @@ class KidsPage extends StatelessWidget {
                             Navigator.push(
                                 context,
                                 CupertinoPageRoute(
-                                    builder: (context) => VideoListScreen(
+                                    builder: (context) => const VideoListScreen(
                                         // title: 'Video Player ',
                                         )));
                             print('Videos button pressed!');

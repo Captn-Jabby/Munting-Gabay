@@ -24,13 +24,13 @@ class _NumberOfUsersState extends State<NumberOfUsers> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
+            const Icon(
               Icons.remove_red_eye_outlined,
               color: Colors.white,
             ),
             Text(
               ' ${widget.userCount + 1}',
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           ],
         ),

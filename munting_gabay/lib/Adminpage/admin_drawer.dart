@@ -12,6 +12,8 @@ import 'package:munting_gabay/variable.dart';
 class AdminDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  AdminDrawer({super.key});
+
   @override
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
@@ -55,13 +57,13 @@ class AdminDrawer extends StatelessWidget {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Text('Loading...');
+                  return const Text('Loading...');
                 }
                 if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
                 if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return Text('User not found');
+                  return const Text('User not found');
                 }
                 String username = snapshot.data!['username'];
                 return Text(username);
@@ -75,7 +77,7 @@ class AdminDrawer extends StatelessWidget {
                   .get(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(
                       // Color of the loading indicator
                       valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -100,8 +102,8 @@ class AdminDrawer extends StatelessWidget {
           ),
 
           ListTile(
-            leading: Icon(Icons.person),
-            title: Text(
+            leading: const Icon(Icons.person),
+            title: const Text(
               'Profile',
               style: TextStyle(color: Colors.black54),
             ),
@@ -109,13 +111,13 @@ class AdminDrawer extends StatelessWidget {
               // Handle navigation to profile
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => AdminProfilePage()),
+                MaterialPageRoute(builder: (context) => const AdminProfilePage()),
               );
             },
           ),
           ListTile(
-            leading: Icon(Icons.home_filled),
-            title: Text(
+            leading: const Icon(Icons.home_filled),
+            title: const Text(
               'Home',
               style: TextStyle(color: Colors.black54),
             ),
@@ -123,16 +125,16 @@ class AdminDrawer extends StatelessWidget {
               // Handle navigation to profile
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => AdminPage()),
+                MaterialPageRoute(builder: (context) => const AdminPage()),
               );
             },
           ),
-          Divider(
+          const Divider(
             color: Colors.black,
           ), // Adds a visual divider
           ListTile(
-            leading: Icon(Icons.logout),
-            title: Text(
+            leading: const Icon(Icons.logout),
+            title: const Text(
               'Logout',
               style: TextStyle(color: Colors.black54),
             ),
@@ -141,17 +143,17 @@ class AdminDrawer extends StatelessWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: Text(
+                    title: const Text(
                       'Confirm Logout',
                       style: TextStyle(color: Colors.black54),
                     ),
-                    content: Text(
+                    content: const Text(
                       'Are you sure you want to log out?',
                       style: TextStyle(color: Colors.black54),
                     ),
                     actions: <Widget>[
                       TextButton(
-                        child: Text(
+                        child: const Text(
                           'Cancel',
                           style: TextStyle(color: Colors.black54),
                         ),
@@ -160,7 +162,7 @@ class AdminDrawer extends StatelessWidget {
                         },
                       ),
                       TextButton(
-                        child: Text(
+                        child: const Text(
                           'Logout',
                           style: TextStyle(color: Colors.red),
                         ),
@@ -170,7 +172,7 @@ class AdminDrawer extends StatelessWidget {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen()),
+                                  builder: (context) => const LoginScreen()),
                             );
                           } catch (e) {
                             print('Error logging out: $e');

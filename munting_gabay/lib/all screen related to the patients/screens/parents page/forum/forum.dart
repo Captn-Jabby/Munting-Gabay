@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:munting_gabay/variable.dart';
 
 class ForumPage extends StatefulWidget {
+  const ForumPage({super.key});
+
   @override
   _ForumPageState createState() => _ForumPageState();
 }
@@ -77,14 +79,14 @@ class _ForumPageState extends State<ForumPage> {
       context: context,
       isScrollControlled:
           true, // Set to true to ensure the modal is not full height
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
         return Padding(
           padding:
               EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: Container(
+          child: SizedBox(
             height: MediaQuery.of(context).size.height *
                 0.6, // Adjust the height of the modal
             child: PostModal(
@@ -106,17 +108,16 @@ class _ForumPageState extends State<ForumPage> {
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
         backgroundColor: secondaryColor,
-        title: Text('Munting Gabay Forum'),
+        title: const Text('Munting Gabay Forum'),
       ),
       body: _user == null
           ? Center(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary:
-                      scaffoldBgColor, // Change this color to the desired background color
+                  backgroundColor: scaffoldBgColor, // Change this color to the desired background color
                 ),
                 onPressed: () => _signIn('test@example.com', 'password'),
-                child: Text('Sign in as a test user'),
+                child: const Text('Sign in as a test user'),
               ),
             )
           : Column(
@@ -126,7 +127,7 @@ class _ForumPageState extends State<ForumPage> {
                     stream: _firestore.collection('posts').snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
-                        return Center(
+                        return const Center(
                           child: Center(
                             child: CircularProgressIndicator(
                               // Color of the loading indicator
@@ -151,7 +152,7 @@ class _ForumPageState extends State<ForumPage> {
                           title: Text(postContent),
                           subtitle: Text(userName),
                           trailing: IconButton(
-                            icon: Icon(Icons.add_comment),
+                            icon: const Icon(Icons.add_comment),
                             onPressed: () {
                               _showPostModal(post.id, postContent, userName);
                             },
@@ -172,7 +173,7 @@ class _ForumPageState extends State<ForumPage> {
                     decoration: InputDecoration(
                       hintText: 'Write your post...',
                       suffixIcon: IconButton(
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                         onPressed: () {
                           createPost(_postController.text);
                           _postController.clear();
@@ -194,7 +195,7 @@ class PostModal extends StatefulWidget {
   final User? user;
   final FirebaseFirestore firestore;
 
-  const PostModal({
+  const PostModal({super.key, 
     required this.postId,
     required this.postContent,
     required this.userName,
@@ -233,18 +234,18 @@ class _PostModalState extends State<PostModal> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16.0),
+      padding: const EdgeInsets.all(16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '${widget.postContent}',
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            widget.postContent,
+            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           Text(widget.userName),
-          SizedBox(height: 16.0),
-          Container(
+          const SizedBox(height: 16.0),
+          SizedBox(
             height: 100.0,
             child: StreamBuilder<QuerySnapshot>(
               stream: widget.firestore
@@ -254,7 +255,7 @@ class _PostModalState extends State<PostModal> {
               builder: (BuildContext context,
                   AsyncSnapshot<QuerySnapshot> snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(
+                  return const Center(
                     child: Center(
                       child: CircularProgressIndicator(
                         // Color of the loading indicator
@@ -279,7 +280,7 @@ class _PostModalState extends State<PostModal> {
                     subtitle: Text('Commented by $commentedUserName'),
                   );
                   commentWidgets.add(Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
                     child: commentWidget,
                   ));
                 }
@@ -289,24 +290,23 @@ class _PostModalState extends State<PostModal> {
               },
             ),
           ),
-          SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           TextFormField(
             controller: _commentController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               hintText: 'Write a comment...',
             ),
           ),
-          SizedBox(height: 8.0),
+          const SizedBox(height: 8.0),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary:
-                  scaffoldBgColor, // Change this color to the desired background color
+              backgroundColor: scaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               addComment(_commentController.text);
               _commentController.clear();
             },
-            child: Text('Add Comment'),
+            child: const Text('Add Comment'),
           ),
         ],
       ),

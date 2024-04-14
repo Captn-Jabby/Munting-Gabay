@@ -10,6 +10,8 @@ class DoctorsHM extends StatelessWidget {
   @override
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+   DoctorsHM({super.key});
+
   @override
   Widget build(BuildContext context) {
     final User? user = _auth.currentUser;
@@ -47,7 +49,7 @@ class DoctorsHM extends StatelessWidget {
               elevation: 0,
               toolbarHeight: 150,
               iconTheme: IconThemeData(color: scaffoldBgColor),
-              actions: [
+              actions: const [
                 Center(
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +71,7 @@ class DoctorsHM extends StatelessWidget {
                 ),
               ],
             ),
-            drawer: AppDrawer(),
+            drawer:  AppDrawer(),
             body: SingleChildScrollView(
               child: Center(
                 child: Column(
@@ -92,14 +94,14 @@ class DoctorsHM extends StatelessWidget {
                         style: buttonTextStyle1,
                       )),
                     ),
-                    SizedBox(height: 50),
+                    const SizedBox(height: 50),
                     Container(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: BtnHeight,
                               ),
                               Image.asset(
@@ -107,7 +109,7 @@ class DoctorsHM extends StatelessWidget {
                                 width: LOGOSIZE,
                                 height: LOGOSIZE,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: lOGOSpacing,
                               ),
                               Container(
@@ -124,10 +126,9 @@ class DoctorsHM extends StatelessWidget {
                                         'Forum and Discussion button pressed!');
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.blue,
-                                    onPrimary: Colors.white,
+                                    foregroundColor: Colors.white, backgroundColor: Colors.blue,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Forum and Discussion',
                                     style: ParentbuttonTextStyle,
                                   ),
@@ -137,7 +138,7 @@ class DoctorsHM extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: BtnHeight,
                               ),
                               Container(
@@ -154,10 +155,9 @@ class DoctorsHM extends StatelessWidget {
                                         'Educational Webinars button pressed!');
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.green,
-                                    onPrimary: Colors.white,
+                                    foregroundColor: Colors.white, backgroundColor: Colors.green,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Educational Webinars',
                                     style: ParentbuttonTextStyle,
                                   ),
@@ -172,7 +172,7 @@ class DoctorsHM extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: BtnHeight,
                               ),
                               Image.asset(
@@ -193,10 +193,9 @@ class DoctorsHM extends StatelessWidget {
                                     print('Resource Library button pressed!');
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.orange,
-                                    onPrimary: Colors.white,
+                                    foregroundColor: Colors.white, backgroundColor: Colors.orange,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Resource Library',
                                     style: ParentbuttonTextStyle,
                                   ),
@@ -206,7 +205,7 @@ class DoctorsHM extends StatelessWidget {
                           ),
                           Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: BtnHeight,
                               ),
                               Container(
@@ -223,10 +222,9 @@ class DoctorsHM extends StatelessWidget {
                                         'Online Consultation button pressed!');
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.purple,
-                                    onPrimary: Colors.white,
+                                    foregroundColor: Colors.white, backgroundColor: Colors.purple,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Online Consultation',
                                     style: ParentbuttonTextStyle,
                                   ),
@@ -237,14 +235,14 @@ class DoctorsHM extends StatelessWidget {
                                 width: LOGOSIZE,
                                 height: LOGOSIZE,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: lOGOSpacing,
                               ),
                             ],
                           ),
                           Row(
                             children: [
-                              SizedBox(
+                              const SizedBox(
                                 width: BtnHeight,
                               ),
                               Image.asset(
@@ -252,7 +250,7 @@ class DoctorsHM extends StatelessWidget {
                                 width: LOGOSIZE,
                                 height: LOGOSIZE,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: lOGOSpacing,
                               ),
                               Container(
@@ -272,10 +270,9 @@ class DoctorsHM extends StatelessWidget {
                                     // );
                                   },
                                   style: ElevatedButton.styleFrom(
-                                    primary: Colors.red,
-                                    onPrimary: Colors.white,
+                                    foregroundColor: Colors.white, backgroundColor: Colors.red,
                                   ),
-                                  child: Text(
+                                  child: const Text(
                                     'Psychologist Research',
                                     style: ParentbuttonTextStyle,
                                   ),

@@ -198,7 +198,7 @@ class SessionController extends ValueNotifier<AgoraSettings> {
       token: value.connectionData?.tempToken ?? value.generatedToken ?? "",
       channelId: value.connectionData!.channelName,
       uid: value.connectionData!.uid!,
-      options: ChannelMediaOptions(
+      options: const ChannelMediaOptions(
         channelProfile: ChannelProfileType.channelProfileLiveBroadcasting,
         clientRoleType: ClientRoleType.clientRoleBroadcaster,
       ),
