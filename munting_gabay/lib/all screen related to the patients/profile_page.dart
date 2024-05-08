@@ -199,6 +199,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
               controller: _usernameController,
               decoration: const InputDecoration(labelText: 'Username'),
             ),
+            const SizedBox(height: 10,),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(

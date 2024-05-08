@@ -204,7 +204,7 @@ class _pscyhState extends State<pscyh> {
                                             style: ElevatedButton.styleFrom(
                                               foregroundColor: Colors.white, backgroundColor: scaffoldBgColor,
                                             ),
-                                            child: const Text(
+                                            child: Text(
                                               'View Details',
                                               style: TextStyle(
                                                   fontSize: 16,

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:munting_gabay/variable.dart';
 
 class MusicPlayer extends StatefulWidget {
   const MusicPlayer({Key? key, required this.title}) : super(key: key);
@@ -12,7 +13,7 @@ class MusicPlayer extends StatefulWidget {
 
 class _MusicPlayerState extends State<MusicPlayer> {
   // Variable
-  Color bgColor = Colors.blue;
+
   late AudioPlayer _player;
   List<String> songAssets = [];
 
@@ -81,10 +82,12 @@ class _MusicPlayerState extends State<MusicPlayer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: bgColor,
+      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: bgColor,
+        leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+        centerTitle: true,
+        title: Text(widget.title, style: TextStyle(color: Colors.white),),
+        backgroundColor: secondaryColor,
       ),
       body: Column(
         children: [
@@ -106,7 +109,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
                             top: 10.0, left: 15.0, right: 15.0),
                         padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
                         decoration: BoxDecoration(
-                          color: bgColor,
+                          color: secondaryColor,
                           borderRadius: BorderRadius.circular(4.0),
                           border: Border.all(
                             color: Colors.white70,
