@@ -1,314 +1,356 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:munting_gabay/variable.dart';
 
-class ForumPage extends StatefulWidget {
-  const ForumPage({super.key});
-
-  @override
-  _ForumPageState createState() => _ForumPageState();
-}
-
-class _ForumPageState extends State<ForumPage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  late User? _user;
-  late TextEditingController _postController;
-  late TextEditingController _commentController;
-
-  @override
-  void initState() {
-    super.initState();
-    _postController = TextEditingController();
-    _commentController = TextEditingController();
-    _user = _auth.currentUser;
-  }
-
-  Future<void> _signOut() async {
-    await _auth.signOut();
-    setState(() {
-      _user = null;
-    });
-  }
-
-  Future<void> _signIn(String email, String password) async {
-    try {
-      await _auth.signInWithEmailAndPassword(email: email, password: password);
-      setState(() {
-        _user = _auth.currentUser;
-      });
-    } catch (e) {
-      print(e);
-    }
-  }
-
-  void createPost(String content) async {
-    String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot =
-        await _firestore.collection('users').doc(_user?.uid).get();
-    if (userSnapshot.exists) {
-      userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
-    }
-    DocumentReference postRef = await _firestore.collection('posts').add({
-      'userId': userName,
-      'content': content,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-    String postId = postRef.id;
-    postRef.update({'postId': postId});
-  }
-
-  void addComment(String postId, String userId, String content) async {
-    String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot =
-        await _firestore.collection('users').doc(_user?.uid).get();
-    if (userSnapshot.exists) {
-      userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
-    }
-    _firestore.collection('comments').add({
-      'postId': postId,
-      'userId': userName,
-      'content': content,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
-
-  void _showPostModal(String postId, String postContent, String userName) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled:
-          true, // Set to true to ensure the modal is not full height
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
-      ),
-      builder: (BuildContext context) {
-        return Padding(
-          padding:
-              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height *
-                0.6, // Adjust the height of the modal
-            child: PostModal(
-              postId: postId,
-              postContent: postContent,
-              userName: userName,
-              user: _user,
-              firestore: _firestore,
-            ),
-          ),
-        );
-      },
-    );
-  }
+class ForumPage extends StatelessWidget {
+  const ForumPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: Colors.green,
         title: const Text('Munting Gabay Forum'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              // Navigate to the screen/modal for creating a new post
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => NewPostScreen(),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: _user == null
-          ? Center(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: scaffoldBgColor, // Change this color to the desired background color
-                ),
-                onPressed: () => _signIn('test@example.com', 'password'),
-                child: const Text('Sign in as a test user'),
-              ),
-            )
-          : Column(
-              children: [
-                Expanded(
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: _firestore.collection('posts').snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) {
-                        return const Center(
-                          child: Center(
-                            child: CircularProgressIndicator(
-                              // Color of the loading indicator
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(LoadingColor),
-
-                              // Width of the indicator's line
-                              strokeWidth: 4,
-
-                              // Optional: Background color of the circle
-                              backgroundColor: bgloadingColor,
-                            ),
-                          ),
-                        );
-                      }
-                      final posts = snapshot.data!.docs;
-                      List<Widget> postWidgets = [];
-                      for (var post in posts) {
-                        final postContent = post.get('content');
-                        final userName = post.get('userId');
-                        final postWidget = ListTile(
-                          title: Text(postContent),
-                          subtitle: Text(userName),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.add_comment),
-                            onPressed: () {
-                              _showPostModal(post.id, postContent, userName);
-                            },
-                          ),
-                        );
-                        postWidgets.add(postWidget);
-                      }
-                      return ListView(
-                        children: postWidgets,
-                      );
-                    },
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    controller: _postController,
-                    decoration: InputDecoration(
-                      hintText: 'Write your post...',
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.send),
-                        onPressed: () {
-                          createPost(_postController.text);
-                          _postController.clear();
-                        },
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+      body: Column(
+        children: [
+          Expanded(
+            child: PostList(),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class PostModal extends StatefulWidget {
-  final String postId;
-  final String postContent;
-  final String userName;
-  final User? user;
-  final FirebaseFirestore firestore;
-
-  const PostModal({super.key, 
-    required this.postId,
-    required this.postContent,
-    required this.userName,
-    required this.user,
-    required this.firestore,
-  });
-
+class PostList extends StatelessWidget {
   @override
-  _PostModalState createState() => _PostModalState();
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('posts').snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final posts = snapshot.data!.docs;
+        return ListView.builder(
+          itemCount: posts.length,
+          itemBuilder: (context, index) {
+            final post = posts[index] as QueryDocumentSnapshot<Map<String, dynamic>>;
+            return PostTile(post: post);
+          },
+        );
+      },
+    );
+  }
 }
 
-class _PostModalState extends State<PostModal> {
-  late TextEditingController _commentController;
+class PostTile extends StatelessWidget {
+  final QueryDocumentSnapshot<Map<String, dynamic>> post;
 
-  @override
-  void initState() {
-    super.initState();
-    _commentController = TextEditingController();
-  }
-
-  void addComment(String content) async {
-    String userName = 'Anonymous User';
-    DocumentSnapshot userSnapshot =
-        await widget.firestore.collection('users').doc(widget.user?.uid).get();
-    if (userSnapshot.exists) {
-      userName = (userSnapshot.data() as Map)['name'] ?? 'Anonymous User';
-    }
-    widget.firestore.collection('comments').add({
-      'postId': widget.postId,
-      'userId': userName,
-      'content': content,
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-  }
+  const PostTile({Key? key, required this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            widget.postContent,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-          ),
-          const SizedBox(height: 8.0),
-          Text(widget.userName),
-          const SizedBox(height: 16.0),
-          SizedBox(
-            height: 100.0,
-            child: StreamBuilder<QuerySnapshot>(
-              stream: widget.firestore
-                  .collection('comments')
-                  .where('postId', isEqualTo: widget.postId)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) {
-                  return const Center(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        // Color of the loading indicator
-                        valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+    int upvotes = post.data().containsKey('upvotes') ? post['upvotes'] ?? 0 : 0;
 
-                        // Width of the indicator's line
-                        strokeWidth: 4,
-
-                        // Optional: Background color of the circle
-                        backgroundColor: bgloadingColor,
+    return Card(
+      margin: const EdgeInsets.all(10),
+      child: InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => CommentPage(post: post),
+            ),
+          );
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                post['content'] ?? '',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Posted by: ${post['userId'] ?? "Anonymous"}',
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          // Handle upvote
+                          FirebaseFirestore.instance.runTransaction((transaction) async {
+                            final freshSnapshot = await transaction.get(post.reference);
+                            final upvotes = freshSnapshot.data()!.containsKey('upvotes') ? freshSnapshot['upvotes'] ?? 0 : 0;
+                            transaction.update(post.reference, {'upvotes': upvotes + 1});
+                          });
+                        },
+                        icon: Icon(Icons.arrow_upward),
                       ),
-                    ),
-                  );
-                }
-                final comments = snapshot.data!.docs;
-                List<Widget> commentWidgets = [];
-                for (var comment in comments) {
-                  final commentContent = comment.get('content');
-                  final commentedUserName = comment.get('userId');
-                  final commentWidget = ListTile(
-                    title: Text(commentContent),
-                    subtitle: Text('Commented by $commentedUserName'),
-                  );
-                  commentWidgets.add(Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: commentWidget,
-                  ));
-                }
-                return ListView(
-                  children: commentWidgets,
-                );
-              },
+                      Text('$upvotes'),
+                    ],
+                  ),
+                ],
+              ),
+              // Always show edit and delete buttons
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      // Handle edit
+                    },
+                    icon: Icon(Icons.edit),
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      // Handle delete
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text('Delete Post'),
+                            content: Text('Are you sure you want to delete this post?'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  post.reference.delete();
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    icon: Icon(Icons.delete),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CommentPage extends StatelessWidget {
+  final QueryDocumentSnapshot<Map<String, dynamic>> post;
+
+  const CommentPage({Key? key, required this.post}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(post['content'] ?? ''),
+      ),
+      body: Column(
+        children: [
+          Expanded(
+            child: CommentList(post: post),
+          ),
+          CommentInput(post: post),
+        ],
+      ),
+    );
+  }
+}
+
+class CommentList extends StatelessWidget {
+  final QueryDocumentSnapshot<Map<String, dynamic>> post;
+
+  const CommentList({Key? key, required this.post}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance
+          .collection('comments')
+          .where('postId', isEqualTo: post.id)
+          .snapshots(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        final comments = snapshot.data!.docs;
+        return ListView.builder(
+          itemCount: comments.length,
+          itemBuilder: (context, index) {
+            final comment = comments[index];
+            return ListTile(
+              title: Text(comment['content'] ?? ''),
+              subtitle: Text(comment['userId'] ?? ''),
+            );
+          },
+        );
+      },
+    );
+  }
+}
+
+class CommentInput extends StatelessWidget {
+  final QueryDocumentSnapshot<Map<String, dynamic>> post;
+  final TextEditingController _commentController = TextEditingController();
+
+  CommentInput({Key? key, required this.post}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              controller: _commentController,
+              decoration: InputDecoration(
+                hintText: 'Add a comment...',
+              ),
             ),
           ),
-          const SizedBox(height: 16.0),
-          TextFormField(
-            controller: _commentController,
-            decoration: const InputDecoration(
-              hintText: 'Write a comment...',
-            ),
-          ),
-          const SizedBox(height: 8.0),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: scaffoldBgColor, // Change this color to the desired background color
-            ),
-            onPressed: () {
-              addComment(_commentController.text);
+          IconButton(
+            onPressed: () async {
+              // Handle comment submission
+              String username = 'Anonymous'; // Default username
+              final currentUser = FirebaseAuth.instance.currentUser;
+              if (currentUser != null) {
+                final userDoc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+                if (userDoc.exists) {
+                  // Extract username
+                  username = userDoc.data()?['username'] ?? 'Anonymous';
+                }
+              }
+
+              FirebaseFirestore.instance.collection('comments').add({
+                'postId': post.id,
+                'userId': username,
+                'content': _commentController.text,
+                'timestamp': FieldValue.serverTimestamp(),
+              });
               _commentController.clear();
             },
-            child: const Text('Add Comment'),
+            icon: Icon(Icons.send),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class NewPostScreen extends StatefulWidget {
+  @override
+  _NewPostScreenState createState() => _NewPostScreenState();
+}
+
+class _NewPostScreenState extends State<NewPostScreen> {
+  final TextEditingController _postController = TextEditingController();
+  bool _useAnonymous = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('New Post'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: _postController,
+              decoration: InputDecoration(
+                hintText: 'Write your post...',
+              ),
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+            ),
+            SizedBox(height: 16),
+            Row(
+              children: [
+                Checkbox(
+                  value: _useAnonymous,
+                  onChanged: (value) {
+                    setState(() {
+                      _useAnonymous = value!;
+                    });
+                  },
+                ),
+                Text('Post Anonymously'),
+              ],
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                // Handle post submission
+                final content = _postController.text;
+                if (content.isNotEmpty) {
+                  String username;
+                  if (_useAnonymous) {
+                    username = 'Anonymous';
+                  } else {
+                    // Get current user
+                    final User? currentUser = FirebaseAuth.instance.currentUser;
+                    if (currentUser != null) {
+                      // Fetch user document from Firestore
+                      final userDoc = await FirebaseFirestore.instance.collection('users').doc(currentUser.uid).get();
+                      if (userDoc.exists) {
+                        // Extract username
+                        username = userDoc.data()?['username'] ?? 'Anonymous';
+                      } else {
+                        username = 'Anonymous';
+                      }
+                    } else {
+                      username = 'Anonymous';
+                    }
+                  }
+                  // Add post
+                  FirebaseFirestore.instance.collection('posts').add({
+                    'userId': username,
+                    'content': content,
+                    'timestamp': FieldValue.serverTimestamp(),
+                  });
+                  Navigator.pop(context);
+                }
+              },
+              child: Text('Submit'),
+            ),
+          ],
+        ),
       ),
     );
   }
