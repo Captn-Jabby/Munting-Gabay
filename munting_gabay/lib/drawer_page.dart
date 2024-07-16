@@ -45,191 +45,186 @@ class AppDrawer extends StatelessWidget {
     // Call the function to get data from Firebase
 
     return Drawer(
-      child: Container(
-        color: scaffoldBgColor,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            Container(
-              color: scaffoldBgColor,
-              child: UserAccountsDrawerHeader(
-                accountName: FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(user?.uid)
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Text(
-                        'Loading...',
-                        style: TextStyle(color: text),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return Text(
-                        'Error: ${snapshot.error}',
-                        style: const TextStyle(color: text),
-                      );
-                    }
-                    if (!snapshot.hasData || !snapshot.data!.exists) {
-                      return const Text(
-                        'User not found',
-                        style: TextStyle(color: text),
-                      );
-                    }
-                    String username = snapshot.data!['username'];
-                    return Text(username);
-                  },
+      backgroundColor: scaffoldBgColor,
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          UserAccountsDrawerHeader(
+            accountName: FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user?.uid)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Text(
+                    'Loading...',
+                    style: TextStyle(color: text),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return Text(
+                    'Error: ${snapshot.error}',
+                    style: const TextStyle(color: text),
+                  );
+                }
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return const Text(
+                    'User not found',
+                    style: TextStyle(color: text),
+                  );
+                }
+                String username = snapshot.data!['username'];
+                return Text(username);
+              },
+            ),
+            accountEmail: const Text( ""),
+            currentAccountPicture: FutureBuilder<DocumentSnapshot>(
+              future: FirebaseFirestore.instance
+                  .collection('users')
+                  .doc(user?.uid)
+                  .get(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator(); // Show a loading indicator
+                }
+                if (snapshot.hasError) {
+                  return Text(
+                    'Error: ${snapshot.error}',
+                    style: const TextStyle(color: text),
+                  );
+                }
+                if (!snapshot.hasData || !snapshot.data!.exists) {
+                  return const CircleAvatar(
+                    backgroundImage: AssetImage('assets/avatar1.png'),
+                  );
+                }
+                String profileImageUrl = snapshot.data!['avatarPath'];
+                return CircleAvatar(
+                    backgroundImage: NetworkImage(profileImageUrl));
+              },
+            ),
+          ),
+
+          Column(
+            children: [
+              ListTile(
+                leading: const Icon(Icons.person),
+                title: const Text(
+                  'Profile',
+                  style: TextStyle(color: text),
                 ),
-                accountEmail: Text(user?.email ?? ""),
-                currentAccountPicture: FutureBuilder<DocumentSnapshot>(
-                  future: FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(user?.uid)
-                      .get(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const CircularProgressIndicator(); // Show a loading indicator
-                    }
-                    if (snapshot.hasError) {
-                      return Text(
-                        'Error: ${snapshot.error}',
-                        style: const TextStyle(color: text),
-                      );
-                    }
-                    if (!snapshot.hasData || !snapshot.data!.exists) {
-                      return const CircleAvatar(
-                        backgroundImage: AssetImage('assets/avatar1.png'),
-                      );
-                    }
-                    String profileImageUrl = snapshot.data!['avatarPath'];
-                    return CircleAvatar(
-                        backgroundImage: NetworkImage(profileImageUrl));
-                  },
-                ),
+                onTap: () {
+                  // Handle navigation to profile
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const UserProfilePage()),
+                  );
+                },
               ),
-            ),
-
-            Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text(
-                    'Profile',
-                    style: TextStyle(color: text),
-                  ),
-                  onTap: () {
-                    // Handle navigation to profile
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const UserProfilePage()),
-                    );
-                  },
+              ListTile(
+                leading: const Icon(Icons.home_filled),
+                title: const Text(
+                  'Home',
+                  style: TextStyle(color: text),
                 ),
-                ListTile(
-                  leading: const Icon(Icons.home_filled),
-                  title: const Text(
-                    'Home',
-                    style: TextStyle(color: text),
-                  ),
-                  onTap: () {
-                    // Handle navigation to profile
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const HomepagePT()),
-                    );
-                  },
+                onTap: () {
+                  // Handle navigation to profile
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomepagePT()),
+                  );
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.pin),
+                title: const Text(
+                  'Change PIN',
+                  style: TextStyle(color: text),
                 ),
-                ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text(
-                    'Settings',
-                    style: TextStyle(color: text),
-                  ),
-                  onTap: () {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => const ChangePin()),
-                    );
-                  },
+                onTap: () {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const ChangePin()),
+                  );
+                },
+              ),
+              // ListTile(
+              //   leading: Icon(Icons.color_lens),
+              //   title: Text(
+              //     'Themes',
+              //     style: TextStyle(color: text),
+              //   ),
+              //   onTap: () {
+              //     Navigator.pushReplacement(
+              //       context,
+              //       MaterialPageRoute(
+              //           builder: (context) => ColorChangerScreen()),
+              //     );
+              //   },
+              // ),
+              const Divider(
+                color: Colors.black,
+              ), // Adds a visual divider
+              ListTile(
+                leading: const Icon(Icons.logout),
+                title: const Text(
+                  'Logout',
+                  style: TextStyle(color: text),
                 ),
-                // ListTile(
-                //   leading: Icon(Icons.color_lens),
-                //   title: Text(
-                //     'Themes',
-                //     style: TextStyle(color: text),
-                //   ),
-                //   onTap: () {
-                //     Navigator.pushReplacement(
-                //       context,
-                //       MaterialPageRoute(
-                //           builder: (context) => ColorChangerScreen()),
-                //     );
-                //   },
-                // ),
-                const Divider(
-                  color: Colors.black,
-                ), // Adds a visual divider
-                ListTile(
-                  leading: const Icon(Icons.logout),
-                  title: const Text(
-                    'Logout',
-                    style: TextStyle(color: text),
-                  ),
-                  onTap: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text(
-                            'Confirm Logout',
-                            style: TextStyle(color: text),
-                          ),
-                          content: const Text(
-                            'Are you sure you want to log out?',
-                            style: TextStyle(color: text),
-                          ),
-                          actions: <Widget>[
-                            TextButton(
-                              child: const Text(
-                                'Cancel',
-                                style: TextStyle(color: text),
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).pop(); // Close the dialog
-                              },
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text(
+                          'Confirm Logout',
+                          style: TextStyle(color: text),
+                        ),
+                        content: const Text(
+                          'Are you sure you want to log out?',
+                          style: TextStyle(color: text),
+                        ),
+                        actions: <Widget>[
+                          TextButton(
+                            child: const Text(
+                              'Cancel',
+                              style: TextStyle(color: text),
                             ),
-                            TextButton(
-                              child: const Text(
-                                'Logout',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                              onPressed: () async {
-                                try {
-                                  await FirebaseAuth.instance.signOut();
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => const LoginScreen()),
-                                  );
-                                } catch (e) {
-                                  print('Error logging out: $e');
-                                }
-                              },
+                            onPressed: () {
+                              Navigator.of(context).pop(); // Close the dialog
+                            },
+                          ),
+                          TextButton(
+                            child: const Text(
+                              'Logout',
+                              style: TextStyle(color: Colors.red),
                             ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
+                            onPressed: () async {
+                              try {
+                                await FirebaseAuth.instance.signOut();
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const LoginScreen()),
+                                );
+                              } catch (e) {
+                                print('Error logging out: $e');
+                              }
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+              ),
+            ],
+          ),
 
-            // Add more ListTiles for other menu items
-          ],
-        ),
+          // Add more ListTiles for other menu items
+        ],
       ),
     );
   }

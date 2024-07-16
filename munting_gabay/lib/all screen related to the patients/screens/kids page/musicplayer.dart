@@ -84,9 +84,9 @@ class _MusicPlayerState extends State<MusicPlayer> {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
       appBar: AppBar(
-        leading: IconButton(onPressed: (){}, icon: Icon(Icons.arrow_back_ios)),
+        leading: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_back_ios)),
         centerTitle: true,
-        title: Text(widget.title, style: TextStyle(color: Colors.white),),
+        title: Text(widget.title, style: const TextStyle(color: Colors.white),),
         backgroundColor: secondaryColor,
       ),
       body: Column(

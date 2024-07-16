@@ -90,9 +90,9 @@ class _DrUserProfileState extends State<DrUserProfile> {
       },
     );
 
-    if (picked != null && picked != selectedDate) {
+    if (picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked!;
       });
     }
   }

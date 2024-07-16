@@ -1,7 +1,6 @@
 // import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -30,7 +29,7 @@ class DoctorInfoPage extends StatefulWidget {
   final String DoctorStatus;
   final String phone_number;
 
-  DoctorInfoPage({
+  const DoctorInfoPage({
     super.key,
     required this.birthdate,
     required this.phone_number,

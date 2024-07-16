@@ -15,16 +15,12 @@ class PhoneCallScreen extends StatelessWidget {
 
   void makePhoneCall() async {
     bool? res = await FlutterPhoneDirectCaller.callNumber(phone_number);
-    if (res != null) {
-      if (res) {
-        print('Phone call successful');
-      } else {
-        print('Error making the phone call');
-      }
+    if (res!) {
+      print('Phone call successful');
     } else {
-      print('Error making the phone call: result is null');
+      print('Error making the phone call');
     }
-  }
+    }
 
   @override
   Widget build(BuildContext context) {

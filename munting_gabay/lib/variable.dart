@@ -68,6 +68,12 @@ final TextStyle smallTextStyle11 = GoogleFonts.poppins(
     fontSize: 30,
   ),
 );
+final TextStyle buttonText1 = GoogleFonts.poppins(
+    textStyle: const TextStyle(
+      color: Colors.black,
+      fontSize: 14,
+    ),
+);
 final TextStyle smallTextStyle1 = GoogleFonts.poppins(
   textStyle: const TextStyle(
     color: Color(0xFF9C9C9C),

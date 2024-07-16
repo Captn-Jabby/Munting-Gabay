@@ -166,9 +166,9 @@ class _PersonalIdentificationScreenState
       },
     );
 
-    if (picked != null && picked != selectedDate) {
+    if (picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked!;
       });
     }
   }

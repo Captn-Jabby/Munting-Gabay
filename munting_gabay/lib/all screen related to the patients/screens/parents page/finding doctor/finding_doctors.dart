@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/doctor_information.dart';
 import 'package:munting_gabay/variable.dart';
 
@@ -68,7 +69,8 @@ class _pscyhState extends State<pscyh> {
           backgroundColor: secondaryColor,
           elevation: 0,
           iconTheme: IconThemeData(color: scaffoldBgColor),
-          title: const Text('Pyschology search'),
+          centerTitle: true,
+          title: const Text('Finding Doctors'),
         ),
         drawer: AppDrawer(),
         body: SingleChildScrollView(
@@ -206,10 +208,7 @@ class _pscyhState extends State<pscyh> {
                                             ),
                                             child: Text(
                                               'View Details',
-                                              style: TextStyle(
-                                                  fontSize: 16,
-                                                  color: secondaryColor),
-                                            ),
+                                              style: buttonText1),
                                           ),
                                         ],
                                       ),

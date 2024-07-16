@@ -131,9 +131,9 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
       },
     );
 
-    if (picked != null && picked != selectedDate) {
+    if (picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked!;
       });
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:munting_gabay/variable.dart';
 
 class ForumPage extends StatelessWidget {
   const ForumPage({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class ForumPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.green,
+        backgroundColor: secondaryColor,
         title: const Text('Munting Gabay Forum'),
         actions: [
           IconButton(
@@ -347,7 +348,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                   Navigator.pop(context);
                 }
               },
-              child: Text('Submit'),
+              child: Text('Submit', style: buttonText1,),
             ),
           ],
         ),

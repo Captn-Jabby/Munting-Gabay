@@ -25,8 +25,8 @@ class _AlphabetState extends State<Alphabet> {
               Container(
                 child: ElevatedButton(onPressed: () {},
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
+                backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
               ),
               child: (const Text('Aa', style: TextStyle(fontSize: 100))),
               ),
@@ -34,7 +34,7 @@ class _AlphabetState extends State<Alphabet> {
 //B
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Bb', style: TextStyle(fontSize: 100))),
               ),
@@ -42,7 +42,7 @@ class _AlphabetState extends State<Alphabet> {
 //C
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Cc', style: TextStyle(fontSize: 100))),
               ),
@@ -50,7 +50,7 @@ class _AlphabetState extends State<Alphabet> {
 //D
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Dd', style: TextStyle(fontSize: 100))),
               ),
@@ -59,8 +59,8 @@ class _AlphabetState extends State<Alphabet> {
               Container(
                 child: ElevatedButton(onPressed: () {},
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
+                backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
               ),
               child: (const Text('Ee', style: TextStyle(fontSize: 100))),
               ),
@@ -68,7 +68,7 @@ class _AlphabetState extends State<Alphabet> {
 //F
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Ff', style: TextStyle(fontSize: 100))),
               ),
@@ -76,7 +76,7 @@ class _AlphabetState extends State<Alphabet> {
 //G
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Gg', style: TextStyle(fontSize: 100))),
               ),
@@ -84,7 +84,7 @@ class _AlphabetState extends State<Alphabet> {
 //H
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Hh', style: TextStyle(fontSize: 100))),
               ),
@@ -93,8 +93,8 @@ class _AlphabetState extends State<Alphabet> {
               Container(
                 child: ElevatedButton(onPressed: () {},
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
+                backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
               ),
               child: (const Text('Ii', style: TextStyle(fontSize: 100))),
               ),
@@ -102,7 +102,7 @@ class _AlphabetState extends State<Alphabet> {
 //J
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Jj', style: TextStyle(fontSize: 100))),
               ),
@@ -110,7 +110,7 @@ class _AlphabetState extends State<Alphabet> {
 //K
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Kk', style: TextStyle(fontSize: 100))),
               ),
@@ -118,7 +118,7 @@ class _AlphabetState extends State<Alphabet> {
 //L
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Ll', style: TextStyle(fontSize: 100))),
               ),
@@ -127,8 +127,8 @@ class _AlphabetState extends State<Alphabet> {
               Container(
                 child: ElevatedButton(onPressed: () {},
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
+                backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
               ),
               child: (const Text('Mm', style: TextStyle(fontSize: 80))),
               ),
@@ -136,7 +136,7 @@ class _AlphabetState extends State<Alphabet> {
 //N
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Nn', style: TextStyle(fontSize: 100))),
               ),
@@ -144,7 +144,7 @@ class _AlphabetState extends State<Alphabet> {
 //O
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Oo', style: TextStyle(fontSize: 100))),
               ),
@@ -152,7 +152,7 @@ class _AlphabetState extends State<Alphabet> {
 //P
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Pp', style: TextStyle(fontSize: 100))),
               ),
@@ -161,8 +161,8 @@ class _AlphabetState extends State<Alphabet> {
               Container(
                 child: ElevatedButton(onPressed: () {},
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
+                backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
               ),
               child: (const Text('Qq', style: TextStyle(fontSize: 100))),
               ),
@@ -170,7 +170,7 @@ class _AlphabetState extends State<Alphabet> {
 //R
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Rr', style: TextStyle(fontSize: 100))),
               ),
@@ -178,7 +178,7 @@ class _AlphabetState extends State<Alphabet> {
 //S
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Ss', style: TextStyle(fontSize: 100))),
               ),
@@ -186,7 +186,7 @@ class _AlphabetState extends State<Alphabet> {
 //T
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Tt', style: TextStyle(fontSize: 100))),
               ),
@@ -195,8 +195,8 @@ class _AlphabetState extends State<Alphabet> {
               Container(
                 child: ElevatedButton(onPressed: () {},
               style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
-              shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
+                backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), 
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))
               ),
               child: (const Text('Uu', style: TextStyle(fontSize: 100))),
               ),
@@ -204,7 +204,7 @@ class _AlphabetState extends State<Alphabet> {
 //V
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Vv', style: TextStyle(fontSize: 100))),
               ),
@@ -212,7 +212,7 @@ class _AlphabetState extends State<Alphabet> {
 //W
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 99, 209, 158)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Ww', style: TextStyle(fontSize: 80))),
               ),
@@ -220,7 +220,7 @@ class _AlphabetState extends State<Alphabet> {
 //X
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 224, 115, 142)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Xx', style: TextStyle(fontSize: 100))),
               ),
@@ -228,7 +228,7 @@ class _AlphabetState extends State<Alphabet> {
 //Y
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 158, 83, 172)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Yy', style: TextStyle(fontSize: 100))),
               ),
@@ -236,7 +236,7 @@ class _AlphabetState extends State<Alphabet> {
 //Z
               Container(
                 child: ElevatedButton(onPressed: () {},
-              style: ButtonStyle(backgroundColor: MaterialStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: MaterialStateProperty.all(
+              style: ButtonStyle(backgroundColor: WidgetStateProperty.all(const Color.fromARGB(255, 100, 171, 212)), shape: WidgetStateProperty.all(
           RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)))),
               child: (const Text('Zz', style: TextStyle(fontSize: 100))),
               ),

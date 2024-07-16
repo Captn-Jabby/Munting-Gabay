@@ -93,9 +93,9 @@ class _UserProfilePageState extends State<UserProfilePage> {
       },
     );
 
-    if (picked != null && picked != selectedDate) {
+    if (picked != selectedDate) {
       setState(() {
-        selectedDate = picked;
+        selectedDate = picked!;
       });
     }
   }
