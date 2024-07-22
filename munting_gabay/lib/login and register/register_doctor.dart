@@ -411,7 +411,7 @@ class _PersonalIdentificationScreenState
                             style: TextStyle(color: text),
                           )),
                       const SizedBox(
-                        width: 210,
+                        width: 160,
                       ),
                       ElevatedButton(
                         onPressed: () {

@@ -78,8 +78,6 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
       });
 
       // Perform further actions like saving additional user data to Firestore
-
-      EasyLoading.showSuccess('Registration Successful');
       EasyLoading.dismiss();
 
       // Show a success message and navigate to the LoginScreen
@@ -88,7 +86,7 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Success'),
-            content: const Text('You are successfully registered!'),
+            content: const Text('You are successfully registered! Please check email inbox for verification'),
             actions: [
               TextButton(
                 onPressed: () {
