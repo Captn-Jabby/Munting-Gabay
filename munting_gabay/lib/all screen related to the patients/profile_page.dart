@@ -23,24 +23,14 @@ class _UserProfilePageState extends State<UserProfilePage> {
   final TextEditingController _emailController = TextEditingController();
   DateTime selectedDate = DateTime.now();
   late User _currentUser;
-  // final Box<String> _avatarBox = Hive.box<String>('avatarBox');
   String _avatarPath = '';
 
-  final FirebaseStorage _storage =
-      FirebaseStorage.instance; // Instantiate FirebaseStorage
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   void initState() {
     super.initState();
     _currentUser = _auth.currentUser!;
-    // _avatarPath =
-    //     _avatarBox.get('avatarPath${_currentUser.email}', defaultValue: '')!;
-    _loadUserData();
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
     _loadUserData();
   }
 
@@ -55,28 +45,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
         setState(() {
           _nameController.text = snapshot['name'];
           _usernameController.text = snapshot['username'];
-          // Convert Timestamp to DateTime
           Timestamp birthdateTimestamp = snapshot['birthdate'];
           selectedDate = birthdateTimestamp.toDate();
           _addressController.text = snapshot['address'];
           _emailController.text = snapshot['email'];
           _avatarPath = snapshot['avatarPath'] ?? '';
-          // 'https://firebasestorage.googleapis.com/v0/b/munting-gabay-4f845.appspot.com/o/avatars%2Fbened8ct12%40gmail.com.jpg?alt=media&token=0d9e85c8-bcf3-4789-986c-caeda85e16ce';
         });
       }
     } else {
       print('Error: User email is empty');
-      // Handle the case where user email is empty
     }
   }
 
-  // void _updateAvatarPath(String path) {
-  //   print("Avatar Path: $_avatarPath"); // Add this line for debugging
-
-  //   _avatarBox.put('avatarPath${_currentUser.email}', path);
-  // }
-
-  // Selection of date
   Future<void> _selectDate(BuildContext context) async {
     DateTime currentDate = DateTime.now();
     DateTime firstDate = DateTime(1900);
@@ -88,21 +68,18 @@ class _UserProfilePageState extends State<UserProfilePage> {
       firstDate: firstDate,
       lastDate: lastDate,
       selectableDayPredicate: (DateTime day) {
-        // Allow only dates without time
         return day.isBefore(currentDate) || day.isAtSameMomentAs(currentDate);
       },
     );
 
-    if (picked != selectedDate) {
+    if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = picked!;
+        selectedDate = picked;
       });
     }
   }
 
   void _updateUserData() async {
-    print("Avatar Path: $_avatarPath"); // Add this line for debugging
-
     await FirebaseFirestore.instance
         .collection('users')
         .doc(_currentUser.uid)
@@ -120,51 +97,44 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  // Function to display avatar selection dialog
   Future<void> _showAvatarSelectionDialog() async {
-    final selectedAvatar = await showDialog<String>(
-      context: context,
-      builder: (BuildContext context) {
-        return Column(
-          children: [
-            SimpleDialog(
-              title: const Text('Select Avatar'),
-              children: <Widget>[
-                SimpleDialogOption(
-                  onPressed: () async {
-                    // Close the dialog
-                    Navigator.pop(context);
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-                    // Pick and upload a new avatar
-                    await _pickAndUploadAvatar();
-                  },
-                  child: const ListTile(
-                    title: Text('Choose from Gallery'),
-                  ),
-                ),
-                // Add more SimpleDialogOption for additional avatars
-              ],
-            ),
-          ],
-        );
-      },
-    );
-
-    if (selectedAvatar != null) {
-      setState(() {
-        _avatarPath = selectedAvatar;
-        // _updateAvatarPath(_avatarPath); // Update avatar path in Hive
-      });
+    if (pickedFile != null) {
+      await _pickAndUploadAvatar(File(pickedFile.path));
     }
+  }
+
+  Future<void> _pickAndUploadAvatar(File file) async {
+    final uploadTask = _storage.ref().child('avatars/${_currentUser.uid}.jpg').putFile(file);
+
+    await uploadTask.whenComplete(() async {
+      final downloadURL = await _storage.ref().child('avatars/${_currentUser.uid}.jpg').getDownloadURL();
+
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(_currentUser.uid)
+          .update({
+        'avatarPath': downloadURL,
+      });
+
+      setState(() {
+        _avatarPath = downloadURL;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Avatar updated successfully')),
+      );
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    print("Avatar Path: $_avatarPath"); // Add this line for debugging
     return Scaffold(
-      backgroundColor: scaffoldBgColor,
+      backgroundColor: Colors.grey[100], // Background color
       appBar: AppBar(
-        backgroundColor: secondaryColor,
+        backgroundColor: secondaryColor, // AppBar color
         title: const Text('Profile'),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -183,63 +153,50 @@ class _UserProfilePageState extends State<UserProfilePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            GestureDetector(
-              onTap: _showAvatarSelectionDialog,
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: NetworkImage(_avatarPath),
+            Center(
+              child: GestureDetector(
+                onTap: _showAvatarSelectionDialog,
+                child: CircleAvatar(
+                  radius: 60,
+                  backgroundColor: Colors.grey[300], // Default background color
+                  backgroundImage: _avatarPath.isNotEmpty
+                      ? NetworkImage(_avatarPath)
+                      : null,
+                  child: _avatarPath.isEmpty
+                      ? Icon(Icons.camera_alt, size: 50, color: Colors.grey[700])
+                      : null,
+                ),
               ),
             ),
             const SizedBox(height: 16.0),
-            TextFormField(
-              controller: _nameController,
-              decoration: const InputDecoration(labelText: 'Name'),
-            ),
-            TextFormField(
-              controller: _usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
-            ),
-            const SizedBox(height: 10,),
+            _buildTextField(controller: _nameController, label: 'Name'),
+            _buildTextField(controller: _usernameController, label: 'Username'),
+            const SizedBox(height: 16.0),
             GestureDetector(
               onTap: () => _selectDate(context),
               child: AbsorbPointer(
-                child: TextField(
-                  controller: TextEditingController(
-                      text: "${selectedDate.toLocal()}"
-                          .split(' ')[0]), // Format to show only the date part
-                  decoration: InputDecoration(
-                    labelText: 'Birthdate',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: const BorderSide(color: Colors.blue),
-                    ),
-                  ),
+                child: _buildTextField(
+                  controller: TextEditingController(text: "${selectedDate.toLocal()}".split(' ')[0]),
+                  label: 'Birthdate',
+                  suffixIcon: Icon(Icons.calendar_today),
                 ),
               ),
             ),
-            TextFormField(
-              controller: _addressController,
-              decoration: const InputDecoration(labelText: 'Address'),
-            ),
-            TextFormField(
-              controller: _emailController,
-              decoration: const InputDecoration(labelText: 'Email', enabled: false),
-            ),
-            const SizedBox(height: 16.0),
-            Container(
-              // width: BtnWidth,
-              // height: BtnHeight,
+            _buildTextField(controller: _addressController, label: 'Address'),
+            _buildTextField(controller: _emailController, label: 'Email', enabled: false),
+            const SizedBox(height: 20.0),
+            Center(
               child: ElevatedButton(
                 onPressed: _updateUserData,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: secondaryColor, // Use the specified color
+                  backgroundColor: secondaryColor, // Button color
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(BtnCircularRadius),
+                    borderRadius: BorderRadius.circular(10.0),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Save',
-                  style: buttonTextStyle1,
+                  style: TextStyle(fontSize: 16.0, color: Colors.white),
                 ),
               ),
             ),
@@ -249,38 +206,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
     );
   }
 
-  Future<void> _pickAndUploadAvatar() async {
-    final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile =
-        await picker.pickImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
-      // Upload the image to Firebase Storage
-      Reference storageReference =
-          _storage.ref().child('avatars/${_currentUser.uid}.jpg');
-      UploadTask uploadTask = storageReference.putFile(File(pickedFile.path));
-      await uploadTask.whenComplete(() async {
-        // Get the download URL of the uploaded image
-        String downloadURL = await storageReference.getDownloadURL();
-
-        // Update the avatar path in Firestore
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(_currentUser.uid)
-            .update({
-          'avatarPath': downloadURL,
-        });
-
-        // Update the local state
-        setState(() {
-          _avatarPath = downloadURL;
-        });
-
-        // Show a success message
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Avatar updated successfully')),
-        );
-      });
-    }
+  Widget _buildTextField({required TextEditingController controller, required String label, bool enabled = true, Widget? suffixIcon}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: TextField(
+        controller: controller,
+        enabled: enabled,
+        decoration: InputDecoration(
+          labelText: label,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          suffixIcon: suffixIcon,
+        ),
+      ),
+    );
   }
 }

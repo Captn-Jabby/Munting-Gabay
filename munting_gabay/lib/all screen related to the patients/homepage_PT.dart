@@ -100,6 +100,7 @@ class _HomepagePTState extends State<HomepagePT> {
         child: Center(
           child: Column(
             children: [
+
               Column(
                 children: [
                   const SizedBox(
@@ -113,10 +114,10 @@ class _HomepagePTState extends State<HomepagePT> {
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
                         letterSpacing: 2,
-                        textStyle: const TextStyle(
+                        textStyle: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 40,
-                          color: Color(0xFF95C440),
+                          color: secondaryColor,
                         )),
                   ),
                   Padding(
@@ -126,6 +127,7 @@ class _HomepagePTState extends State<HomepagePT> {
                   ),
                 ],
               ),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -159,6 +161,7 @@ class _HomepagePTState extends State<HomepagePT> {
                   ),
                 ],
               ),
+
               const SizedBox(height: BtnSpacing),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

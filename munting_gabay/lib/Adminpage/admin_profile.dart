@@ -94,7 +94,7 @@ class _AdminProfilePageState extends State<AdminProfilePage> {
 
     if (picked != null && picked != selectedDate) {
       setState(() {
-        selectedDate = picked!;
+        selectedDate = picked;
       });
     }
 

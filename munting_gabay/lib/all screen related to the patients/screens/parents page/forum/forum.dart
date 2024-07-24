@@ -14,20 +14,20 @@ class ForumPage extends StatelessWidget {
         title: const Text('Munting Gabay Forum'),
         actions: [
           IconButton(
-            icon: Icon(Icons.add),
+            icon: const Icon(Icons.add),
             onPressed: () {
               // Navigate to the screen/modal for creating a new post
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => NewPostScreen(),
+                  builder: (context) => const NewPostScreen(),
                 ),
               );
             },
           ),
         ],
       ),
-      body: Column(
+      body: const Column(
         children: [
           Expanded(
             child: PostList(),
@@ -39,6 +39,8 @@ class ForumPage extends StatelessWidget {
 }
 
 class PostList extends StatelessWidget {
+  const PostList({super.key});
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<QuerySnapshot>(
@@ -89,7 +91,7 @@ class PostTile extends StatelessWidget {
             children: [
               Text(
                 post['content'] ?? '',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               Row(
@@ -97,7 +99,7 @@ class PostTile extends StatelessWidget {
                 children: [
                   Text(
                     'Posted by: ${post['userId'] ?? "Anonymous"}',
-                    style: TextStyle(color: Colors.grey),
+                    style: const TextStyle(color: Colors.grey),
                   ),
                   Row(
                     children: [
@@ -110,7 +112,7 @@ class PostTile extends StatelessWidget {
                             transaction.update(post.reference, {'upvotes': upvotes + 1});
                           });
                         },
-                        icon: Icon(Icons.arrow_upward),
+                        icon: const Icon(Icons.arrow_upward),
                       ),
                       Text('$upvotes'),
                     ],
@@ -125,7 +127,7 @@ class PostTile extends StatelessWidget {
                     onPressed: () {
                       // Handle edit
                     },
-                    icon: Icon(Icons.edit),
+                    icon: const Icon(Icons.edit),
                   ),
                   IconButton(
                     onPressed: () {
@@ -134,28 +136,28 @@ class PostTile extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AlertDialog(
-                            title: Text('Delete Post'),
-                            content: Text('Are you sure you want to delete this post?'),
+                            title: const Text('Delete Post'),
+                            content: const Text('Are you sure you want to delete this post?'),
                             actions: <Widget>[
                               TextButton(
                                 onPressed: () {
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Cancel'),
+                                child: const Text('Cancel'),
                               ),
                               TextButton(
                                 onPressed: () {
                                   post.reference.delete();
                                   Navigator.of(context).pop();
                                 },
-                                child: Text('Delete'),
+                                child: const Text('Delete'),
                               ),
                             ],
                           );
                         },
                       );
                     },
-                    icon: Icon(Icons.delete),
+                    icon: const Icon(Icons.delete),
                   ),
                 ],
               ),
@@ -239,7 +241,7 @@ class CommentInput extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: _commentController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Add a comment...',
               ),
             ),
@@ -265,7 +267,7 @@ class CommentInput extends StatelessWidget {
               });
               _commentController.clear();
             },
-            icon: Icon(Icons.send),
+            icon: const Icon(Icons.send),
           ),
         ],
       ),
@@ -274,6 +276,8 @@ class CommentInput extends StatelessWidget {
 }
 
 class NewPostScreen extends StatefulWidget {
+  const NewPostScreen({super.key});
+
   @override
   _NewPostScreenState createState() => _NewPostScreenState();
 }
@@ -295,13 +299,13 @@ class _NewPostScreenState extends State<NewPostScreen> {
           children: [
             TextField(
               controller: _postController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 hintText: 'Write your post...',
               ),
               maxLines: null,
               keyboardType: TextInputType.multiline,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             Row(
               children: [
                 Checkbox(
@@ -312,7 +316,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     });
                   },
                 ),
-                Text('Post Anonymously'),
+                const Text('Post Anonymously'),
               ],
             ),
             ElevatedButton(

@@ -20,14 +20,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
-  bool _ispasswordValid = true;
+  bool _isPasswordValid = true;
 
-  /////////////////////////
   bool _validatePassword(String password) {
     return password.length >= 6;
   }
 
-  ////////////////////
   void _showError(String title) {
     showDialog(
       context: context,
@@ -37,17 +35,17 @@ class _LoginPageState extends State<LoginPage> {
           title: Text(title),
           actions: [
             ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Okay')),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Okay'),
+            ),
           ],
         );
       },
     );
   }
 
-//////////////////////////////
   void _resendVerificationEmail() async {
     try {
       User? user = _auth.currentUser;
@@ -97,10 +95,10 @@ class _LoginPageState extends State<LoginPage> {
     final password = _passwordController.text.trim();
 
     setState(() {
-      _ispasswordValid = _validatePassword(password);
+      _isPasswordValid = _validatePassword(password);
     });
 
-    if (_ispasswordValid) {
+    if (_isPasswordValid) {
       try {
         UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email,
@@ -110,9 +108,7 @@ class _LoginPageState extends State<LoginPage> {
         final User? user = result.user;
 
         if (user != null) {
-          // Check if the user's email is verified
           if (user.emailVerified) {
-            // Proceed to authenticated area
             EasyLoading.showSuccess('You are successfully logged in.');
 
             DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
@@ -128,32 +124,26 @@ class _LoginPageState extends State<LoginPage> {
               if (status == 'Accepted') {
                 Navigator.pushReplacementNamed(context, '/homeDoctor');
               } else if (status == 'Rejected') {
-                _showError('''Your doctor account has been rejected.
-              \n\nPlease contact 'muntinggabay@gmail.com' for further assistance.''');
+                _showError('Your doctor account has been rejected.\n\nPlease contact "muntinggabay@gmail.com" for further assistance.');
               } else if (status == 'ADMIN') {
                 Navigator.pushReplacementNamed(context, '/homeAdmin');
               } else {
-                _showError(
-                    'Your doctor account has not been accepted yet. Please wait for approval.');
+                _showError('Your doctor account has not been accepted yet. Please wait for approval.');
               }
             } else {
               _showError('Invalid user type');
             }
           } else {
-            // Email not verified, prompt the user to verify their email
             _showResendEmailDialog(context);
           }
         } else {
-          // User does not exist
           _showError('User does not exist. Please sign up first.');
         }
       } catch (error) {
-        _showError(
-            'There is no user record corresponding to this email address.\nPlease check your email or try registering.');
+        _showError('There is no user record corresponding to this email address.\nPlease check your email or try registering.');
       }
     } else {
-      _showError(
-          'Information Empty');//invalid password logic history
+      _showError('Invalid password.');
     }
 
     EasyLoading.dismiss();
@@ -163,17 +153,18 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          elevation: 0,
-          backgroundColor: const Color(0xFFF4F9EC),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_rounded,
-              color: Colors.black,
-            ),
-          )),
+        elevation: 0,
+        backgroundColor: const Color(0xFFF4F9EC),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.all(24),
         decoration: mainBackgroundTheme,
@@ -182,173 +173,150 @@ class _LoginPageState extends State<LoginPage> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Column(
-                children: [
-                  const Center(
-                    child: SpinningContainer(),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(21.0),
-                    child: Text(
-                      'Sign in',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.poppins(
-                          letterSpacing: 2,
-                          textStyle: GoogleFonts.poppins(
-                              fontWeight: FontWeight.bold,
-                              fontSize: 27,
-                              color: const Color(0xFF333333))),
-                    ),
-                  ),
-                ],
+              const Center(
+                child: SpinningContainer(),
               ),
-              Column(
-                children: [
-                  TextField(
-                    controller: _emailController,
-                    decoration: InputDecoration(
-                      labelText: 'Email',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50.0),
-                      ),
+              Padding(
+                padding: const EdgeInsets.all(21.0),
+                child: Text(
+                  'Sign in',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    letterSpacing: 2,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 27,
+                    color: const Color(0xFF333333),
+                  ),
+                ),
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50.0),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                    child: Icon(
+                      _isPasswordVisible
+                          ? Icons.visibility
+                          : Icons.visibility_off,
                     ),
                   ),
-                  const SizedBox(
-                    height: BtnSpacing,
-                  ),
-                  TextField(
-                    controller: _passwordController,
-                    decoration: InputDecoration(
-                      labelText: 'Password',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _isPasswordVisible = !_isPasswordVisible;
-                          });
-                        },
-                        child: Icon(
-                          _isPasswordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
-                        ),
-                      ),
-                    ),
-                    obscureText: !_isPasswordVisible,
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: BtnWidth,
-                    height: BtnHeight,
-                    child: ElevatedButton(
-                      onPressed: () => _signInUser(context),
-                      style: buttonStyle1,
-                      child: Text(
-                        'Login',
-                        style: buttonTextStyle1,
-                      ),
+                ),
+                obscureText: !_isPasswordVisible,
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () => _signInUser(context),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF95C440),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  Stack(
-                    alignment: const Alignment(0.3, -1),
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Confirmation'),
-                                content: const Text(
-                                    'Are you sure you want to create an account?'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(
-                                          context); // Close the dialog
-                                    },
-                                    child: const Text('Cancel'),
-                                  ),
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.pop(
-                                          context); // Close the dialog
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const RegistrationPatients(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Confirm',
-                                      style: TextStyle(color: Colors.red),
-                                    ),
-                                  ),
-                                ],
+                  child: Text(
+                    'Login',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Confirmation'),
+                        content: const Text('Are you sure you want to create an account?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const RegistrationPatients(),
+                                ),
                               );
                             },
-                          );
-                        },
-                        child: const Text(
-                          'CREATE AN ACCOUNT',
-                          style: TextStyle(color: text),
-                        ),
-                      ),
-                      Container(
-                        height: 34,
-                        margin: const EdgeInsets.only(top: 30),
-                        child: TextButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return AlertDialog(
-                                  title: const Text('Confirmation'),
-                                  content: const Text(
-                                      'Are you sure you want to Forgot Password?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(
-                                            context); // Close the dialog
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(
-                                            context); // Close the dialog
-                                        Navigator.pushReplacement(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const ForgotPasswordScreen(),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Confirm',
-                                        style: TextStyle(color: Colors.red),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                          child: const Text(
-                            'Forgot Password',
-                            style: TextStyle(color: Colors.black),
+                            child: const Text('Confirm', style: TextStyle(color: Colors.red)),
                           ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text(
+                  'CREATE AN ACCOUNT',
+                  style: TextStyle(color: Color(0xFF333333)),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: const Text('Confirmation'),
+                        content: const Text('Are you sure you want to Forgot Password?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text('Cancel'),
+                          ),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                              Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ForgotPasswordScreen(),
+                                ),
+                              );
+                            },
+                            child: const Text('Confirm', style: TextStyle(color: Colors.red)),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                child: const Text(
+                  'Forgot Password',
+                  style: TextStyle(color: Color(0xFF333333)),
+                ),
               ),
             ],
           ),
@@ -374,9 +342,8 @@ class _SpinningContainerState extends State<SpinningContainer>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration:
-          const Duration(minutes: 1), // Set the duration for one complete rotation
-    )..repeat(); // Repeat the animation infinitely
+      duration: const Duration(minutes: 1),
+    )..repeat();
   }
 
   @override
@@ -387,10 +354,10 @@ class _SpinningContainerState extends State<SpinningContainer>
         padding: const EdgeInsets.all(50),
         height: MediaQuery.of(context).size.height / 4,
         decoration: const BoxDecoration(
-            image: DecorationImage(
-                image: AssetImage(
-          "assets/images/world.png",
-        ))),
+          image: DecorationImage(
+            image: AssetImage("assets/images/world.png"),
+          ),
+        ),
       ),
     );
   }
