@@ -63,20 +63,20 @@ class _pscyhState extends State<pscyh> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: scaffoldBgColor,
-        appBar: AppBar(
-          backgroundColor: secondaryColor,
-          elevation: 0,
-          iconTheme: IconThemeData(color: scaffoldBgColor),
-          centerTitle: true,
-          title: const Text('Finding Doctors'),
-        ),
-        drawer: AppDrawer(),
-        body: SingleChildScrollView(
-            child: Center(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
+      backgroundColor: scaffoldBgColor,
+      appBar: AppBar(
+        backgroundColor: secondaryColor,
+        elevation: 0,
+        iconTheme: IconThemeData(color: scaffoldBgColor),
+        centerTitle: true,
+        title: const Text('Finding Doctors'),
+      ),
+      drawer: AppDrawer(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextField(
@@ -92,7 +92,6 @@ class _pscyhState extends State<pscyh> {
                   stream: FirebaseFirestore.instance
                       .collection('users')
                       .where('role', isEqualTo: 'DOCTORS')
-                      .where('status', isEqualTo: 'Accepted')
                       .snapshots(),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -151,17 +150,19 @@ class _pscyhState extends State<pscyh> {
                                           CircleAvatar(
                                             radius: 40,
                                             backgroundImage: NetworkImage(
-                                              doc['avatarPath'] ?? '',
+                                              doc['profile_picture'] ?? '',
                                             ),
                                           ),
                                           const SizedBox(height: 10),
                                           Text(
                                             'Name: $psychologistName',
-                                            style: const TextStyle(fontSize: 16),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                           Text(
                                             'Address: $psychologistAddress',
-                                            style: const TextStyle(fontSize: 16),
+                                            style:
+                                                const TextStyle(fontSize: 16),
                                           ),
                                           const SizedBox(height: 10),
                                           ElevatedButton(
@@ -177,12 +178,13 @@ class _pscyhState extends State<pscyh> {
                                                     initialAddress:
                                                         doc['address'],
                                                     NameOfHospital: doc.get(
-                                                            'addressHospital') ??
+                                                            'clinic_address') ??
                                                         'Unknown',
-                                                    IMAGE: doc['avatarPath'] ??
+                                                    IMAGE: doc[
+                                                            'profile_picture'] ??
                                                         'assets/images/avatar1.png',
                                                     avatarPath: doc[
-                                                            'avatarPath'] ??
+                                                            'profile_picture'] ??
                                                         'assets/images/avatar1.png',
                                                     birthdate: doc['birthdate']
                                                         .toDate(),
@@ -196,18 +198,17 @@ class _pscyhState extends State<pscyh> {
                                                         doc['phone_number'] ??
                                                             'Unknown',
                                                     DoctorStatus:
-                                                        doc['DoctorStatus'] ??
-                                                            '',
+                                                        doc['status'] ?? '',
                                                   ),
                                                 ),
                                               );
                                             },
                                             style: ElevatedButton.styleFrom(
-                                              foregroundColor: Colors.white, backgroundColor: scaffoldBgColor,
+                                              foregroundColor: Colors.white,
+                                              backgroundColor: scaffoldBgColor,
                                             ),
-                                            child: Text(
-                                              'View Details',
-                                              style: buttonText1),
+                                            child: Text('View Details',
+                                                style: buttonText1),
                                           ),
                                         ],
                                       ),
@@ -227,6 +228,10 @@ class _pscyhState extends State<pscyh> {
                   },
                 ),
               ),
-            ]))));
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

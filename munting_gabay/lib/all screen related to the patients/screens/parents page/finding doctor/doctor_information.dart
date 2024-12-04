@@ -8,7 +8,6 @@ import 'package:munting_gabay/Doctors%20screen/schedule_request.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/MessagePage.dart';
 
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/patients_history.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/call.dart';
 import 'package:munting_gabay/login%20and%20register/calling_doctor.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:photo_view/photo_view.dart';
@@ -84,7 +83,7 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
             }
 
             String doctorStatus =
-                snapshot.data!.get('DoctorStatus') ?? 'Not Available';
+                snapshot.data!.get('status') ?? 'Not Available';
 
             Color indicatorColor = _getStatusColor(doctorStatus);
 
@@ -152,40 +151,40 @@ class _DoctorInfoPageState extends State<DoctorInfoPage> {
                                   );
                                 },
                               ),
-                              SizedBox(
-                                width: width,
-                              ), // In DocDashboard.dart or equivalent
-                              IconButton(
-                                icon: const Icon(Icons
-                                    .video_camera_front_rounded), // Calling icon
-                                onPressed: () async {
-                                  final newCallStatus =
-                                      !callStatus; // Toggle call status
+                              // SizedBox(
+                              //   width: width,
+                              // ), // In DocDashboard.dart or equivalent
+                              // IconButton(
+                              //   icon: const Icon(Icons
+                              //       .video_camera_front_rounded), // Calling icon
+                              //   onPressed: () async {
+                              //     final newCallStatus =
+                              //         !callStatus; // Toggle call status
 
-                                  // Update the callStatus field in Firebase
-                                  await FirebaseFirestore.instance
-                                      .collection(
-                                          'usersdata') // Update with your collection name
-                                      .doc(widget.docId)
-                                      .update({'callStatus': newCallStatus});
+                              //     // Update the callStatus field in Firebase
+                              //     await FirebaseFirestore.instance
+                              //         .collection(
+                              //             'usersdata') // Update with your collection name
+                              //         .doc(widget.docId)
+                              //         .update({'callStatus': newCallStatus});
 
-                                  // Fire the event
-                                  eventBus.fire(VideoCallEvent(
-                                      docId: widget.docId,
-                                      isCalling: newCallStatus));
+                              //     // Fire the event
+                              //     eventBus.fire(VideoCallEvent(
+                              //         docId: widget.docId,
+                              //         isCalling: newCallStatus));
 
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => Call(
-                                        currentUserUid: widget.currentUserUid,
-                                        currentUserName: widget.currentUserName,
-                                        docId: widget.docId,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
+                              //     Navigator.push(
+                              //       context,
+                              //       MaterialPageRoute(
+                              //         builder: (context) => Call(
+                              //           currentUserUid: widget.currentUserUid,
+                              //           currentUserName: widget.currentUserName,
+                              //           docId: widget.docId,
+                              //         ),
+                              //       ),
+                              //     );
+                              //   },
+                              // ),
 
                               SizedBox(
                                 width: width,

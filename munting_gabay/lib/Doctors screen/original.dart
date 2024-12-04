@@ -5,7 +5,6 @@ import 'package:intl/intl.dart'; // Import the intl package
 import 'package:munting_gabay/Doctors%20screen/Dr_drawer.dart';
 import 'package:munting_gabay/Doctors%20screen/newsched.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/finding%20doctor/userpage.dart';
-import 'package:munting_gabay/Doctors%20screen/doctor_call.dart';
 import 'package:munting_gabay/ringtone/flutter_ringtone_player.dart';
 import 'package:munting_gabay/variable.dart';
 import 'package:table_calendar/table_calendar.dart';
@@ -371,46 +370,46 @@ class _DocDashboardState extends State<DocDashboard>
                 // You can add any additional logic here if needed
               },
             ),
-            TextButton(
-              child: const Text('Answer'),
-              onPressed: () async {
-                // Fetch currentUserUid from Firestore
-                final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
-                    await FirebaseFirestore.instance
-                        .collection('users') // Update with your collection name
-                        .doc(widget.docId)
-                        .get();
+            //   TextButton(
+            //     child: const Text('Answer'),
+            //     onPressed: () async {
+            //       // Fetch currentUserUid from Firestore
+            //       final DocumentSnapshot<Map<String, dynamic>> docSnapshot =
+            //           await FirebaseFirestore.instance
+            //               .collection('users') // Update with your collection name
+            //               .doc(widget.docId)
+            //               .get();
 
-                if (docSnapshot.exists) {
-                  final String currentUserUid =
-                      docSnapshot.data()?['currentUserUid'] ?? '';
+            //       if (docSnapshot.exists) {
+            //         final String currentUserUid =
+            //             docSnapshot.data()?['currentUserUid'] ?? '';
 
-                  // Update callStatus to false
-                  await FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(widget.docId)
-                      .update({'callStatus': false});
+            //         // Update callStatus to false
+            //         await FirebaseFirestore.instance
+            //             .collection('users')
+            //             .doc(widget.docId)
+            //             .update({'callStatus': false});
 
-                  Navigator.of(context).pop();
+            //         Navigator.of(context).pop();
 
-                  // Navigate to CallDoctor with currentUserUid
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CallDoctor(
-                        currentUserUid: currentUserUid,
-                        currentUserName:
-                            currentUserUid, // You might want to fetch the user's name from Firestore if available
-                        docId: widget.docId,
-                        currentemailId: currentUserUid,
-                      ),
-                    ),
-                  );
-                } else {
-                  // Handle the case where the document does not exist
-                }
-              },
-            ),
+            //         // Navigate to CallDoctor with currentUserUid
+            //         Navigator.push(
+            //           context,
+            //           MaterialPageRoute(
+            //             builder: (context) => CallDoctor(
+            //               currentUserUid: currentUserUid,
+            //               currentUserName:
+            //                   currentUserUid, // You might want to fetch the user's name from Firestore if available
+            //               docId: widget.docId,
+            //               currentemailId: currentUserUid,
+            //             ),
+            //           ),
+            //         );
+            //       } else {
+            //         // Handle the case where the document does not exist
+            //       }
+            //     },
+            //   ),
           ],
         );
       },
@@ -501,7 +500,8 @@ class DayCardDOC extends StatefulWidget {
   final String selectedStatusFilter; // Add the selected status filter
 
   const DayCardDOC(
-      {super.key, required this.dayData,
+      {super.key,
+      required this.dayData,
       required this.docId,
       required this.selectedStatusFilter});
 
@@ -540,7 +540,8 @@ class _DayCardDOCState extends State<DayCardDOC> {
             ),
             trailing: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: DoctorsecondaryColor, // Change this color to the desired background color
+                backgroundColor:
+                    DoctorsecondaryColor, // Change this color to the desired background color
               ),
               onPressed: () {
                 setState(() {
@@ -581,7 +582,8 @@ class SlotTileDOC extends StatefulWidget {
   final String day;
   final String selectedStatusFilter; // Add the selected status filter
 
-  const SlotTileDOC({super.key, 
+  const SlotTileDOC({
+    super.key,
     required this.slotData,
     required this.docId,
     required this.day,
@@ -612,7 +614,8 @@ class _SlotTileDOCState extends State<SlotTileDOC> {
               'Available', // Hide the button if the status is 'Available'
           child: ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: dynamicScaffoldBgColor, // Change this color to the desired background color
+              backgroundColor:
+                  dynamicScaffoldBgColor, // Change this color to the desired background color
             ),
             onPressed: () {
               if (widget.slotData['status'] == 'Canceled') {
