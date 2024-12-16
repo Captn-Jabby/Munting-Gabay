@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/screens/parents%20page/Parent_page.dart';
 import 'package:munting_gabay/variable.dart';
 
 class EducationalVdieos {
@@ -70,17 +69,6 @@ class webinarsScreen extends StatelessWidget {
     return Scaffold(
         backgroundColor: scaffoldBgColor,
         appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ParentPage(),
-                ),
-              );
-            },
-          ),
           backgroundColor: secondaryColor,
           title: const Text('Educational Videos'),
         ),
