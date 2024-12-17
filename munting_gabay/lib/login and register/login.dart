@@ -88,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void _signInUser(BuildContext context) async {
+  void _signInUser(BuildContext context) {
     EasyLoading.show(status: 'Logging in...');
 
     final email = _emailController.text.trim();
@@ -99,54 +99,58 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     if (_isPasswordValid) {
-      try {
-        UserCredential result = await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
+      _auth
+          .signInWithEmailAndPassword(email: email, password: password)
+          .then((auth) async {
+        final User user = auth.user!;
 
-        final User? user = result.user;
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(user.uid)
+            .get()
+            .then(
+          (loggedInUser) async {
+            if (!loggedInUser.exists) {
+              _showError(
+                  "Cannot fetch your data. Please ensure that this account is registered and try again");
 
-        if (user != null) {
-          if (user.emailVerified) {
-            EasyLoading.showSuccess('You are successfully logged in.');
-
-            DocumentSnapshot userDataSnapshot = await FirebaseFirestore.instance
-                .collection('users')
-                .doc(user.uid)
-                .get();
-            String role = userDataSnapshot['role'];
-
-            if (role == 'PATIENTS') {
-              Navigator.pushReplacementNamed(context, '/homePT');
-            } else if (role == 'DOCTORS') {
-              String status = userDataSnapshot['status'];
-              if (status == 'Accepted') {
-                Navigator.pushReplacementNamed(context, '/homeDoctor');
-              } else if (status == 'Rejected') {
-                _showError('Your doctor account has been rejected.\n\nPlease contact "muntinggabay@gmail.com" for further assistance.');
-              } else if (status == 'ADMIN') {
-                Navigator.pushReplacementNamed(context, '/homeAdmin');
-              } else {
-                _showError('Your doctor account has not been accepted yet. Please wait for approval.');
-              }
-            } else {
-              _showError('Invalid user type');
+              await FirebaseAuth.instance.signOut();
+              return;
             }
-          } else {
-            _showResendEmailDialog(context);
-          }
-        } else {
-          _showError('User does not exist. Please sign up first.');
-        }
-      } catch (error) {
-        _showError('There is no user record corresponding to this email address.\nPlease check your email or try registering.');
-      }
+
+            if (loggedInUser.get("role") != "PATIENTS") {
+              _showError(
+                  "Cannot authorize your login attempt with this account. Please try again with an account with appropriate role to continue.");
+
+              await FirebaseAuth.instance.signOut();
+
+              return;
+            }
+
+            if (!user.emailVerified) {
+              _showResendEmailDialog(context);
+
+              await FirebaseAuth.instance.signOut();
+              return;
+            }
+
+            Navigator.popUntil(context, (route) => route.isFirst);
+          },
+        ).catchError((error) {
+          _showError("Cannot fetch data for validation. Please try again.");
+        });
+      }).catchError(
+        (error) {
+          _showError(
+              'There is no user record corresponding to this email address.\nPlease check your email or try registering.');
+        },
+      ).whenComplete(
+        () => EasyLoading.dismiss(),
+      );
     } else {
       _showError('Invalid password.');
+      EasyLoading.dismiss();
     }
-
-    EasyLoading.dismiss();
   }
 
   @override
@@ -165,160 +169,183 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
       ),
-      body: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: mainBackgroundTheme,
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              const Center(
-                child: SpinningContainer(),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(21.0),
-                child: Text(
-                  'Sign in',
-                  textAlign: TextAlign.center,
-                  style: GoogleFonts.poppins(
-                    letterSpacing: 2,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 27,
-                    color: const Color(0xFF333333),
-                  ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: mainBackgroundTheme,
+          width: double.infinity,
+          height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                const Center(
+                  child: SpinningContainer(),
                 ),
-              ),
-              TextField(
-                controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50.0),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
-                  suffixIcon: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                    child: Icon(
-                      _isPasswordVisible
-                          ? Icons.visibility
-                          : Icons.visibility_off,
+                Padding(
+                  padding: const EdgeInsets.all(21.0),
+                  child: Text(
+                    'Sign in',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.poppins(
+                      letterSpacing: 2,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 27,
+                      color: const Color(0xFF333333),
                     ),
                   ),
                 ),
-                obscureText: !_isPasswordVisible,
-              ),
-              const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                height: 50,
-                child: ElevatedButton(
-                  onPressed: () => _signInUser(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF95C440),
-                    shape: RoundedRectangleBorder(
+                TextField(
+                  controller: _emailController,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                TextField(
+                  controller: _passwordController,
+                  keyboardType: TextInputType.visiblePassword,
+                  textInputAction: TextInputAction.done,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
+                    suffixIcon: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          _isPasswordVisible = !_isPasswordVisible;
+                        });
+                      },
+                      child: Icon(
+                        _isPasswordVisible
+                            ? Icons.visibility_off
+                            : Icons.visibility,
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    'Login',
-                    style: GoogleFonts.poppins(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 18,
-                      color: Colors.white,
+                  obscureText: !_isPasswordVisible,
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => _signInUser(context),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF95C440),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                    ),
+                    child: Text(
+                      'Login',
+                      style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Confirmation'),
-                        content: const Text('Are you sure you want to create an account?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const RegistrationPatients(),
+                const SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirmation'),
+                          content: const Text(
+                              'Are you sure you want to create an account?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const RegistrationPatients(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Confirm',
+                                style: TextStyle(
+                                  color: Colors.red,
                                 ),
-                              );
-                            },
-                            child: const Text('Confirm', style: TextStyle(color: Colors.red)),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text(
-                  'CREATE AN ACCOUNT',
-                  style: TextStyle(color: Color(0xFF333333)),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: const Text(
+                    'CREATE AN ACCOUNT',
+                    style: TextStyle(color: Color(0xFF333333)),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return AlertDialog(
-                        title: const Text('Confirmation'),
-                        content: const Text('Are you sure you want to Forgot Password?'),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                            },
-                            child: const Text('Cancel'),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.pop(context);
-                              Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ForgotPasswordScreen(),
+                TextButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Confirmation'),
+                          content: const Text(
+                              'Are you sure you want to Forgot Password?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        const ForgotPasswordScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Confirm',
+                                style: TextStyle(
+                                  color: Colors.red,
                                 ),
-                              );
-                            },
-                            child: const Text('Confirm', style: TextStyle(color: Colors.red)),
-                          ),
-                        ],
-                      );
-                    },
-                  );
-                },
-                child: const Text(
-                  'Forgot Password',
-                  style: TextStyle(color: Color(0xFF333333)),
+                              ),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                  child: const Text(
+                    'Forgot Password',
+                    style: TextStyle(color: Color(0xFF333333)),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

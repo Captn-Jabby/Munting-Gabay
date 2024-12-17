@@ -1,9 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/current_user_provider.dart';
 
 class ChangePin extends StatefulWidget {
   const ChangePin({super.key, Key});
@@ -13,45 +12,22 @@ class ChangePin extends StatefulWidget {
 }
 
 class _ChangePinState extends State<ChangePin> {
-  String currentPin = '';
-  String newPin = '';
-  bool pinEnabled = true;
+  final TextEditingController _currentPinCtrl = TextEditingController();
+  final TextEditingController _newPinCtrl = TextEditingController();
+  bool _hideCurrentPin = true;
+  bool _hideNewPin = true;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
-    fetchPinStatus(); // Fetch PIN status when the widget initializes
   }
 
-  Future<void> fetchPinStatus() async {
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('users');
-
-        final String? currentUserEmail = user.email;
-
-        final DocumentSnapshot userData =
-            await usersDataCollection.doc(currentUserEmail).get();
-
-        if (userData.exists) {
-          final Map<String, dynamic> userDataMap =
-              userData.data() as Map<String, dynamic>;
-          final bool savedPinStatus = userDataMap['pinStatus'];
-
-          setState(() {
-            pinEnabled = savedPinStatus; // Update the pinEnabled state
-          });
-        } else {
-          print('User data not found in Firestore.');
-        }
-      } else {
-        print('User not authenticated.');
-      }
-    } catch (e) {
-      print('Error fetching PIN status: $e');
-    }
+  @override
+  void dispose() {
+    _currentPinCtrl.clear();
+    _newPinCtrl.clear();
+    super.dispose();
   }
 
   @override
@@ -63,215 +39,195 @@ class _ChangePinState extends State<ChangePin> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomepagePT(),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
         centerTitle: true,
         title: const Text('Change PIN'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  currentPin = value;
-                });
-              },
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'Current PIN',
-              ),
-            ),
-            const SizedBox(height: 10.0),
-            TextField(
-              onChanged: (value) {
-                setState(() {
-                  newPin = value;
-                });
-              },
-              obscureText: true,
-              decoration: const InputDecoration(
-                labelText: 'New PIN',
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      pinEnabled = !pinEnabled;
-                      updatePinStatusInFirestore(pinEnabled);
-                    });
-                  },
-                  child: Text(pinEnabled ? 'PIN Disabled' : 'PIN Enabled'),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      pinEnabled = !pinEnabled;
-                      updatePinStatusInFirestore(pinEnabled);
-                    });
-                  },
-                  child: Container(
-                    width: 50, // Adjust width as needed
-                    height: 30, // Adjust height as needed
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(
-                          15), // Adjust border radius as needed
-                      color: pinEnabled
-                          ? Colors.grey
-                          : Colors.green, // Adjust colors as needed
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          pinEnabled ? 'OFF' : 'ON',
-                          style: const TextStyle(
-                            color: Colors.white, // Adjust text color as needed
-                            fontWeight: FontWeight.bold,
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: CustomScrollView(
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Consumer<CurrentUserProvider>(
+                  builder: (context, provider, child) {
+                    return Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          TextFormField(
+                            controller: _currentPinCtrl,
+                            obscureText: _hideCurrentPin,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.next,
+                            maxLength: 4,
+                            decoration: InputDecoration(
+                              labelText: 'Current PIN',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              suffixIcon: IconButton(
+                                focusNode: FocusNode(skipTraversal: true),
+                                onPressed: () {
+                                  _hideCurrentPin = !_hideCurrentPin;
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  _hideCurrentPin
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == "") {
+                                return "Current PIN is required.";
+                              }
+                              if (value?.length != 4) {
+                                return "Current PIN should be 4 characters long";
+                              }
+                              if (value != provider.currentUser!.pin) {
+                                return "Invalid PIN.";
+                              }
+
+                              return null;
+                            },
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                          const SizedBox(height: 10.0),
+                          TextFormField(
+                            controller: _newPinCtrl,
+                            obscureText: _hideNewPin,
+                            keyboardType: TextInputType.number,
+                            textInputAction: TextInputAction.done,
+                            maxLength: 4,
+                            decoration: InputDecoration(
+                              labelText: 'New PIN',
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              suffixIcon: IconButton(
+                                focusNode: FocusNode(skipTraversal: true),
+                                onPressed: () {
+                                  _hideNewPin = !_hideNewPin;
+                                  setState(() {});
+                                },
+                                icon: Icon(
+                                  _hideNewPin
+                                      ? Icons.visibility
+                                      : Icons.visibility_off,
+                                ),
+                              ),
+                            ),
+                            validator: (value) {
+                              if (value == "") {
+                                return "New PIN is required.";
+                              }
+                              if (value?.length != 4) {
+                                return "New PIN should be 4 characters long";
+                              }
+                              if (value == _currentPinCtrl.text) {
+                                return "Should not be equal to current PIN.";
+                              }
+
+                              return null;
+                            },
+                          ),
+                          const SizedBox(height: 20.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () {},
+                                child: Text(
+                                  provider.currentUser!.pinStatus
+                                      ? 'PIN Enabled'
+                                      : 'PIN Disabled',
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  provider.updatePinStatus(
+                                    context: context,
+                                    pinStatus: !provider.currentUser!.pinStatus,
+                                  );
+                                },
+                                child: Container(
+                                  width: 50, // Adjust width as needed
+                                  height: 30, // Adjust height as needed
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        15), // Adjust border radius as needed
+                                    color: provider.currentUser!.pinStatus
+                                        ? Colors.green
+                                        : Colors
+                                            .grey, // Adjust colors as needed
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      provider.currentUser!.pinStatus
+                                          ? 'ON'
+                                          : 'OFF',
+                                      style: const TextStyle(
+                                        color: Colors
+                                            .white, // Adjust text color as needed
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 20),
+                          SizedBox(
+                            width: BtnWidth,
+                            height: BtnHeight,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    secondaryColor, // Change this color to the desired background color
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                              ),
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  provider
+                                      .updatePin(
+                                    context: context,
+                                    pin: _newPinCtrl.text,
+                                  )
+                                      .then(
+                                    (value) {
+                                      if (value) {
+                                        _currentPinCtrl.clear();
+                                        _newPinCtrl.clear();
+                                      }
+                                    },
+                                  );
+                                }
+                              },
+                              child: Text(
+                                'Change PIN',
+                                style: buttonTextStyle1,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
-              ],
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: secondaryColor, // Change this color to the desired background color
-              ),
-              onPressed: () {
-                if (currentPin.isNotEmpty && newPin.isNotEmpty) {
-                  changePin(currentPin, newPin);
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please fill in both current and new PIN.'),
-                    ),
-                  );
-                }
-              },
-              child: const Text(
-                'Change PIN',
-                style: TextStyle(color: text),
               ),
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> setPinInFirestore(String pin) async {
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('users');
-
-        final String? currentUserEmail = user.email;
-
-        await usersDataCollection.doc(currentUserEmail).update({
-          'pin': pin,
-        });
-
-        print('PIN code set successfully in Firestore.');
-      } else {
-        print('User not authenticated.');
-      }
-    } catch (e) {
-      print('Error setting PIN in Firestore: $e');
-    }
-  }
-
-  Future<void> updatePinStatusInFirestore(bool pinStatus) async {
-    EasyLoading.show(status: 'Loading');
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null && mounted) {
-        final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('users');
-
-        final String? currentUserEmail = user.email;
-
-        await usersDataCollection.doc(currentUserEmail).update({
-          'pinStatus': pinStatus,
-        });
-
-        // Update the local state only if the widget is still mounted
-        if (mounted) {
-          setState(() {
-            pinEnabled = pinStatus;
-          });
-
-          EasyLoading.dismiss();
-        }
-
-        print('PIN status updated successfully in Firestore.');
-      } else {
-        print('User not authenticated or widget not mounted.');
-      }
-    } catch (e) {
-      print('Error updating PIN status in Firestore: $e');
-    }
-  }
-
-  void changePin(String currentPin, String newPin) async {
-    try {
-      final User? user = FirebaseAuth.instance.currentUser;
-
-      if (user != null) {
-        final CollectionReference usersDataCollection =
-            FirebaseFirestore.instance.collection('users');
-
-        final String? currentUserEmail = user.email;
-
-        final DocumentSnapshot userData =
-            await usersDataCollection.doc(currentUserEmail).get();
-
-        if (userData.exists) {
-          final Map<String, dynamic> userDataMap =
-              userData.data() as Map<String, dynamic>;
-          final String savedPin = userDataMap['pin'];
-
-          if (currentPin.isEmpty || currentPin == savedPin) {
-            await setPinInFirestore(newPin);
-
-            Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('PIN changed successfully.'),
-              ),
-            );
-          } else {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Incorrect current PIN. Please try again.'),
-              ),
-            );
-          }
-        } else {
-          print('User data not found in Firestore.');
-        }
-      } else {
-        print('User not authenticated.');
-      }
-    } catch (e) {
-      print('Error changing PIN: $e');
-    }
   }
 }

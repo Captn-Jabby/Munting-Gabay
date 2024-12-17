@@ -1,12 +1,12 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/variable.dart';
+import 'package:provider/provider.dart';
+
+import '../models/current_user.dart';
+import '../providers/current_user_provider.dart';
 
 class UserProfilePage extends StatefulWidget {
   const UserProfilePage({super.key});
@@ -16,48 +16,50 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  late User _currentUser;
-  String _avatarPath = '';
 
-  final FirebaseStorage _storage = FirebaseStorage.instance;
+  void _loadUserData() {
+    // WidgetsBinding.instance.addPostFrameCallback(
+    //   (timeStamp) {
+    // initialize provider
+    final currentUser =
+        Provider.of<CurrentUserProvider>(context, listen: false).currentUser!;
+
+    _nameController.text = currentUser.name;
+    _usernameController.text = currentUser.username;
+    selectedDate = currentUser.birthdate;
+    _addressController.text = currentUser.address;
+    _emailController.text = currentUser.email;
+    setState(() {});
+    //   },
+    // );
+  }
 
   @override
   void initState() {
-    super.initState();
-    _currentUser = _auth.currentUser!;
     _loadUserData();
+    super.initState();
   }
 
-  void _loadUserData() async {
-    if (_currentUser.uid.isNotEmpty) {
-      final snapshot = await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_currentUser.uid)
-          .get();
-
-      if (snapshot.exists) {
-        setState(() {
-          _nameController.text = snapshot['name'];
-          _usernameController.text = snapshot['username'];
-          Timestamp birthdateTimestamp = snapshot['birthdate'];
-          selectedDate = birthdateTimestamp.toDate();
-          _addressController.text = snapshot['address'];
-          _emailController.text = snapshot['email'];
-          _avatarPath = snapshot['avatarPath'] ?? '';
-        });
-      }
-    } else {
-      print('Error: User email is empty');
-    }
+  @override
+  void dispose() {
+    _nameController.clear();
+    _usernameController.clear();
+    _addressController.clear();
+    _emailController.clear();
+    super.dispose();
   }
 
   Future<void> _selectDate(BuildContext context) async {
+    // remove text field focus
+    if (FocusScope.of(context).focusedChild != null) {
+      FocusScope.of(context).focusedChild!.unfocus();
+    }
+
     DateTime currentDate = DateTime.now();
     DateTime firstDate = DateTime(1900);
     DateTime lastDate = DateTime(2101);
@@ -79,54 +81,20 @@ class _UserProfilePageState extends State<UserProfilePage> {
     }
   }
 
-  void _updateUserData() async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(_currentUser.uid)
-        .update({
-      'name': _nameController.text,
-      'username': _usernameController.text,
-      'birthdate': selectedDate,
-      'address': _addressController.text,
-      'email': _emailController.text,
-      'avatarPath': _avatarPath,
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('User data updated successfully')),
-    );
-  }
-
-  Future<void> _showAvatarSelectionDialog() async {
+  Future<void> _showAvatarSelectionDialog(
+      {required CurrentUserProvider provider}) async {
     final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      await _pickAndUploadAvatar(File(pickedFile.path));
-    }
-  }
-
-  Future<void> _pickAndUploadAvatar(File file) async {
-    final uploadTask = _storage.ref().child('avatars/${_currentUser.uid}.jpg').putFile(file);
-
-    await uploadTask.whenComplete(() async {
-      final downloadURL = await _storage.ref().child('avatars/${_currentUser.uid}.jpg').getDownloadURL();
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(_currentUser.uid)
-          .update({
-        'avatarPath': downloadURL,
-      });
-
-      setState(() {
-        _avatarPath = downloadURL;
-      });
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Avatar updated successfully')),
-      );
-    });
+    await picker.pickImage(source: ImageSource.gallery).then(
+      (pickedFile) {
+        if (pickedFile != null) {
+          provider.updateProfilePicture(
+            context: context,
+            file: File(pickedFile.path),
+          );
+        }
+      },
+    );
   }
 
   @override
@@ -139,74 +107,114 @@ class _UserProfilePageState extends State<UserProfilePage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const HomepagePT(),
-              ),
-            );
+            Navigator.pop(context);
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: GestureDetector(
-                onTap: _showAvatarSelectionDialog,
-                child: CircleAvatar(
-                  radius: 60,
-                  backgroundColor: Colors.grey[300], // Default background color
-                  backgroundImage: _avatarPath.isNotEmpty
-                      ? NetworkImage(_avatarPath)
-                      : null,
-                  child: _avatarPath.isEmpty
-                      ? Icon(Icons.camera_alt, size: 50, color: Colors.grey[700])
-                      : null,
-                ),
-              ),
-            ),
-            const SizedBox(height: 16.0),
-            _buildTextField(controller: _nameController, label: 'Name'),
-            _buildTextField(controller: _usernameController, label: 'Username'),
-            const SizedBox(height: 16.0),
-            GestureDetector(
-              onTap: () => _selectDate(context),
-              child: AbsorbPointer(
-                child: _buildTextField(
-                  controller: TextEditingController(text: "${selectedDate.toLocal()}".split(' ')[0]),
-                  label: 'Birthdate',
-                  suffixIcon: Icon(Icons.calendar_today),
-                ),
-              ),
-            ),
-            _buildTextField(controller: _addressController, label: 'Address'),
-            _buildTextField(controller: _emailController, label: 'Email', enabled: false),
-            const SizedBox(height: 20.0),
-            Center(
-              child: ElevatedButton(
-                onPressed: _updateUserData,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: secondaryColor, // Button color
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10.0),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Consumer<CurrentUserProvider>(
+            builder: (context, provider, snapshot) {
+              final currentUser = provider.currentUser!;
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: GestureDetector(
+                      onTap: () =>
+                          _showAvatarSelectionDialog(provider: provider),
+                      child: CircleAvatar(
+                        radius: 60,
+                        backgroundColor:
+                            Colors.grey[300], // Default background color
+                        backgroundImage: currentUser.avatarPath.isNotEmpty
+                            ? NetworkImage(currentUser.avatarPath)
+                            : null,
+                        child: currentUser.avatarPath.isEmpty
+                            ? Icon(
+                                Icons.camera_alt,
+                                size: 50,
+                                color: Colors.grey[700],
+                              )
+                            : null,
+                      ),
+                    ),
                   ),
-                ),
-                child: const Text(
-                  'Save',
-                  style: TextStyle(fontSize: 16.0, color: Colors.white),
-                ),
-              ),
-            ),
-          ],
+                  const SizedBox(height: 16.0),
+                  _buildTextField(controller: _nameController, label: 'Name'),
+                  _buildTextField(
+                      controller: _usernameController, label: 'Username'),
+                  const SizedBox(height: 16.0),
+                  GestureDetector(
+                    onTap: () => _selectDate(context),
+                    child: AbsorbPointer(
+                      child: _buildTextField(
+                        controller: TextEditingController(
+                            text: "${selectedDate.toLocal()}".split(' ')[0]),
+                        label: 'Birthdate',
+                        suffixIcon: const Icon(Icons.calendar_today),
+                      ),
+                    ),
+                  ),
+                  _buildTextField(
+                      controller: _addressController, label: 'Address'),
+                  _buildTextField(
+                      controller: _emailController,
+                      label: 'Email',
+                      enabled: false),
+                  const SizedBox(height: 20.0),
+                  SizedBox(
+                    width: BtnWidth,
+                    height: BtnHeight,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        final updatedProfile = CurrentUser(
+                          id: currentUser.id,
+                          name: _nameController.text,
+                          username: _usernameController.text,
+                          role: currentUser.role,
+                          birthdate: selectedDate,
+                          address: _addressController.text,
+                          email: _emailController.text,
+                          pinStatus: currentUser.pinStatus,
+                          pin: currentUser.pin,
+                          avatarPath: currentUser.avatarPath,
+                        );
+
+                        provider.updateUserData(
+                          context: context,
+                          currentUser: updatedProfile,
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: secondaryColor, // Button color
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                      ),
+                      child: Text(
+                        'Save',
+                        style: buttonTextStyle1,
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTextField({required TextEditingController controller, required String label, bool enabled = true, Widget? suffixIcon}) {
+  Widget _buildTextField(
+      {required TextEditingController controller,
+      required String label,
+      bool enabled = true,
+      Widget? suffixIcon}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: TextField(

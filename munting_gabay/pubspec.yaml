@@ -68,6 +68,7 @@ dependencies:
   webview_flutter: ^4.4.1
   plugin_platform_interface: any
   path_provider: any
+  timeago: ^3.7.0
 flutter_icons:
   android: true
   ios: true
