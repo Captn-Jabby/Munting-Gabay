@@ -70,16 +70,18 @@ class _FindingDoctorsScreenState extends State<FindingDoctorsScreen> {
               final String searchKey = provider.getSearchKey;
 
               if (provider.isDoctorLoading) {
-                return const Center(
-                  child: CircularProgressIndicator(
-                    // Color of the loading indicator
-                    valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      // Color of the loading indicator
+                      valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
 
-                    // Width of the indicator's line
-                    strokeWidth: 4,
+                      // Width of the indicator's line
+                      strokeWidth: 4,
 
-                    // Optional: Background color of the circle
-                    backgroundColor: bgloadingColor,
+                      // Optional: Background color of the circle
+                      backgroundColor: bgloadingColor,
+                    ),
                   ),
                 );
               }

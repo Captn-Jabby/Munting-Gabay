@@ -12,13 +12,11 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../models/current_user.dart';
 
 class CurrentUserProvider with ChangeNotifier {
-  bool _isAuthLoading = true;
   bool _isCurrentUserLoading = true;
   User? _auth;
   CurrentUser? _currentUser;
 
   // initialize getters
-  bool get isAuthLoading => _isAuthLoading;
   bool get isCurrentUserLoading => _isCurrentUserLoading;
   User? get getAuth => _auth;
   CurrentUser? get currentUser => _currentUser;
@@ -32,7 +30,6 @@ class CurrentUserProvider with ChangeNotifier {
 
         if (auth == null) {
           _currentUser = null;
-          _isAuthLoading = true;
           _isCurrentUserLoading = true;
 
           notifyListeners();
@@ -70,7 +67,6 @@ class CurrentUserProvider with ChangeNotifier {
           avatarPath: data["avatarPath"],
         );
 
-        _isAuthLoading = false;
         _isCurrentUserLoading = false;
 
         notifyListeners();
@@ -82,7 +78,6 @@ class CurrentUserProvider with ChangeNotifier {
           print(error);
         }
 
-        _isAuthLoading = false;
         _isCurrentUserLoading = false;
 
         notifyListeners();

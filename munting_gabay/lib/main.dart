@@ -76,7 +76,11 @@ class _MyAppState extends State<MyApp> {
           builder: (context, provider, child) {
             final auth = provider.getAuth;
 
-            if (provider.isAuthLoading || provider.isCurrentUserLoading) {
+            if (auth == null) {
+              return const LoginScreen();
+            }
+
+            if (provider.isCurrentUserLoading) {
               return const Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
@@ -84,10 +88,6 @@ class _MyAppState extends State<MyApp> {
                   backgroundColor: bgloadingColor,
                 ),
               );
-            }
-
-            if (auth == null) {
-              return const LoginScreen();
             }
 
             return const HomepagePT();
