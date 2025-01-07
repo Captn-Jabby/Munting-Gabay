@@ -2,12 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/homepage_PT.dart';
 import 'package:munting_gabay/all%20screen%20related%20to%20the%20patients/profile_page.dart';
 import 'package:munting_gabay/login%20and%20register/changepin_screen.dart';
 import 'package:munting_gabay/variable.dart';
+import 'package:provider/provider.dart';
 
-import 'main.dart';
+import 'providers/current_user_provider.dart';
 
 class AppDrawer extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,77 +46,42 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User? user = _auth.currentUser;
+    // final User? user = _auth.currentUser;
     return Drawer(
-      backgroundColor: scaffoldBgColor, // Set the background color to light green
+      backgroundColor:
+          scaffoldBgColor, // Set the background color to light green
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          UserAccountsDrawerHeader(
-            decoration: BoxDecoration(
-              color: secondaryColor, // Dark green for the header
-            ),
-
-            accountName: FutureBuilder<DocumentSnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection('users')
-                  .doc(user?.uid)
-                  .get(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Text(
-                    'Loading...',
-                    style: TextStyle(color: Colors.white),
-                  );
-                }
-                if (snapshot.hasError) {
-                  return Text(
-                    'Error: ${snapshot.error}',
-                    style: const TextStyle(color: Colors.white),
-                  );
-                }
-                if (!snapshot.hasData || !snapshot.data!.exists) {
-                  return const Text(
-                    'User not found',
-                    style: TextStyle(color: Colors.white),
-                  );
-                }
-                String username = snapshot.data!['username'];
-                return Text(' $username',
+          Consumer<CurrentUserProvider>(
+            builder: (context, currentUser, child) {
+              return UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: secondaryColor, // Dark green for the header
+                ),
+                accountName: Text(
+                  currentUser.currentUser?.username ?? "Unknown User",
                   style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 18,
                     fontFamily: 'Roboto', // Change to desired font-family
                   ),
-                );
-              },
-            ),
-            accountEmail: const Text(
-              "",
-              style: TextStyle(color: Colors.white),
-            ),
-            currentAccountPicture: FutureBuilder<String>(
-              future: getProfileImageUrl(),
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const CircularProgressIndicator();
-                }
-                if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-                  // Return default avatar image if error or no URL
-                  return CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/avatar1.png'),
-                  );
-
-                }
-                String profileImageUrl = snapshot.data!;
-                return CircleAvatar(
-                  backgroundImage: NetworkImage(profileImageUrl),
-                );
-
-              },
-            ),
-          ), SizedBox(height: 34,),
+                ),
+                accountEmail: Text(
+                  currentUser.currentUser?.email ?? "",
+                  style: const TextStyle(color: Colors.white),
+                ),
+                currentAccountPicture: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(currentUser.currentUser?.avatarPath ?? ""),
+                ),
+              );
+            },
+          ),
+          const SizedBox(
+            height: 34,
+          ),
           ListTile(
             leading: Icon(Icons.person, color: secondaryColor),
             title: const Text(
@@ -124,10 +89,14 @@ class AppDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const UserProfilePage()),
+                MaterialPageRoute(
+                  builder: (context) => const UserProfilePage(),
+                ),
               );
+
+              Scaffold.of(context).closeDrawer();
             },
           ),
           ListTile(
@@ -137,10 +106,12 @@ class AppDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.popUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const HomepagePT()),
+                (route) => route.isFirst,
               );
+
+              Scaffold.of(context).closeDrawer();
             },
           ),
           ListTile(
@@ -150,10 +121,14 @@ class AppDrawer extends StatelessWidget {
               style: TextStyle(color: Colors.black),
             ),
             onTap: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ChangePin()),
+                MaterialPageRoute(
+                  builder: (context) => const ChangePin(),
+                ),
               );
+
+              Scaffold.of(context).closeDrawer();
             },
           ),
           const Divider(color: Colors.black), // Divider color
@@ -193,12 +168,13 @@ class AppDrawer extends StatelessWidget {
                         ),
                         onPressed: () async {
                           try {
-                            await FirebaseAuth.instance.signOut();
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()),
-                            );
+                            Navigator.pop(context);
+                            await FirebaseAuth.instance.signOut().then(
+                                  (value) => Navigator.popUntil(
+                                    context,
+                                    (route) => route.isFirst,
+                                  ),
+                                );
                           } catch (e) {
                             print('Error logging out: $e');
                           }

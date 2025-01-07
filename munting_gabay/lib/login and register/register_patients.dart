@@ -21,7 +21,8 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final TextEditingController _pinController = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
@@ -86,14 +87,16 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: const Text('Success'),
-            content: const Text('You are successfully registered! Please check email inbox for verification'),
+            content: const Text(
+                'You are successfully registered! Please check email inbox for verification'),
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.pop(context); // Close the dialog
                   Navigator.pushReplacement(
                     context,
-                    MaterialPageRoute(builder: (context) => const LoginScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const LoginScreen()),
                   );
                 },
                 child: const Text('OK'),
@@ -114,6 +117,11 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
 
   // Selection of date
   Future<void> _selectDate(BuildContext context) async {
+    // remove focus first
+    if (FocusScope.of(context).focusedChild != null) {
+      FocusScope.of(context).focusedChild!.unfocus();
+    }
+
     DateTime currentDate = DateTime.now();
     DateTime firstDate = DateTime(1900);
     DateTime lastDate = DateTime(2101);
@@ -140,14 +148,27 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: scaffoldBgColor,
-      body: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: mainBackgroundTheme,
-        width: double.infinity,
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: const Color(0xFFF4F9EC),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: const Icon(
+            Icons.arrow_back_rounded,
+            color: Colors.black,
+          ),
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: mainBackgroundTheme,
+          // width: double.infinity,
+          // height: MediaQuery.of(context).size.height,
+          child: SingleChildScrollView(
             child: Center(
               child: Column(
                 children: [
@@ -155,266 +176,280 @@ class _RegistrationPatientsState extends State<RegistrationPatients> {
                     'Register',
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(
-                        letterSpacing: 1,
-                        textStyle: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 40,
-                          color: Color(0xFF95C440),
-                        )),
-                  ),
-                  SizedBox(
-                    width: 300,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        children: [
-                          TextFormField(
-                            controller: _usernameController,
-                            decoration: InputDecoration(
-                              labelText: 'Username',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Adjust the border radius
-                                borderSide: const BorderSide(
-                                    color:
-                                        Colors.blue), // Adjust the border color
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a Username ';
-                              }
-                              return null; // Return null if the validation succeeds
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: _nameController,
-                            decoration: InputDecoration(
-                              labelText: 'Name',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Adjust the border radius
-                                borderSide: const BorderSide(
-                                    color:
-                                        Colors.blue), // Adjust the border color
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a  name';
-                              }
-                              return null; // Return null if the validation succeeds
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: _addressController,
-                            decoration: InputDecoration(
-                              labelText: 'Address',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Adjust the border radius
-                                borderSide: const BorderSide(
-                                    color:
-                                        Colors.blue), // Adjust the border color
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter the address';
-                              }
-                              return null; // Return null if the validation succeeds
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextField(
-                            inputFormatters: [
-                              FilteringTextInputFormatter.allow(
-                                  RegExp(r'[0-9]'))
-                            ],
-                            controller: _pinController,
-                            maxLength: 4,
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              setState(() {
-                                pinStatus =
-                                    (value.isNotEmpty && value.length == 4);
-                              });
-                            },
-                            decoration: InputDecoration(
-                              labelText:
-                                  'Pincode for Parent\'s Pages (OPTIONAL) ',
-                              hintText: 'Pin is set to default: 1234',
-                              counterText: '',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          GestureDetector(
-                            onTap: () => _selectDate(context),
-                            child: AbsorbPointer(
-                              child: TextFormField(
-                                controller: TextEditingController(
-                                  text:
-                                      "${selectedDate.toLocal()}".split(' ')[0],
-                                ),
-                                decoration: InputDecoration(
-                                  labelText: 'Birthdate',
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10.0),
-                                    borderSide: const BorderSide(color: Colors.blue),
-                                  ),
-                                ),
-                                validator: (value) {
-                                  if (value == null || value.isEmpty) {
-                                    return 'Please select a birthdate';
-                                  }
-                                  DateTime today = DateTime.now();
-                                  DateTime parsedDate =
-                                      DateTime.parse(value.split(' ')[0]);
-                                  int age = today.year - parsedDate.year;
-                                  if (today.month < parsedDate.month ||
-                                      (today.month == parsedDate.month &&
-                                          today.day < parsedDate.day)) {
-                                    age--;
-                                  }
-                                  if (age < 18) {
-                                    return 'You must be at least 18 years old.';
-                                  }
-                                  return null;
-                                },
-                              ),
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: _emailController,
-                            decoration: InputDecoration(
-                              labelText: 'Email',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Colors.blue),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter an email';
-                              } else if (!RegExp(
-                                      r'^[a-zA-Z0-9._%+-]+@gmail.com$')
-                                  .hasMatch(value)) {
-                                return 'Please enter a valid Gmail address';
-                              }
-                              return null; // Return null if the validation succeeds
-                            },
-                          ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          TextFormField(
-                            controller: _passwordController,
-                            decoration: InputDecoration(
-                              labelText: 'Password',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                                borderSide: const BorderSide(color: Colors.blue),
-                              ),
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
-                                },
-                                child: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ),
-                            ),
-                            obscureText: !_isPasswordVisible,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter a Password';
-                              } else if (value.length < 6) {
-                                return 'Password must be at least 6 characters';
-                              }
-                              return null; // Return null if the validation succeeds
-                            },
-                          ),
-                          const SizedBox(
-                            height: 30,
-                          ),
-                          TextFormField(
-                            controller: _confirmPasswordController,
-                            decoration: InputDecoration(
-                              labelText: 'Confirm Password',
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(
-                                    10.0), // Adjust the border radius
-                                borderSide: const BorderSide(
-                                    color:
-                                        Colors.blue), // Adjust the border color
-                              ),
-                              suffixIcon: GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _isPasswordVisible = !_isPasswordVisible;
-                                  });
-                                },
-                                child: Icon(
-                                  _isPasswordVisible
-                                      ? Icons.visibility
-                                      : Icons.visibility_off,
-                                ),
-                              ),
-                            ),
-                            obscureText: !_isPasswordVisible,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please confirm your Password';
-                              } else if (value != _passwordController.text) {
-                                return 'Passwords do not match';
-                              }
-                              return null; // Return null if the validation succeeds
-                            },
-                          ),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: BtnWidth,
-                            height: BtnHeight,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _registerUser();
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: secondaryColor,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          BtnCircularRadius))),
-                              child: Text(
-                                'Register',
-                                style: buttonTextStyle1,
-                              ),
-                            ),
-                          ),
-                        ],
+                      letterSpacing: 1,
+                      textStyle: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 40,
+                        color: Color(0xFF95C440),
                       ),
+                    ),
+                  ),
+                  const SizedBox(height: 21),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          controller: _usernameController,
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            labelText: 'Username',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the border radius
+                              borderSide: const BorderSide(
+                                  color:
+                                      Colors.blue), // Adjust the border color
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a Username ';
+                            }
+                            return null; // Return null if the validation succeeds
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        TextFormField(
+                          controller: _nameController,
+                          keyboardType: TextInputType.name,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            labelText: 'Name',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the border radius
+                              borderSide: const BorderSide(
+                                  color:
+                                      Colors.blue), // Adjust the border color
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a  name';
+                            }
+                            return null; // Return null if the validation succeeds
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        TextFormField(
+                          controller: _addressController,
+                          keyboardType: TextInputType.streetAddress,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            labelText: 'Address',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the border radius
+                              borderSide: const BorderSide(
+                                  color:
+                                      Colors.blue), // Adjust the border color
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter the address';
+                            }
+                            return null; // Return null if the validation succeeds
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        TextField(
+                          inputFormatters: [
+                            FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
+                          ],
+                          controller: _pinController,
+                          maxLength: 4,
+                          keyboardType: TextInputType.number,
+                          textInputAction: TextInputAction.next,
+                          onChanged: (value) {
+                            setState(() {
+                              pinStatus =
+                                  (value.isNotEmpty && value.length == 4);
+                            });
+                          },
+                          decoration: InputDecoration(
+                            labelText:
+                                'Pincode for Parent\'s Pages (OPTIONAL) ',
+                            hintText: 'Pin is set to default: 1234',
+                            counterText: '',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        GestureDetector(
+                          onTap: () => _selectDate(context),
+                          child: AbsorbPointer(
+                            child: TextFormField(
+                              controller: TextEditingController(
+                                text: "${selectedDate.toLocal()}".split(' ')[0],
+                              ),
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                labelText: 'Birthdate',
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10.0),
+                                  borderSide:
+                                      const BorderSide(color: Colors.blue),
+                                ),
+                              ),
+                              validator: (value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please select a birthdate';
+                                }
+                                DateTime today = DateTime.now();
+                                DateTime parsedDate =
+                                    DateTime.parse(value.split(' ')[0]);
+                                int age = today.year - parsedDate.year;
+                                if (today.month < parsedDate.month ||
+                                    (today.month == parsedDate.month &&
+                                        today.day < parsedDate.day)) {
+                                  age--;
+                                }
+                                if (age < 18) {
+                                  return 'You must be at least 18 years old.';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        TextFormField(
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.blue),
+                            ),
+                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter an email';
+                            } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@gmail.com$')
+                                .hasMatch(value)) {
+                              return 'Please enter a valid Gmail address';
+                            }
+                            return null; // Return null if the validation succeeds
+                          },
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        TextFormField(
+                          controller: _passwordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.next,
+                          decoration: InputDecoration(
+                            labelText: 'Password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(color: Colors.blue),
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                              child: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                            ),
+                          ),
+                          obscureText: !_isPasswordVisible,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a Password';
+                            } else if (value.length < 6) {
+                              return 'Password must be at least 6 characters';
+                            }
+                            return null; // Return null if the validation succeeds
+                          },
+                        ),
+                        const SizedBox(
+                          height: 30,
+                        ),
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.done,
+                          decoration: InputDecoration(
+                            labelText: 'Confirm Password',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(
+                                  10.0), // Adjust the border radius
+                              borderSide: const BorderSide(
+                                  color:
+                                      Colors.blue), // Adjust the border color
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _isPasswordVisible = !_isPasswordVisible;
+                                });
+                              },
+                              child: Icon(
+                                _isPasswordVisible
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                              ),
+                            ),
+                          ),
+                          obscureText: !_isPasswordVisible,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please confirm your Password';
+                            } else if (value != _passwordController.text) {
+                              return 'Passwords do not match';
+                            }
+                            return null; // Return null if the validation succeeds
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: BtnWidth,
+                          height: BtnHeight,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                _registerUser();
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: secondaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                  BtnCircularRadius,
+                                ),
+                              ),
+                            ),
+                            child: Text(
+                              'Register',
+                              style: buttonTextStyle1,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -443,8 +478,8 @@ class _SpinningContainerPState extends State<SpinningContainerP>
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration:
-          const Duration(minutes: 1), // Set the duration for one complete rotation
+      duration: const Duration(
+          minutes: 1), // Set the duration for one complete rotation
     )..repeat(); // Repeat the animation infinitely
   }
 

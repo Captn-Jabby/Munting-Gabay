@@ -14,28 +14,29 @@ class ParentPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: scaffoldBgColor,
+      appBar: AppBar(
         backgroundColor: scaffoldBgColor,
-        appBar: AppBar(
-          backgroundColor: scaffoldBgColor,
-          elevation: 0,
-          // iconTheme: IconThemeData(color: secondaryColors),
-        ),
-        drawer: AppDrawer(),
-        body: SingleChildScrollView(
-            child: Center(
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 20),
-                  child: Text('PARENTS PAGE', style: smallTextStyle11),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
+        elevation: 0,
+        // iconTheme: IconThemeData(color: secondaryColors),
+      ),
+      drawer: AppDrawer(),
+      body: SingleChildScrollView(
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 20),
+                    child: Text('PARENTS PAGE', style: smallTextStyle11),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
                 height: MediaQuery.of(context).size.height * 0.8,
                 child: GridView.builder(
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -49,9 +50,13 @@ class ParentPage extends StatelessWidget {
                   itemBuilder: (BuildContext context, int index) {
                     return buildButton(index, context);
                   },
-                )),
-          ]),
-        )));
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildButton(int index, BuildContext context) {
@@ -95,34 +100,42 @@ class ParentPage extends StatelessWidget {
                 // Navigate to the screen for 'Psychologist Research'
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const pscyh()),
+                  MaterialPageRoute(
+                    builder: (context) => const FindingDoctorsScreen(),
+                  ),
                 );
                 break;
               case 1:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => webinarsScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => webinarsScreen(),
+                  ),
                 );
                 break;
               case 2:
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => BookResourcesScreen()),
+                    builder: (context) => BookResourcesScreen(),
+                  ),
                 );
                 break;
 
               case 3:
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const ForumPage()),
+                  MaterialPageRoute(
+                    builder: (context) => const ForumPage(),
+                  ),
                 );
                 break;
               case 4:
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) => EducationalVdieosScreen()),
+                    builder: (context) => EducationalVdieosScreen(),
+                  ),
                 );
                 break;
               default:

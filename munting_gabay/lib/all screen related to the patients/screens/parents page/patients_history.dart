@@ -1,113 +1,21 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:munting_gabay/variable.dart';
+import 'package:provider/provider.dart';
+
+import '../../../providers/schedule_provider.dart';
 
 class RequestListScreen extends StatefulWidget {
-  final String docId;
-
-  const RequestListScreen({super.key, required this.docId});
+  const RequestListScreen({super.key});
 
   @override
   _RequestListScreenState createState() => _RequestListScreenState();
 }
 
 class _RequestListScreenState extends State<RequestListScreen> {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  User? user = FirebaseAuth.instance.currentUser;
-  List<Map<String, dynamic>> myRequests = [];
-
   @override
   void initState() {
     super.initState();
-    loadMyRequests();
-  }
-
-  Future<void> loadMyRequests() async {
-    if (user != null) {
-      final querySnapshot =
-          await firestore.collection('schedule').doc(widget.docId).get();
-
-      if (querySnapshot.exists) {
-        final requestData = querySnapshot.data() as Map<String, dynamic>;
-        if (requestData.containsKey('available_days')) {
-          final requestList = (requestData['available_days'] as List)
-              .expand((dayData) => (dayData['slots'] as List)
-                      .where((slotData) =>
-                          (slotData['patients'] as String) == user?.uid)
-                      .map((slotData) {
-                    return {
-                      'slot': slotData['slot'] as String,
-                      'date': dayData['date'] as String,
-                      'status': slotData['status'] as String,
-                    };
-                  }))
-              .toList();
-
-          setState(() {
-            myRequests = requestList;
-          });
-        }
-      }
-    }
-  }
-
-  bool isCancelling = false;
-
-  Future<void> _cancelRequest(String requestSlot) async {
-    if (isCancelling) {
-      return;
-    }
-
-    if (user != null) {
-      isCancelling = true;
-
-      final slotDocument = firestore.collection('schedule').doc(widget.docId);
-
-      final snapshot = await slotDocument.get();
-      if (snapshot.exists) {
-        final requestData = snapshot.data() as Map<String, dynamic>;
-
-        if (requestData.containsKey('available_days')) {
-          final availableDays = requestData['available_days'] as List;
-
-          for (var dayData in availableDays) {
-            final slots = dayData['slots'] as List;
-
-            final slotToCancel = slots.firstWhere(
-              (slotData) => (slotData['slot'] as String) == requestSlot,
-              orElse: () => null,
-            );
-
-            if (slotToCancel != null) {
-              if (slotToCancel['status'] == 'Pending') {
-                slotToCancel['status'] = 'Canceled';
-
-                await slotDocument.update({
-                  'available_days': availableDays,
-                });
-
-                setState(() {
-                  myRequests.remove(requestSlot);
-                });
-
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Request canceled for $requestSlot')),
-                );
-                break; // Exit the loop after a successful cancel
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                      content: Text('You can only cancel pending requests.')),
-                );
-              }
-            }
-          }
-        }
-      }
-
-      isCancelling = false;
-    }
   }
 
   @override
@@ -118,40 +26,73 @@ class _RequestListScreenState extends State<RequestListScreen> {
         backgroundColor: secondaryColor,
         title: const Text('My Requests'),
       ),
-      body: myRequests.isEmpty
-          ? const Center(
-              child: Text('You have not made any requests.'),
-            )
-          : ListView.builder(
-              itemCount: myRequests.length,
-              itemBuilder: (context, index) {
-                final requestSlot = myRequests[index];
-                final slot = requestSlot['slot'] as String;
-                final date = requestSlot['date'] as String;
-                final status = requestSlot['status'] as String;
+      body: Consumer<ScheduleProvider>(
+        builder: (context, provider, child) {
+          final myRequests = provider.getRequestedSchedule;
 
-                return ListTile(
-                  title: Text('Date: $date, Slot: $slot, Status: $status'),
-                  trailing: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: scaffoldBgColor, // Change this color to the desired background color
-                    ),
-                    onPressed: () {
-                      if (status == 'Pending') {
-                        _cancelRequest(slot);
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                              content: Text(
-                                  'You can only cancel pending requests.')),
-                        );
-                      }
-                    },
-                    child: const Text('Cancel'),
-                  ),
-                );
-              },
-            ),
+          if (provider.isScheduleLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                // Color of the loading indicator
+                valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+
+                // Width of the indicator's line
+                strokeWidth: 4,
+
+                // Optional: Background color of the circle
+                backgroundColor: bgloadingColor,
+              ),
+            );
+          }
+
+          if (myRequests.isEmpty) {
+            return const Center(
+              child: Text('You have not made any requests.'),
+            );
+          }
+
+          return ListView.builder(
+            itemCount: myRequests.length,
+            itemBuilder: (context, index) {
+              final schedule = myRequests[index];
+              final slot =
+                  "${DateFormat("hh:mm").format(schedule.dateStart)} - ${DateFormat("hh:mm a").format(schedule.dateEnd)}";
+              final date = DateFormat("MMMM dd").format(schedule.dateStart);
+              final status = schedule.status;
+
+              return Card(
+                margin: const EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 4,
+                ),
+                child: ListTile(
+                  title: Text(date),
+                  subtitle: Text("$slot \u2022 $status"),
+                  trailing: schedule.status != "Pending"
+                      ? null
+                      : ElevatedButton(
+                          style:
+                              buttonStyle1, // Change this color to the desired background color
+
+                          onPressed: () {
+                            provider.cancelRequest(
+                              context: context,
+                              schedule: schedule,
+                            );
+                          },
+                          child: const Text(
+                            'Cancel',
+                            style: TextStyle(
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }

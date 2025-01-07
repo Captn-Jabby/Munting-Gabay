@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:munting_gabay/variable.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -41,26 +42,51 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
         backgroundColor: secondaryColor,
         title: const Text('Forgot Password'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(
-                labelText: 'Email',
+      body: GestureDetector(
+        // behavior: HitTestBehavior.opaque,
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Container(
+          padding: const EdgeInsets.all(24.0),
+          decoration: mainBackgroundTheme,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                controller: emailController,
+                keyboardType: TextInputType.emailAddress,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: secondaryColor, // Change this color to the desired background color
+              const SizedBox(height: 20.0),
+              SizedBox(
+                width: BtnWidth,
+                height: BtnHeight,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: secondaryColor,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(
+                        BtnCircularRadius,
+                      ),
+                    ),
+                  ),
+                  onPressed: resetPassword,
+                  child: Text(
+                    'Reset Password',
+                    style: GoogleFonts.poppins(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ),
-              onPressed: resetPassword,
-              child: const Text('Reset Password'),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
