@@ -122,6 +122,9 @@ class ScheduleProvider extends DoctorProvider {
   // get ScheduleLoading status
   bool get isScheduleLoading => _isScheduleLoading;
 
+  // get selected doctor
+  Doctor? get getSelectedDoctor => _selectedDoctor;
+
   // get doctor schedule
   List<Schedule> get getActiveDocSched => _activeDoctorSchedule;
   List<Schedule> get getDocSchedHistory => _doctorScheduleHistory;

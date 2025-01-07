@@ -12,12 +12,14 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../models/current_user.dart';
 
 class CurrentUserProvider with ChangeNotifier {
-  bool _isCurrentUserLoading = true;
+  bool _isInitializing = true;
+  bool _isLoading = true;
   User? _auth;
   CurrentUser? _currentUser;
 
   // initialize getters
-  bool get isCurrentUserLoading => _isCurrentUserLoading;
+  bool get isInitializing => _isInitializing;
+  bool get isLoading => _isLoading;
   User? get getAuth => _auth;
   CurrentUser? get currentUser => _currentUser;
 
@@ -26,11 +28,11 @@ class CurrentUserProvider with ChangeNotifier {
     FirebaseAuth.instance.authStateChanges().listen(
       (auth) {
         _auth = auth;
-        // _authStreamController.add(auth);
+        _isInitializing = false;
 
         if (auth == null) {
           _currentUser = null;
-          _isCurrentUserLoading = true;
+          _isLoading = true;
 
           notifyListeners();
           return;
@@ -67,7 +69,7 @@ class CurrentUserProvider with ChangeNotifier {
           avatarPath: data["avatarPath"],
         );
 
-        _isCurrentUserLoading = false;
+        _isLoading = false;
 
         notifyListeners();
         return;
@@ -78,7 +80,7 @@ class CurrentUserProvider with ChangeNotifier {
           print(error);
         }
 
-        _isCurrentUserLoading = false;
+        _isLoading = false;
 
         notifyListeners();
         return;

@@ -74,13 +74,22 @@ class _MyAppState extends State<MyApp> {
         title: "Munting Gabay",
         home: Consumer<CurrentUserProvider>(
           builder: (context, provider, child) {
+            if (provider.isInitializing) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
+                  strokeWidth: 4,
+                  backgroundColor: bgloadingColor,
+                ),
+              );
+            }
             final auth = provider.getAuth;
 
             if (auth == null) {
               return const LoginScreen();
             }
 
-            if (provider.isCurrentUserLoading) {
+            if (provider.isLoading) {
               return const Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation<Color>(LoadingColor),
